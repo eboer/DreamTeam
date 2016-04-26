@@ -11,6 +11,7 @@ namespace MBBS
 	{
 		public App ()
 		{
+            //Test van andries
 			// The root page of your application
 			MainPage = new ContentPage {
 				Content = new StackLayout {
