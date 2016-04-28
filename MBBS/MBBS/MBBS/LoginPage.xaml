@@ -2,19 +2,21 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MBBS.LoginPage"
-             Title="MBBS Login">
+             Title="MBBS Login"
+             BackgroundColor="#e6e6e6">
 
   <ContentPage.ToolbarItems>
     <ToolbarItem Text="Sign Up" Clicked="MenuItem_OnButtonSignUpClicked" />
   </ContentPage.ToolbarItems>
   <ContentPage.Content>
-    <StackLayout VerticalOptions="StartAndExpand">
-      <Label Text="Username" />
-      <Entry x:Name="UsernameEntry" Placeholder="username" />
-      <Label Text="Password" />
-      <Entry x:Name="PasswordEntry" IsPassword="true" />
-      <Button Text="Login" Clicked="MenuItem_OnButtonSignUpClicked" />
+    <StackLayout VerticalOptions="Center">
+      <Label Text="Email" TextColor="#000000"/>
+      <Entry x:Name="EmailEntry" TextColor="#000000" Placeholder="Email" />
+      <Label Text="Password" TextColor="#000000"/>
+      <Entry x:Name="PasswordEntry" TextColor="#000000" IsPassword="true" />
+      <Button Text="Login" BackgroundColor="#0233a6" BorderRadius="0" Clicked="MenuItem_OnButtonSignUpClicked" />
       <Label x:Name="MessageLabel" />
+      <Label Text="Registreren" HorizontalOptions="Center"></Label>
     </StackLayout>
   </ContentPage.Content>
 </ContentPage>
