@@ -9,16 +9,16 @@ using Android.OS;
 
 namespace MBBS.Droid
 {
-	[Activity (Label = "MBBS", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
-	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
-	{
-		protected override void OnCreate (Bundle bundle)
-		{
-			base.OnCreate (bundle);
+    [Activity(Label = "MBBS", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
+    {
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
 
-			global::Xamarin.Forms.Forms.Init (this, bundle);
-			LoadApplication (new MBBS.App ());
-		}
-	}
+            global::Xamarin.Forms.Forms.Init(this, bundle);
+            LoadApplication(new App());
+        }
+    }
 }
 
