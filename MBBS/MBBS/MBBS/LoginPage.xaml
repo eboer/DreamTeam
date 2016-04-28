@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MBBS.LoginPage"
+             Title="MBBS Login">
+
+  <ContentPage.ToolbarItems>
+    <ToolbarItem Text="Sign Up" Clicked="MenuItem_OnButtonSignUpClicked" />
+  </ContentPage.ToolbarItems>
+  <ContentPage.Content>
+    <StackLayout VerticalOptions="StartAndExpand">
+      <Label Text="Username" />
+      <Entry x:Name="UsernameEntry" Placeholder="username" />
+      <Label Text="Password" />
+      <Entry x:Name="PasswordEntry" IsPassword="true" />
+      <Button Text="Login" Clicked="MenuItem_OnButtonSignUpClicked" />
+      <Label x:Name="MessageLabel" />
+    </StackLayout>
+  </ContentPage.Content>
+</ContentPage>
