@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MBBS.HomePage"
+             Title="Stenden MBBS"
+             BackgroundColor="#e6e6e6" >
+  
+  <ListView x:Name="ModuleListView" HasUnevenRows="True">
+    <ListView.Header>
+      <StackLayout Padding="10,5,0,5" BackgroundColor="#4d4d4d">
+          <Label Text="Stenden Modules" TextColor="#ffffff"/>
+      </StackLayout>
+    </ListView.Header>
+    <ListView.ItemTemplate>
+      <DataTemplate>
+        <ViewCell >
+          <Grid>
+            <Grid HeightRequest="5"/>
+            <StackLayout
+                         Padding="0"
+                         BackgroundColor="#ffffff">
+              <Button Text="{Binding Name}" 
+                      TextColor="#4d4d4d"
+                      BackgroundColor="#ffffff" 
+                      BorderRadius="0" 
+                      Clicked="Button_OnClicked"
+                      MinimumWidthRequest="100"
+                      />
+            </StackLayout>
+          </Grid>
+        </ViewCell>
+      </DataTemplate>
+    </ListView.ItemTemplate>
+  </ListView>
+</ContentPage>

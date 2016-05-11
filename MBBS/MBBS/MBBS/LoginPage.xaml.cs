@@ -19,5 +19,13 @@ namespace MBBS
         {
             
         }
+
+        private async void ButtonLogin_OnClicked(object sender, EventArgs e)
+        {
+            Application.Current.MainPage = new NavigationPage(new HomePage())
+            {
+                BarBackgroundColor = Color.FromHex("#003788")
+            };
+        }
     }
 }
