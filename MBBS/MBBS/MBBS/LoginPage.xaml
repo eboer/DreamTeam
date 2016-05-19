@@ -12,15 +12,35 @@
     <StackLayout VerticalOptions="Center">
       <Label/>
       <Image Source="drawable-xxhdpi/icon.png"></Image>
-      <Label Text="Email" TextColor="#4d4d4d" />
-      <Entry x:Name="EmailEntry" TextColor="#4d4d4d" BackgroundColor="#ffffff" Placeholder="Email" />
-      <Label Text="Password" TextColor="#4d4d4d"/>
-      <Entry x:Name="PasswordEntry" TextColor="#4d4d4d" BackgroundColor="#ffffff" IsPassword="true" />
-      <Button Text="Login" BackgroundColor="#003788" WidthRequest="120" HeightRequest="40" BorderWidth="0" BorderRadius="0" HorizontalOptions="Center" Clicked="ButtonLogin_OnClicked" />
-      <Label x:Name="MessageLabel" FontSize="10" />
-      <Button Text="Registreren" BackgroundColor="#e6e6e6" FontSize="12" TextColor="#737373" BorderWidth="0" BorderRadius="0" HorizontalOptions="Center"/>
-      
-      
+      <Label Text="Email" 
+             TextColor="#4d4d4d" />
+      <Entry x:Name="EmailEntry" 
+             TextColor="#4d4d4d" 
+             BackgroundColor="#ffffff" 
+             Placeholder="Email" />
+      <Label Text="Wachtwoord" 
+             TextColor="#4d4d4d"/>
+      <Entry x:Name="PasswordEntry" 
+             TextColor="#4d4d4d" 
+             BackgroundColor="#ffffff" 
+             IsPassword="true" />
+      <Button Text="Login" 
+              BackgroundColor="#003788" 
+              WidthRequest="120" 
+              HeightRequest="40" 
+              BorderWidth="0" 
+              BorderRadius="0" 
+              HorizontalOptions="Center" 
+              Clicked="ButtonLogin_OnClicked" />
+      <Label x:Name="MessageLabel" 
+             FontSize="10" />
+      <Button Text="Registreren" 
+              BackgroundColor="#e6e6e6" 
+              FontSize="12" 
+              TextColor="#737373" 
+              BorderWidth="0" 
+              BorderRadius="0" 
+              HorizontalOptions="Center"/>
     </StackLayout>
   </ContentPage.Content>
 </ContentPage>
