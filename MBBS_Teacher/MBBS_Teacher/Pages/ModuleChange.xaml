@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="MBBS_Teacher.Pages.ModuleChange"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MBBS_Teacher.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="800"
+      >
+
+    <Grid>
+        <Label x:Name="header" Content="Hello Bert, Select a module"  VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Height="66" Background="#73AAD9"  Foreground="White" />
+        <Button x:Name="back" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Back" Width="75" Height="20" Margin="10,20,0,0" Foreground="White" Background="#7B93AF" Click="back_Click" />
+
+    </Grid>
+</UserControl>
