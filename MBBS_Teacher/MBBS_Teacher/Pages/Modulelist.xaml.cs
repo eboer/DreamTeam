@@ -64,8 +64,11 @@ namespace MBBS_Teacher.Pages
                
                 
                 Console.WriteLine("verwacht hier iets:" + text);
-                Module t = JsonConvert.DeserializeObject<Module>(text);
-                Data data = new Data();
+                List<Module> t = JsonConvert.DeserializeObject<List<Module>>(text);
+                foreach(Module module in t)
+                {
+                    moduleList.Items.Add(new ListViewItem { Content = module.module_name });
+                }
             }
             catch (WebException exept)
             {
