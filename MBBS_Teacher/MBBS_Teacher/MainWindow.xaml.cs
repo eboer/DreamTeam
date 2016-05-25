@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace MBBS_Teacher
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for MainWindow.xamlj
     /// </summary>
     public partial class MainWindow : Window
     {
