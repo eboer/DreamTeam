@@ -11,7 +11,7 @@ namespace MBBS
     {
         public App()
         {
-            // The root page of your application
+            // The root page of the MBBS application
             MainPage = new LoginPage();
         }
 

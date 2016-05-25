@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="MBBS_Teacher.Pages.Login"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MBBS_Teacher.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="800"
+        >
+
+    <Grid Background="#E6E6E6">
+        <Button x:Name="login" Content="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Margin="0,100,0,0" Click="login_Click" Background="#73AAD9" Foreground="White" />
+        <Label Name="Error" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,60,0,0" Foreground="Red" />
+        <TextBox x:Name="Username" HorizontalAlignment="Center" Height="23" TextWrapping="Wrap" Text="Username" VerticalAlignment="Center" Width="120" Margin="0,-100,0,0" GotFocus="Username_GotFocus" />
+        <PasswordBox x:Name="Password" HorizontalAlignment="Center" Height="23"  VerticalAlignment="Center" Width="120" Margin="0,0,0,0"/>
+        <Label x:Name="header" Content="Login/register"  VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Height="66"  Background="#73AAD9" Foreground="White" />
+        <Label x:Name="footer" Content="Register" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Bottom" Foreground="#B0B0B0" MouseLeftButtonDown="footer_MouseLeftButtonDown" />
+    </Grid>
+</UserControl>
