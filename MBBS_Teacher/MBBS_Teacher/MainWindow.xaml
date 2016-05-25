@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MBBS_Teacher"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="526">
+        Title="Module Beoordelings en Beheer Systeem" Height="350" Width="525"
+        Icon="Logo.ico">
     <Grid>
         
     </Grid>
