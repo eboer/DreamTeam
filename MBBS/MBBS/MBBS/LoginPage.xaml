@@ -40,7 +40,8 @@
               TextColor="#737373" 
               BorderWidth="0" 
               BorderRadius="0" 
-              HorizontalOptions="Center"/>
+              HorizontalOptions="Center"
+              Clicked="ButtonRegister_OnClicked" />
     </StackLayout>
   </ContentPage.Content>
 </ContentPage>

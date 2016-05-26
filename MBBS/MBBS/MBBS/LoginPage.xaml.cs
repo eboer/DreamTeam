@@ -17,7 +17,7 @@ namespace MBBS
 
         private void MenuItem_OnButtonSignUpClicked(object sender, EventArgs e)
         {
-            
+            Navigation.PushAsync(new RegisterPage());
         }
 
         private async void ButtonLogin_OnClicked(object sender, EventArgs e)
@@ -26,6 +26,11 @@ namespace MBBS
             {
                 BarBackgroundColor = Color.FromHex("#003788")
             };
+        }
+
+        private void ButtonRegister_OnClicked(object sender, EventArgs e)
+        {
+            Navigation.PushModalAsync(new RegisterPage());
         }
     }
 }
