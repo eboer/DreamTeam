@@ -44,36 +44,36 @@ namespace MBBS.Authentication
             return token;
         }
 
-        public string getToken(int userID)
+        private int getUserID(string token)
         {
-            string token;
+            int userID;
             SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MS_TableConnectionString"].ConnectionString);
             con.Open();
             try
             {
-                SqlCommand cmd = new SqlCommand("SELECT token, expires FROM Token WHERE UserID = @userID", con);
-                cmd.Parameters.AddWithValue("@userID", userID);
+                SqlCommand cmd = new SqlCommand("SELECT UserID, expires FROM Token WHERE Token = @token", con);
+                cmd.Parameters.AddWithValue("@token", token);
 
                 SqlDataReader reader = cmd.ExecuteReader();
                 if(reader.HasRows)
                 {
                     while (reader.Read())
                     {
-                        token = reader.GetString(0);
+                        userID = reader.GetInt32(0);
                         DateTime time = reader.GetDateTime(1);
                         if (time < DateTime.Now)
                         {
                             deleteToken(userID);
-                            return null;
+                            return 0;
                         }
                         con.Close();
-                        return token;
+                        return userID;
                     }
-                    return null;
+                    return 0;
                 }
                 else
                 {
-                    return null;
+                    return 0;
                 }
                 
                 
@@ -81,12 +81,12 @@ namespace MBBS.Authentication
             catch (Exception e)
             {
                 con.Close();
-                return null;
+                return 0;
             }
            
         }
 
-        public void deleteToken(int userID)
+        private void deleteToken(int userID)
         {
             SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MS_TableConnectionString"].ConnectionString);
             con.Open();
@@ -104,19 +104,10 @@ namespace MBBS.Authentication
             }
         }
 
-        public Boolean confirmToken(int userID, string token)
+        public int confirmToken()
         {
-            //System.Web.HttpContext.Current.Request
-            string userToken = getToken(userID);
-            if(userToken == null)
-            {
-                return false;
-            }
-            if(userToken.Equals(token))
-            {
-                return true;
-            }
-            return false;
+            string token = System.Web.HttpContext.Current.Request.Headers["Authorization"];
+            return getUserID(token);
         }
 
     }

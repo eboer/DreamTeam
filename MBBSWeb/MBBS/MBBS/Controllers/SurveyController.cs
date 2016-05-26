@@ -1,28 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Web.Http;
-using MBBS.Database;
 using MBBS.Authentication;
+using MBBS.Calculators;
 
 namespace MBBS.Controllers
 {
-    [RoutePrefix("api/Module")]
-    public class ModuleController : ApiController
+    [RoutePrefix("api/Survey")]
+    public class SurveyController : ApiController
     {
         Authenticate authenticate = new Authenticate();
 
-        [Route("DocentModules")]
-        public IHttpActionResult Get()
+        [Route("AverageRatingPerYear")]
+        public IHttpActionResult Get(string moduleID)
         {
             int userID = authenticate.confirmToken();
+            //int userID = 1;
             if (userID != 0)
             {
-                ModuleQueries query = new ModuleQueries();
                 
-                return Ok(query.GetDocentModules(userID));
+                SurveyCalculators calculator = new SurveyCalculators();
+                return Ok(calculator.GetAverageRatingPerYear(moduleID));
             }
             else
             {
@@ -30,7 +31,5 @@ namespace MBBS.Controllers
             }
 
         }
-        //new JavaScriptSerializer().Serialize(ListOfMyObject);
-
     }
 }
