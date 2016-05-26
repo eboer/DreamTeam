@@ -17,7 +17,7 @@ namespace MBBS
 
         private void MenuItem_OnButtonSignUpClicked(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new RegisterPage());
+            Navigation.PushModalAsync(new RegisterPage());
         }
 
         private async void ButtonLogin_OnClicked(object sender, EventArgs e)
