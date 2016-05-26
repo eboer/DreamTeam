@@ -25,7 +25,7 @@ namespace MBBS.Controllers
         public IHttpActionResult Get(string email, string firstName, string lastName, string password, int userType)
         {
             int userID = 0;
-            Queries query = new Queries();
+            UserQueries query = new UserQueries();
             try
             {
                 query.CreateUser(firstName, lastName, email, userType);
@@ -70,7 +70,7 @@ namespace MBBS.Controllers
                 return Unauthorized();
             }
             int userID = 0;
-            Queries query = new Queries();
+            UserQueries query = new UserQueries();
             try
             {
                 userID = query.GetUserId(email);

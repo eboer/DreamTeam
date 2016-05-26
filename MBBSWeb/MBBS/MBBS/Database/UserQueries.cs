@@ -7,7 +7,7 @@ using System.Web.Http;
 
 namespace MBBS.Database
 {
-    public class Queries
+    public class UserQueries
     {
         SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MS_TableConnectionString"].ConnectionString);
 
