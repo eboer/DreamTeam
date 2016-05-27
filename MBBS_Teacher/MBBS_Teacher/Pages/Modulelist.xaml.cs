@@ -41,34 +41,28 @@ namespace MBBS_Teacher.Pages
             data = (Data)state;
             this.header.Content = "Hello " + data.LoginName + ", Select a module";
             this.footer.Content = data.LoginName + "'s modules";
-            Console.WriteLine("do this once");
             getData();
                 
        }
 
        private void getData()
        {
-            Console.WriteLine("Dolan pleaz stahp");
+            
             try
             {
-                string url = "http://mbbsweb.azurewebsites.net/api/Module/DocentModules";
+                List<Module> modules = new List<Module>();
+                Task t = Task.Factory.StartNew(() => {
+                    text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/DocentModules", this.data.token);   
+                    modules = JsonConvert.DeserializeObject<List<Module>>(text);
+                                
+                });
 
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-
-                request.Headers.Add("Authorization", this.data.token);
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-                Stream resStream = response.GetResponseStream(); ;
-                StreamReader reader = new StreamReader(resStream);
-                text = reader.ReadToEnd();
-               
-                
-                Console.WriteLine("verwacht hier iets:" + text);
-                List<Module> t = JsonConvert.DeserializeObject<List<Module>>(text);
-                foreach(Module module in t)
+                Task.WaitAll(t);
+                foreach (Module module in modules)
                 {
-                    moduleList.Items.Add(new ListViewItem { Content = module.module_name });
+                    moduleList.Items.Add(new ListViewItem { Content = module.module_id + " " + module.module_name });
                 }
+
             }
             catch (WebException exept)
             {
@@ -104,8 +98,8 @@ namespace MBBS_Teacher.Pages
             var item = sender as ListViewItem;
             if (item != null)
             {
-                data.ModuleName = item.Content.ToString();
-                //Switcher.Switch(new ModuleDetail(), data);
+                data.ModuleName = item.Content.ToString().Substring(0,4);
+                Switcher.Switch(new ModuleDetail(), data);
             }
          }
 

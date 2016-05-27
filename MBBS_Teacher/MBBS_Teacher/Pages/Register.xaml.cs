@@ -52,13 +52,52 @@ namespace MBBS_Teacher.Pages
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
-            string url = "http://mbbsweb.azurewebsites.net/api/Account/Register?email=" + Email.Text + "&firstName=" + FirstName.Text + "&lastName=" + Lastname.Text + "&password=" + Password.Password + "&userType=2";
+            string email = Email.Text;
+            string fName = FirstName.Text;
+            string lName = Lastname.Text;
+            string pass = Password.Password;
+            string error = null;
+            string text = null;
+            Task t = Task.Factory.StartNew(() => {
+                try
+                {
+                    text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Account/Register?email=" + email + "&firstName=" + fName + "&lastName=" + lName + "&password=" + pass + "&userType=2");
+                }
+                catch (WebException exept)
+                {
+                    if (exept.Response != null)
+                    {
+                        using (var errorResponse = (HttpWebResponse)exept.Response)
+                        {
+                            using (var reader = new StreamReader(errorResponse.GetResponseStream()))
+                            {
+                                error = reader.ReadToEnd();
+                                Console.WriteLine(error);
+                            }
+                        }
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                        if (exept.ToString().Contains("500"))
+                        {
+                            error = "The server is unavailable, please try again later ";
+                        }
+                        else
+                        {
+                            error = "Username and/or password incorrect";
+                        }
+                    }
+                }
+            });
+            Task.WaitAll(t);
+            if(text != null)
+            {
+                Msg.Foreground = new SolidColorBrush(Colors.Green);
+                Msg.Content = "Er is met succes een account aangemaakt";
+            }
+            else
+            {
+                Msg.Content = "Er is een probleem met het aanmaken van een account";
+            } 
 
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-            Stream resStream = response.GetResponseStream();
         }
 
         private void back_Click(object sender, RoutedEventArgs e)
