@@ -34,12 +34,8 @@ namespace MBBS_Teacher.Pages
         //fills the chart with data
         public void fillChart()
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://mbbsweb.azurewebsites.net/api/Survey/AverageRatingPerYear?moduleID=" + data.ModuleName);
-            request.Headers.Add("Authorization", data.token);
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Stream resStream = response.GetResponseStream();
-            StreamReader reader = new StreamReader(resStream);
-            string text = reader.ReadToEnd();
+            string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Survey/AverageRatingPerYear?moduleID=" + data.ModuleName, data.token);
+            
             Console.WriteLine(text);
             Dictionary<string, double> values = JsonConvert.DeserializeObject<Dictionary<string, double>>(text);
             ((LineSeries)GradeChart.Series[0]).ItemsSource =
