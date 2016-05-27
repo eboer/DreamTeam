@@ -92,7 +92,39 @@ namespace MBBS.Controllers
             return Unauthorized();
         }
 
-       
+        [Route("Login")]
+        public IHttpActionResult Post()
+        {
+            string email = System.Web.HttpContext.Current.Request["email"];
+            string password = System.Web.HttpContext.Current.Request["password"];
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            {
+                return Unauthorized();
+            }
+            int userID = 0;
+            UserQueries query = new UserQueries();
+            try
+            {
+                userID = query.GetUserId(email);
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+            if (userID != 0)
+            {
+                string retrievedPassword = query.GetPassword(userID);
+
+                if (password.Equals(retrievedPassword))
+                {
+
+                    return Ok(authenticate.setToken(userID));
+                }
+            }
+            return Unauthorized();
+        }
+
+
     }
 
     

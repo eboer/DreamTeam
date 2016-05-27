@@ -31,5 +31,51 @@ namespace MBBS.Database
             con.Close();
             return modules;
         }
+
+        public double GetSubsectionVersion()
+        {
+            string moduleID = System.Web.HttpContext.Current.Request["moduleID"];
+            int subsectionID = Int32.Parse(System.Web.HttpContext.Current.Request["subsectionID"]);
+            double currentVersion = 0;
+            SqlConnection conVersion = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MS_TableConnectionString"].ConnectionString);
+            conVersion.Open();
+            SqlCommand cmd = new SqlCommand("SELECT ModuleContent.VersionNumber " +
+                "FROM ModuleContent " +
+                "WHERE ModuleID = @moduleID AND SubsectionID = @subsectionID", conVersion);
+            cmd.Parameters.AddWithValue("@moduleID", moduleID);
+            cmd.Parameters.AddWithValue("@subsectionID", subsectionID);
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                double version = reader.GetDouble(0);
+                if(version > currentVersion)
+                {
+                    currentVersion = version;
+                }
+            }
+            conVersion.Close();
+            
+            return currentVersion++;
+        }
+
+        public void PostModuleData(int userID)
+        {
+            HttpContext context = HttpContext.Current;
+
+            con.Open();
+            SqlCommand cmd = new SqlCommand("INSERT INTO ModuleContent(ModuleID, SubsectionID, LanguageID, AuthorID, Content, VersionNumber) " +
+                "VALUES (@moduleID, @subsectionID, @languageID, @userID, @content, @version)", con);
+            cmd.Parameters.AddWithValue("@moduleID", context.Request["moduleID"]);
+            cmd.Parameters.AddWithValue("@subsectionID", context.Request["subsectionID"]);
+            cmd.Parameters.AddWithValue("@languageID", context.Request["languageID"]);
+            cmd.Parameters.AddWithValue("@userID", userID);
+            cmd.Parameters.AddWithValue("@content", context.Request["content"]);
+            cmd.Parameters.AddWithValue("@version", GetSubsectionVersion());
+            SqlDataReader reader = cmd.ExecuteReader();
+
+
+
+        }
     }
 }
