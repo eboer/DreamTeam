@@ -35,7 +35,7 @@ namespace MBBS_Teacher.Pages
         public void fillChart()
         {
             string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Survey/AverageRatingPerYear?moduleID=" + data.ModuleName, data.token);
-            
+            WebRequestHelper.sendPostData("http://mbbsweb.azurewebsites.net/api/Module/PostData", data.token, data.ModuleName, "11", "NL", "dit is test data");
             Console.WriteLine(text);
             Dictionary<string, double> values = JsonConvert.DeserializeObject<Dictionary<string, double>>(text);
             ((LineSeries)GradeChart.Series[0]).ItemsSource =

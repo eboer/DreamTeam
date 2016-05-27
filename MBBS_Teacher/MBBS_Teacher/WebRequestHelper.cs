@@ -30,22 +30,35 @@ namespace MBBS_Teacher
             string text = reader.ReadToEnd();
             return text;
         }
-        public static string sendPostData(string url, string postData)
+        public static string sendPostData(string url, string authorization, string moduleId, string subId, string langId, string content)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            var postMsg = "msg=" + postData;
-            var data = Encoding.ASCII.GetBytes(postMsg);
-
-            request.Method = "POST";
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.ContentLength = data.Length;
-            using (var stream = request.GetRequestStream())
+            try
             {
-                stream.Write(data, 0, data.Length);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                request.Headers.Add("Authorization", authorization);
+                var postMsg = "moduleId=" + moduleId;
+                postMsg += "&subsectionId=" + subId;//11
+                postMsg += "&languageId=" + langId;
+                postMsg += "&content=" + content;
+                var data = Encoding.ASCII.GetBytes(postMsg);
+
+                request.Method = "POST";
+                request.ContentType = "application/x-www-form-urlencoded";
+                request.ContentLength = data.Length;
+                using (var stream = request.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+
+                var response = (HttpWebResponse)request.GetResponse();
+                string responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
+                return responseString;
             }
-            var response = (HttpWebResponse)request.GetResponse();
-            string responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
-            return responseString;
+            catch (WebException exept)
+            {
+                return exept.ToString();
+            }
+            
 
         }
     }
