@@ -36,12 +36,23 @@ namespace MBBS.Controllers
         // Only administrator can create modules
 
         //[Route("GetData")]
-        //[Route("GetData")]
-        //public IHttpActionResult Get(string moduleID, int subsection, string languageID)
-        //{
-        
-        //}
-        
+        [Route("GetData")]
+        public IHttpActionResult Get(string moduleID, int subsectionID, string languageID)
+        {
+            //int userID = authenticate.confirmToken();
+            int userID = 1;
+            if (userID != 0)
+            {
+                ModuleQueries query = new ModuleQueries();
+                return Ok(query.GetModuleData(moduleID, subsectionID, languageID));
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+    
+
         [Route("PostData")]
         public IHttpActionResult Post()
         {
@@ -58,6 +69,23 @@ namespace MBBS.Controllers
             }
         }
         //new JavaScriptSerializer().Serialize(ListOfMyObject);
+
+        [Route("GetSubsectionNames")]
+        public IHttpActionResult Get(string languageID)
+        {
+            //int userID = authenticate.confirmToken();
+            int userID = 1;
+            if (userID != 0)
+            {
+                ModuleQueries query = new ModuleQueries();
+                
+                return Ok(query.GetSubsectionNames(languageID));
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
 
     }
 }
