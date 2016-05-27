@@ -23,16 +23,18 @@ namespace MBBS.Controllers
 
     public class TestController : ApiController
     {
-        public IHttpActionResult Get(int userID)
+        public IHttpActionResult Get(string text)
         {
-            Authentication.Authenticate authorization = new Authentication.Authenticate();
-            return Ok(authorization.setToken(userID));
+            //Authentication.Authenticate authorization = new Authentication.Authenticate();
+            return Ok(text);
         }
 
         public IHttpActionResult Get()
         {
-            string listy = "{'Token':'List:'}";
-            
+            double listy;
+            double doubleInt = 8.152397724691;
+           listy = Math.Round(doubleInt, 1);
+
             //try
             //{
             //    SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MS_TableConnectionString"].ConnectionString);
@@ -41,7 +43,7 @@ namespace MBBS.Controllers
             //    cmd.Parameters.AddWithValue("@general", test);
             //    con.Open();
             //    SqlDataReader reader = cmd.ExecuteReader();
-                
+
             //    while (reader.Read())
             //    {
             //        listy += reader.GetString(0) + " : ";
@@ -51,8 +53,8 @@ namespace MBBS.Controllers
             //{
             //    return InternalServerError(e.InnerException);
             //}
-            
-            return Ok(JObject.Parse(listy));
+
+            return Ok("success");
         }
     }
 }

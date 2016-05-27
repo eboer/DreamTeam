@@ -25,7 +25,8 @@ namespace MBBS.Calculators
                         yearNumber++;
                     }
                 }
-                results.Add(year.Key, (double)yearTotal / (double)yearNumber);
+                double ratingResult = (double)yearTotal / (double)yearNumber;
+                results.Add(year.Key, Math.Round(ratingResult, 1)); 
             }
             return results;
         }

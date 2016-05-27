@@ -6,6 +6,7 @@ using System.Net;
 using System.Web.Http;
 using MBBS.Database;
 using MBBS.Authentication;
+using MBBS.Calculators;
 
 namespace MBBS.Controllers
 {
@@ -29,6 +30,32 @@ namespace MBBS.Controllers
                 return Unauthorized();
             }
 
+        }
+
+        //[Route("CreateModule")]
+        // Only administrator can create modules
+
+        //[Route("GetData")]
+        //[Route("GetData")]
+        //public IHttpActionResult Get(string moduleID, int subsection, string languageID)
+        //{
+        
+        //}
+        
+        [Route("PostData")]
+        public IHttpActionResult Post()
+        {
+            int userID = authenticate.confirmToken();
+            if (userID != 0)
+            {
+                ModuleQueries query = new ModuleQueries();
+                query.PostModuleData(userID);
+            return Ok();
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
         //new JavaScriptSerializer().Serialize(ListOfMyObject);
 
