@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,21 +28,18 @@ namespace MBBS_Teacher.Pages
         public LineChart()
         {
             InitializeComponent();
-            fillChart();
-            LoadPieChartData();
-            LoadScoreChart();
+
         }
 
         //fills the chart with data
         public void fillChart()
         {
+            string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Survey/AverageRatingPerYear?moduleID=" + data.ModuleName, data.token);
+            WebRequestHelper.sendPostData("http://mbbsweb.azurewebsites.net/api/Module/PostData", data.token, data.ModuleName, "11", "NL", "dit is test data");
+            Console.WriteLine(text);
+            Dictionary<string, double> values = JsonConvert.DeserializeObject<Dictionary<string, double>>(text);
             ((LineSeries)GradeChart.Series[0]).ItemsSource =
-            new KeyValuePair<DateTime, int>[]{
-            new KeyValuePair<DateTime, int>(DateTime.Now, 7),
-            new KeyValuePair<DateTime, int>(DateTime.Now.AddMonths(1), 6),
-            new KeyValuePair<DateTime, int>(DateTime.Now.AddMonths(2), 4),
-            new KeyValuePair<DateTime, int>(DateTime.Now.AddMonths(3), 5),
-            new KeyValuePair<DateTime, int>(DateTime.Now.AddMonths(4),2) };
+            values;
 
         }
 
@@ -69,6 +69,9 @@ namespace MBBS_Teacher.Pages
         {
             data = (Data)state;
             this.header.Content = data.ModuleName;
+            fillChart();
+            LoadPieChartData();
+            LoadScoreChart();
         }
 
         private void back_Click(object sender, RoutedEventArgs e)

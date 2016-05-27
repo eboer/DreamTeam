@@ -32,28 +32,16 @@ namespace MBBS_Teacher.Pages
             }
             else
             {
+                string uName = Username.Text;
+                string pWord = Password.Password;
                 string text = null;
-                
-                
+                string errorText = null;
+                Data data = new Data();
+                Task t = Task.Factory.StartNew(() =>
+                {
                     try
                     {
-
-                        string url = "http://mbbsweb.azurewebsites.net/api/Account/Login?email=" + Username.Text + "&password=" + Password.Password;
-
-                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                        request.Headers.Add("username", Username.Text);
-                        request.Headers.Add("password", Password.Password);
-                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-                        Stream resStream = response.GetResponseStream(); ;
-                        StreamReader reader = new StreamReader(resStream);
-                        text = reader.ReadToEnd();
-                        Data data = new Data();
-                        data.token = text;
-                        data.token = data.token.TrimEnd('"');
-                        data.token = data.token.TrimStart('"');
-                        data.LoginName = Username.Text;
-                        Switcher.Switch(new Modulelist(), data);
+                        text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Account/Login?email=" + uName + "&password=" + pWord);
                     }
                     catch (WebException exept)
                     {
@@ -70,20 +58,30 @@ namespace MBBS_Teacher.Pages
 
                             if (exept.ToString().Contains("500"))
                             {
-                                Error.Content = "The server is unavailable, please try again later ";
+                                errorText = "The server is unavailable, please try again later ";
                             }
                             else
                             {
-                                Error.Content = "Username and/or password incorrect";
+                                errorText = "Username and/or password incorrect";
                             }
-                            text = exept.ToString();
                         }
 
                     }
-
+                });
                 
-                
-                Console.WriteLine(text);
+                Task.WaitAll(t);
+                if (text != null)
+                {
+                    data.token = text;
+                    data.token = data.token.TrimEnd('"');
+                    data.token = data.token.TrimStart('"');
+                    data.LoginName = Username.Text;
+                    Switcher.Switch(new Modulelist(), data);
+                }
+                else
+                {
+                    Error.Content = errorText;
+                }
             }
         }
 
