@@ -25,8 +25,8 @@ namespace MBBS
             if (PasswordEntry.Text == PasswordEntry2.Text)
             {
                 MakeGetRequest(url);
-                Navigation.PopModalAsync();
                 DisplayAlert("Success!", "You have registered an account", "OK");
+                Navigation.PopModalAsync();
             }
             else
             {
