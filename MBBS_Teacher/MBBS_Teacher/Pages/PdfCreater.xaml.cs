@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,16 +24,34 @@ namespace MBBS_Teacher.Pages
     /// </summary>
     public partial class PdfCreater : UserControl, ISwitchable
     {
+        Data data;
+
         public PdfCreater()
-        {
+        {    
             InitializeComponent();
         }
 
         public void UtilizeState(object state)
         {
             Data data = (Data)state;
-            string token = data.token;
-            //TODO: pdf stuff
+            string text = null;
+
+            List<Module> modules = new List<Module>();
+            Task t = Task.Factory.StartNew(() =>
+            {
+                text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/DocentModules", this.data.token);
+                modules = JsonConvert.DeserializeObject<List<Module>>(text);
+            });
+
+            PdfDocument pdf = new PdfDocument();
+            pdf.Info.Title = "The first PDF document";
+            PdfPage pdfPage = pdf.AddPage();
+            XGraphics graph = XGraphics.FromPdfPage(pdfPage);
+            XFont font = new XFont("Verdana", 20, XFontStyle.Bold);
+            graph.DrawString("This is my first PDF document", font, XBrushes.Black, new XRect(0, 0, pdfPage.Width.Point, pdfPage.Height.Point), XStringFormats.Center);
+            string pdfFilename = "firstpage.pdf";
+            pdf.Save(pdfFilename);
+            Process.Start(pdfFilename);
         }
     }
 }
