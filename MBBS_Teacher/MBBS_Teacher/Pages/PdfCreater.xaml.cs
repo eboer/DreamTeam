@@ -43,12 +43,19 @@ namespace MBBS_Teacher.Pages
                 modules = JsonConvert.DeserializeObject<List<Module>>(text);
             });
 
+            
+
             PdfDocument pdf = new PdfDocument();
             pdf.Info.Title = "The first PDF document";
             PdfPage pdfPage = pdf.AddPage();
             XGraphics graph = XGraphics.FromPdfPage(pdfPage);
             XFont font = new XFont("Verdana", 20, XFontStyle.Bold);
-            graph.DrawString("This is my first PDF document", font, XBrushes.Black, new XRect(0, 0, pdfPage.Width.Point, pdfPage.Height.Point), XStringFormats.Center);
+
+            foreach (Module module in modules)
+            {
+                graph.DrawString(module.module_name, font, XBrushes.Black, new XRect(0, 0, pdfPage.Width.Point, pdfPage.Height.Point), XStringFormats.Center);
+            }
+
             string pdfFilename = "firstpage.pdf";
             pdf.Save(pdfFilename);
             Process.Start(pdfFilename);
