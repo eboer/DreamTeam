@@ -28,6 +28,7 @@ namespace MBBS_Teacher.Pages
         public void UtilizeState(object state)
         {
             Data data = (Data)state;
+            string token = data.token;
             //TODO: pdf stuff
         }
     }
