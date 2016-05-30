@@ -1,21 +1,10 @@
 ﻿using Newtonsoft.Json;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MBBS_Teacher.Pages
 {
@@ -41,7 +30,6 @@ namespace MBBS_Teacher.Pages
             {
                 text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/DocentModules", this.data.token);
                 modules = JsonConvert.DeserializeObject<List<Module>>(text);
-                Console.WriteLine("I am doing this");
             });
             Task.WaitAll(t);
 
@@ -50,13 +38,13 @@ namespace MBBS_Teacher.Pages
             PdfPage pdfPage = pdf.AddPage();
             XGraphics graph = XGraphics.FromPdfPage(pdfPage);
             XFont font = new XFont("Verdana", 20, XFontStyle.Bold);
+            XFont font2 = new XFont("Verdana", 10);
 
             foreach (Module module in modules)
-            {
-                
-                graph.DrawString(module.module_name, font, XBrushes.Black, new XRect(0, 0, pdfPage.Width.Point, pdfPage.Height.Point), XStringFormats.Center);
+            {   
+                graph.DrawString(module.module_name, font, XBrushes.Black, new XRect(0, 0, pdfPage.Width.Point, pdfPage.Height.Point), XStringFormats.TopCenter);
+                graph.DrawString("Dit is starcraft 2 voor beginners. Jullie zijn allemaal noobs en daarom hebben jullie dit nodig", font2, XBrushes.Black, new XRect(0, 0, pdfPage.Width.Point, pdfPage.Height.Point));
             }
-            Console.WriteLine("Now I can this");
 
             string pdfFilename = "firstpage.pdf";
             pdf.Save(pdfFilename);
