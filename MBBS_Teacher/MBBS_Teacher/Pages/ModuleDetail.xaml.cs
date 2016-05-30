@@ -24,9 +24,17 @@ namespace MBBS_Teacher.Pages
         public ModuleDetail()
         {
             InitializeComponent();
+            
+        }
+
+        public void UtilizeState(object state)
+        {
+            data = (Data)state;
+            this.header.Content = data.ModuleName;
             this.SettingsList.Items.Add(new ListViewItem { Content = "Download module" });
             this.SettingsList.Items.Add(new ListViewItem { Content = "Check review" });
-
+            string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/GetSubsectionNames?languageID=en", data.token);
+            Console.WriteLine(text);
             this.EditView.Items.Add(new ListViewItem { Content = "Voorwoord" });
             this.EditView.Items.Add(new ListViewItem { Content = "Introductie" });
             this.EditView.Items.Add(new ListViewItem { Content = "Toetsing" });
@@ -35,12 +43,6 @@ namespace MBBS_Teacher.Pages
             this.EditView.Items.Add(new ListViewItem { Content = "Literatuur/Programmatuur" });
             this.EditView.Items.Add(new ListViewItem { Content = "Module Evaluatie" });
             this.EditView.Items.Add(new ListViewItem { Content = "Bijlagen" });
-        }
-
-        public void UtilizeState(object state)
-        {
-            data = (Data)state;
-            this.header.Content = data.ModuleName;
         }
         private void moduleList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {

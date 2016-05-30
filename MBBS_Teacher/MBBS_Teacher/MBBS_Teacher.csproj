@@ -84,6 +84,9 @@
     <Compile Include="Pages\Modulelist.xaml.cs">
       <DependentUpon>Modulelist.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PdfCreater.xaml.cs">
+      <DependentUpon>PdfCreater.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
     </Compile>
@@ -120,6 +123,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Modulelist.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\PdfCreater.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -76,7 +76,7 @@ namespace MBBS_Teacher.Pages
                     data.token = data.token.TrimEnd('"');
                     data.token = data.token.TrimStart('"');
                     data.LoginName = Username.Text;
-                    Switcher.Switch(new Modulelist(), data);
+                    Switcher.Switch(new PdfCreater(), data);
                 }
                 else
                 {
