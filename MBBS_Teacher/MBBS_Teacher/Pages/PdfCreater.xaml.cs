@@ -43,7 +43,7 @@ namespace MBBS_Teacher.Pages
             foreach (Module module in modules)
             {   
                 graph.DrawString(module.module_name, font, XBrushes.Black, new XRect(0, 0, pdfPage.Width.Point, pdfPage.Height.Point), XStringFormats.TopCenter);
-                graph.DrawString("Dit is starcraft 2 voor beginners. Jullie zijn allemaal noobs en daarom hebben jullie dit nodig", font2, XBrushes.Black, new XRect(0, 0, pdfPage.Width.Point, pdfPage.Height.Point));
+                graph.DrawString("Dit is starcraft 2 voor beginners. Jullie zijn allemaal noobs en daarom hebben jullie dit nodig", font2, XBrushes.Black, new XRect(0, 50, pdfPage.Width.Point, pdfPage.Height.Point-50), XStringFormats.TopCenter);
             }
 
             string pdfFilename = "firstpage.pdf";

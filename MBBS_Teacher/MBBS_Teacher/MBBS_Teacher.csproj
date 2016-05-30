@@ -107,6 +107,7 @@
       <DependentUpon>Register.xaml</DependentUpon>
     </Compile>
     <Compile Include="SizeConverter .cs" />
+    <Compile Include="Subsecties.cs" />
     <Compile Include="Switcher.cs" />
     <Compile Include="WebRequestHelper.cs" />
     <Compile Include="WPFPageSwitch.cs" />
