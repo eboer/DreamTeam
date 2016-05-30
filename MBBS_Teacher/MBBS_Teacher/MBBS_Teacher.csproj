@@ -36,23 +36,23 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MigraDoc.DocumentObjectModel">
-      <HintPath>D:\School\Kennismanagement\PDF\GDI+\MigraDoc.DocumentObjectModel.dll</HintPath>
+      <HintPath>..\..\..\..\..\Downloads\GDI+-2016-05-30\GDI+\MigraDoc.DocumentObjectModel.dll</HintPath>
     </Reference>
     <Reference Include="MigraDoc.Rendering">
-      <HintPath>D:\School\Kennismanagement\PDF\GDI+\MigraDoc.Rendering.dll</HintPath>
+      <HintPath>..\..\..\..\..\Downloads\GDI+-2016-05-30\GDI+\MigraDoc.Rendering.dll</HintPath>
     </Reference>
     <Reference Include="MigraDoc.RtfRendering">
-      <HintPath>D:\School\Kennismanagement\PDF\GDI+\MigraDoc.RtfRendering.dll</HintPath>
+      <HintPath>..\..\..\..\..\Downloads\GDI+-2016-05-30\GDI+\MigraDoc.RtfRendering.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.4-beta1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PdfSharp">
-      <HintPath>D:\School\Kennismanagement\PDF\GDI+\PdfSharp.dll</HintPath>
+      <HintPath>..\..\..\..\..\Downloads\GDI+-2016-05-30\GDI+\PdfSharp.dll</HintPath>
     </Reference>
     <Reference Include="PdfSharp.Charting">
-      <HintPath>D:\School\Kennismanagement\PDF\GDI+\PdfSharp.Charting.dll</HintPath>
+      <HintPath>..\..\..\..\..\Downloads\GDI+-2016-05-30\GDI+\PdfSharp.Charting.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

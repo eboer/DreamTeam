@@ -33,7 +33,7 @@ namespace MBBS_Teacher.Pages
 
         public void UtilizeState(object state)
         {
-            Data data = (Data)state;
+            data = (Data)state;
             string text = null;
 
             List<Module> modules = new List<Module>();
@@ -41,9 +41,9 @@ namespace MBBS_Teacher.Pages
             {
                 text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/DocentModules", this.data.token);
                 modules = JsonConvert.DeserializeObject<List<Module>>(text);
+                Console.WriteLine("I am doing this");
             });
-
-            
+            Task.WaitAll(t);
 
             PdfDocument pdf = new PdfDocument();
             pdf.Info.Title = "The first PDF document";
@@ -53,8 +53,10 @@ namespace MBBS_Teacher.Pages
 
             foreach (Module module in modules)
             {
+                
                 graph.DrawString(module.module_name, font, XBrushes.Black, new XRect(0, 0, pdfPage.Width.Point, pdfPage.Height.Point), XStringFormats.Center);
             }
+            Console.WriteLine("Now I can this");
 
             string pdfFilename = "firstpage.pdf";
             pdf.Save(pdfFilename);
