@@ -70,7 +70,6 @@ namespace MBBS
 
                 if (!string.IsNullOrEmpty(text))
                 {
-                    Debug.WriteLine("or bru I am over here");
                     data.token = text;
                     data.token = data.token.TrimEnd('"');
                     data.token = data.token.TrimStart('"');
