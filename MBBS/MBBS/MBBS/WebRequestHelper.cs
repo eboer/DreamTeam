@@ -12,22 +12,6 @@ namespace MBBS
 {
     class WebRequestHelper
     {
-        public async Task MakeGetRequest(string url)
-        {
-            Debug.WriteLine("Start");
-            try
-            {
-                
-            }
-            catch 
-            {
-                Debug.WriteLine("het internet ligt er weer uit denk ik");
-
-            }
-
-
-        }
-
         //getData using the token
         public string getData(string url, string authorization)
         {
