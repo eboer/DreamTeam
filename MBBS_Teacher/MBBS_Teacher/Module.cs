@@ -14,4 +14,4 @@ namespace MBBS_Teacher
         [JsonProperty("module_name")]
         public string module_name { get; set; }
     }
-}
+}C:\Users\Erik\Source\Repos\DreamTeam\MBBS_Teacher\MBBS_Teacher\MainWindow.xaml
