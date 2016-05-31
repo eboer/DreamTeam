@@ -6,7 +6,6 @@ using System.Net;
 using System.Web.Http;
 using MBBS.Database;
 using MBBS.Authentication;
-using MBBS.Calculators;
 
 namespace MBBS.Controllers
 {
@@ -22,7 +21,7 @@ namespace MBBS.Controllers
             if (userID != 0)
             {
                 ModuleQueries query = new ModuleQueries();
-                
+
                 return Ok(query.GetDocentModules(userID));
             }
             else
@@ -35,12 +34,11 @@ namespace MBBS.Controllers
         //[Route("CreateModule")]
         // Only administrator can create modules
 
-        //[Route("GetData")]
         [Route("GetData")]
         public IHttpActionResult Get(string moduleID, int subsectionID, string languageID)
         {
-            //int userID = authenticate.confirmToken();
-            int userID = 1;
+            int userID = authenticate.confirmToken();
+            //int userID = 1;
             if (userID != 0)
             {
                 ModuleQueries query = new ModuleQueries();
@@ -73,8 +71,7 @@ namespace MBBS.Controllers
         [Route("GetSubsectionNames")]
         public IHttpActionResult Get(string languageID)
         {
-            //int userID = authenticate.confirmToken();
-            int userID = 1;
+            int userID = authenticate.confirmToken();
             if (userID != 0)
             {
                 ModuleQueries query = new ModuleQueries();
@@ -88,4 +85,14 @@ namespace MBBS.Controllers
         }
 
     }
-}
+    [RoutePrefix("api/Module")]
+    public class AllModuleController : ApiController
+    {
+        [Route("AllModules")]
+        public IHttpActionResult Get()
+        {           
+                ModuleQueries query = new ModuleQueries();
+                return Ok(query.GetAllModules());
+        }
+    }
+ }

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace MBBS.Models
 {
-    public class SubsectionModel
+    public class Subsection
     {
         public int SubsectionID { get; set; }
         public string SubsectionCode { get; set; }
