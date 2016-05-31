@@ -25,6 +25,7 @@ namespace MBBS_Teacher
             string text = reader.ReadToEnd();
             return text;
         }
+
         //getData without the token (for loging/register)
         public static string getData(string url)
         {
