@@ -22,15 +22,22 @@ namespace MBBS
         private void ButtonRegister_OnClicked(object sender, EventArgs e)
         {
             string url = "http://mbbsweb.azurewebsites.net/api/Account/Register?email=" + EmailEntry.Text + "&firstName=" + FirstNameEntry.Text + "&lastName=" + LastNameEntry.Text + "&password=" + PasswordEntry.Text;
-            if (PasswordEntry.Text == PasswordEntry2.Text)
+            if (string.IsNullOrEmpty(FirstNameEntry.Text) || string.IsNullOrEmpty(EmailEntry.Text) || string.IsNullOrEmpty(LastNameEntry.Text) || string.IsNullOrEmpty(PasswordEntry.Text))
             {
-                MakeGetRequest(url);
-                DisplayAlert("Success!", "You have registered an account", "OK");
-                Navigation.PopModalAsync();
+                MessageLabel.Text = "One or more fields are empty.";
             }
             else
             {
-                MessageLabel.Text = "The passwords do not match.";
+                if (PasswordEntry.Text == PasswordEntry2.Text)
+                {
+                    MakeGetRequest(url);
+                    DisplayAlert("Success!", "You have registered an account", "OK");
+                    Navigation.PopModalAsync();
+                }
+                else
+                {
+                    MessageLabel.Text = "The passwords do not match.";
+                }
             }
         }
 

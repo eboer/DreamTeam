@@ -6,55 +6,56 @@
              BackgroundColor="#e6e6e6" >
 
   <ContentPage.Content>
-    <StackLayout VerticalOptions="Center">
-      <Label/>
-      <Image Source="drawable-xxhdpi/icon.png"></Image>
-      <Label Text="First Name"
-             TextColor="#4d4d4d" />
-      <Entry x:Name="FirstNameEntry"
-             TextColor="#4d4d4d"
-             BackgroundColor="#ffffff"
-             Placeholder="First Name" />
-      <Label Text="Last Name"
-             TextColor="#4d4d4d" />
-      <Entry x:Name="LastNameEntry"
-             TextColor="#4d4d4d"
-             BackgroundColor="#ffffff"
-             Placeholder="Last Name"></Entry>
-      <Label Text="Email"
-             TextColor="#4d4d4d" />
-      <Entry x:Name="EmailEntry"
-             TextColor="#4d4d4d"
-             BackgroundColor="#ffffff"
-             Placeholder="Email" />
-      <Label Text="Wachtwoord"
-             TextColor="#4d4d4d"/>
-      <Entry x:Name="PasswordEntry"
-             TextColor="#4d4d4d"
-             BackgroundColor="#ffffff"
-             IsPassword="true" />
-      <Label Text="Confirm Password"
-             TextColor="#4d4d4d" />
-      <Entry x:Name="PasswordEntry2"
-             TextColor="#4d4d4d"
-             BackgroundColor="#ffffff" 
-             IsPassword="true" />
+    <ScrollView Orientation="Vertical" VerticalOptions="FillAndExpand">
+      <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand">
+        <Label Text="Registreren"
+               TextColor="#4d4d4d"
+               FontSize="25"/>
+        <Image Source="drawable-xxhdpi/icon.png"></Image>
+        <Label Text="First Name"
+               TextColor="#4d4d4d" />
+        <Entry x:Name="FirstNameEntry"
+               TextColor="#4d4d4d"
+               BackgroundColor="#ffffff"
+               Placeholder="First Name" />
+        <Label Text="Last Name"
+               TextColor="#4d4d4d" />
+        <Entry x:Name="LastNameEntry"
+               TextColor="#4d4d4d"
+               BackgroundColor="#ffffff"
+               Placeholder="Last Name"></Entry>
+        <Label Text="Email"
+               TextColor="#4d4d4d" />
+        <Entry x:Name="EmailEntry"
+               TextColor="#4d4d4d"
+               BackgroundColor="#ffffff"
+               Placeholder="Email" />
+        <Label Text="Password"
+               TextColor="#4d4d4d"/>
+        <Entry x:Name="PasswordEntry"
+               TextColor="#4d4d4d"
+               BackgroundColor="#ffffff"
+               IsPassword="true" />
+        <Label Text="Confirm Password"
+               TextColor="#4d4d4d" />
+        <Entry x:Name="PasswordEntry2"
+               TextColor="#4d4d4d"
+               BackgroundColor="#ffffff" 
+               IsPassword="true" />
       
-      <Button Text="Register"
-              BackgroundColor="#003788"
-              WidthRequest="120"
-              HeightRequest="40"
-              BorderWidth="0"
-              BorderRadius="0"
-              HorizontalOptions="Center"
-              Clicked="ButtonRegister_OnClicked" />
-      <Label x:Name="MessageLabel"
-             TextColor="#4d4d4d"
-             HorizontalOptions="Center"
-             FontSize="18" />
-      
-      
-      
-    </StackLayout>
+        <Button Text="Register"
+                BackgroundColor="#003788"
+                WidthRequest="120"
+                HeightRequest="40"
+                BorderWidth="0"
+                BorderRadius="0"
+                HorizontalOptions="Center"
+                Clicked="ButtonRegister_OnClicked" />
+        <Label x:Name="MessageLabel"
+               TextColor="#4d4d4d"
+               HorizontalOptions="Center"
+               FontSize="18" />
+       </StackLayout>
+      </ScrollView>
   </ContentPage.Content>
 </ContentPage>
