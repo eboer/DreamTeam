@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,11 +13,20 @@ namespace MBBS_Teacher
     class WebRequestHelper
     {
         public Stream strum;
-        public async void MakeGetRequest(string url)
+        public async Task MakeGetRequest(string url)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            var response = await request.GetResponseAsync();
-            strum = response.GetResponseStream();
+            Debug.WriteLine("Start");
+            try
+            {
+                
+            }
+            catch 
+            {
+                Debug.WriteLine("het internet ligt er weer uit denk ik");
+
+            }
+
+
         }
 
         //getData using the token
@@ -25,16 +35,20 @@ namespace MBBS_Teacher
             //MakeGetRequest(url, authorization);
             //read the webresponse
             //request.Headers.Add("Authorization", authorization);
+            Debug.WriteLine("the request woo!");
             StreamReader reader = new StreamReader(strum);
             string text = reader.ReadToEnd();
             return text;
         }
         //getData without the token (for loging/register)
-        public string getData(string url)
+        public async Task<string> getData(string url)
         {
-            MakeGetRequest(url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            var response = await request.GetResponseAsync();
+            Stream ressStream = response.GetResponseStream();
+            
             //read the webresponse
-            StreamReader reader = new StreamReader(strum);
+            StreamReader reader = new StreamReader(ressStream);
             string text = reader.ReadToEnd();
             return text;
         }

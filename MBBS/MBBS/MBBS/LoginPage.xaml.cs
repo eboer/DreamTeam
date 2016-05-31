@@ -25,6 +25,7 @@ namespace MBBS
 
         private async void ButtonLogin_OnClicked(object sender, EventArgs e)
         {
+            WebRequestHelper help = new WebRequestHelper();
             if (string.IsNullOrEmpty(EmailEntry.Text) || string.IsNullOrEmpty(PasswordEntry.Text))
             {
                 MessageLabel.Text = "Please fill in the email and password";
@@ -36,47 +37,46 @@ namespace MBBS
                 string text = null;
                 string errorText = null;
                 Data data = new Data();
-                Task t = Task.Factory.StartNew(() =>
-                {
-                    try
-                    {
-                        text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Account/Login?email=" + uName + "&password=" + pWord);
-                    }
-                    catch (WebException exept)
-                    {
-                        if (exept.Response != null)
-                        {
-                            using (var errorResponse = (HttpWebResponse)exept.Response)
-                            {
-                                using (var reader = new StreamReader(errorResponse.GetResponseStream()))
-                                {
-                                    string error = reader.ReadToEnd();
-                                    Debug.WriteLine(error);
-                                }
-                            }
 
-                            if (exept.ToString().Contains("500"))
+                try
+                {
+                    text = await help.getData("http://mbbsweb.azurewebsites.net/api/Account/Login?email=" + uName + "&password=" + pWord);
+                    Debug.WriteLine(text);
+                }
+                catch (WebException exept)
+                {
+                    if (exept.Response != null)
+                    {
+                        using (var errorResponse = (HttpWebResponse)exept.Response)
+                        {
+                            using (var reader = new StreamReader(errorResponse.GetResponseStream()))
                             {
-                                errorText = "The server is unavailable, please try again later ";
-                            }
-                            else
-                            {
-                                errorText = "Username and/or password incorrect";
+                                string error = reader.ReadToEnd();
+                                Debug.WriteLine(error);
                             }
                         }
 
+                        if (exept.ToString().Contains("500"))
+                        {
+                            errorText = "The server is unavailable, please try again later ";
+                        }
+                        else
+                        {
+                            errorText = "Username and/or password incorrect";
+                        }
                     }
-                });
 
-                Task.WaitAll(t);
-                if (text != null)
+                }
+
+                if (!string.IsNullOrEmpty(text))
                 {
+                    Debug.WriteLine("or bru I am over here");
                     data.token = text;
                     data.token = data.token.TrimEnd('"');
                     data.token = data.token.TrimStart('"');
                     data.LoginName = EmailEntry.Text;
-
-                    Application.Current.MainPage = new NavigationPage(new HomePage()) //nog data meegeven!
+                    Debug.WriteLine((errorText));
+                    Application.Current.MainPage = new NavigationPage(new HomePage(data.token))
                     {
                         BarBackgroundColor = Color.FromHex("#003788")
                     };
