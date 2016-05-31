@@ -11,18 +11,6 @@ namespace MBBS
 {
     public partial class HomePage : ContentPage
     {
-        public HomePage()
-        {
-            //OI
-            InitializeComponent();
-            ModuleListView.ItemsSource = new List<Module>
-            {
-                new Module {module_name = "C#"},
-                new Module {module_name = "Java Finals"},
-                new Module {module_name = "Project website"}
-            };
-        }
-
         public HomePage(string token)
         {
             InitializeComponent();

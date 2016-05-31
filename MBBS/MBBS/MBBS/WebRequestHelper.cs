@@ -8,11 +8,10 @@ using System.Net;
 using System.IO;
 using MBBS;
 
-namespace MBBS_Teacher
+namespace MBBS
 {
     class WebRequestHelper
     {
-        public Stream strum;
         public async Task MakeGetRequest(string url)
         {
             Debug.WriteLine("Start");
@@ -32,13 +31,8 @@ namespace MBBS_Teacher
         //getData using the token
         public string getData(string url, string authorization)
         {
-            //MakeGetRequest(url, authorization);
-            //read the webresponse
-            //request.Headers.Add("Authorization", authorization);
-            Debug.WriteLine("the request woo!");
-            StreamReader reader = new StreamReader(strum);
-            string text = reader.ReadToEnd();
-            return text;
+            //moet nog gemaakt worden
+            return url;
         }
         //getData without the token (for loging/register)
         public async Task<string> getData(string url)
