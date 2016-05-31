@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,18 @@ namespace MBBS
                 new Module {module_name = "Java Finals"},
                 new Module {module_name = "Project website"}
             };
+        }
+
+        public HomePage(string token)
+        {
+            InitializeComponent();
+            ModuleListView.ItemsSource = new List<Module>
+            {
+                new Module {Name = "C#"},
+                new Module {Name = "Java Finals"},
+                new Module {Name = "Project website"}
+            };
+            Debug.WriteLine(token); //weghalen
         }
 
         private async void Button_OnClicked(object sender, EventArgs e)

@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Data.cs" />
     <Compile Include="FormulierPage.xaml.cs">
       <DependentUpon>FormulierPage.xaml</DependentUpon>
     </Compile>
@@ -50,6 +51,7 @@
     <Compile Include="RegisterPage.xaml.cs">
       <DependentUpon>RegisterPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WebRequestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GettingStarted.Xamarin" />
