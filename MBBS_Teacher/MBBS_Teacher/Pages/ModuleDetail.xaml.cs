@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,7 @@ namespace MBBS_Teacher.Pages
     public partial class ModuleDetail : UserControl, ISwitchable
     {
         Data data;
+        Dictionary<string,string> moduleData = new Dictionary<string, string>();
         public ModuleDetail()
         {
             InitializeComponent();
@@ -33,16 +35,34 @@ namespace MBBS_Teacher.Pages
             this.header.Content = data.ModuleName;
             this.SettingsList.Items.Add(new ListViewItem { Content = "Download module" });
             this.SettingsList.Items.Add(new ListViewItem { Content = "Check review" });
-            string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/GetSubsectionNames?languageID=en", data.token);
-            Console.WriteLine(text);
-            this.EditView.Items.Add(new ListViewItem { Content = "Voorwoord" });
-            this.EditView.Items.Add(new ListViewItem { Content = "Introductie" });
-            this.EditView.Items.Add(new ListViewItem { Content = "Toetsing" });
-            this.EditView.Items.Add(new ListViewItem { Content = "Programma" });
-            this.EditView.Items.Add(new ListViewItem { Content = "Structuur & Organisatie" });
-            this.EditView.Items.Add(new ListViewItem { Content = "Literatuur/Programmatuur" });
-            this.EditView.Items.Add(new ListViewItem { Content = "Module Evaluatie" });
-            this.EditView.Items.Add(new ListViewItem { Content = "Bijlagen" });
+
+            List<Subsecties> sub = new List<Subsecties>();
+            string text = null;
+            Task t = Task.Factory.StartNew(() => {
+                text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/GetSubsectionNames?languageID=en", this.data.token);
+                sub = JsonConvert.DeserializeObject<List<Subsecties>>(text);
+
+            });
+
+            Task.WaitAll(t);
+
+            foreach (Subsecties subsec in sub)
+            {
+
+                string moduleResond = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/GetData?moduleID=+" + data.ModuleName + "&subsectionID=" + subsec.SubsectionID + "&languageID=en", data.token);
+                SubsectionData respondString = JsonConvert.DeserializeObject<SubsectionData>(moduleResond);
+                moduleData.Add(subsec.SubsectionName, respondString.Content);
+                                              //  WebRequestHelper.sendPostData("http://mbbsweb.azurewebsites.net/api/Module/PostData", data.token, data.ModuleName, subsec.SubsectionID, "en", "dit is cheap en dirty");
+  
+                this.EditView.Items.Add(new ListViewItem { Content = subsec.SubsectionID + " " + subsec.SubsectionName });
+
+            }
+            Dictionary<string,string> p = Module.getModuleData(data.token, data.ModuleName);
+            foreach(KeyValuePair<string,string> k in p)
+            {
+                Console.WriteLine(k.Key + " " + k.Value);
+            }
+            Console.WriteLine("lol");
         }
         private void moduleList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -67,6 +87,17 @@ namespace MBBS_Teacher.Pages
         private void back_Click(object sender, RoutedEventArgs e)
         {
             Switcher.Switch(new Modulelist(),data);
+        }
+
+        private class SubsectionData
+        {
+            [JsonProperty("AuthorID")]
+            public string AuthorID { get; set; }
+            [JsonProperty("Content")]
+            public string Content { get; set; }
+            [JsonProperty("VersionNumber")]
+            public string VersionNumber { get; set; }
+
         }
     }
 }

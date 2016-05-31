@@ -148,7 +148,7 @@ namespace MBBS_Teacher.Pages
                     data.token = data.token.TrimEnd('"');
                     data.token = data.token.TrimStart('"');
                     data.LoginName = Username.Text;
-                    Switcher.Switch(new ModuleDetail(), data);
+                    Switcher.Switch(new Modulelist(), data);
                 }
                 else
                 {
