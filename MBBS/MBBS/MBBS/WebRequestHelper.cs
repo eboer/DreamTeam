@@ -1,46 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.IO;
+using MBBS;
 
-namespace MBBS_Teacher
+namespace MBBS
 {
-   static class WebRequestHelper
+    class WebRequestHelper
     {
         //getData using the token
-        public static string getData(string url, string authorization)
+        public string getData(string url, string authorization)
         {
-            //create the httpwebrequest
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            //add the token in the header
-            request.Headers.Add("Authorization", authorization);
-            //get the webresponse
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Stream resStream = response.GetResponseStream();
-            //read the webresponse
-            StreamReader reader = new StreamReader(resStream);
-            string text = reader.ReadToEnd();
-            return text;
+            //moet nog gemaakt worden
+            return url;
         }
-
         //getData without the token (for loging/register)
-        public static string getData(string url)
+        public async Task<string> getData(string url)
         {
-            //create the webrequest
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            //get the respnse
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Stream resStream = response.GetResponseStream();
+            var response = await request.GetResponseAsync();
+            Stream ressStream = response.GetResponseStream();
+            
             //read the webresponse
-            StreamReader reader = new StreamReader(resStream);
+            StreamReader reader = new StreamReader(ressStream);
             string text = reader.ReadToEnd();
             return text;
         }
         //send data using POST
-        public static string sendPostData(string url, string authorization, string moduleId, string subId, string langId, string content)
+        /*public string sendPostData(string url, string authorization, string moduleId, string subId, string langId, string content)
         {
             try
             {
@@ -76,6 +67,6 @@ namespace MBBS_Teacher
             }
             
 
-        }
+        }*/
     }
 }
