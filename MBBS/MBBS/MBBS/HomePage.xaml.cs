@@ -16,9 +16,9 @@ namespace MBBS
             InitializeComponent();
             ModuleListView.ItemsSource = new List<Module>
             {
-                new Module {Name = "C#"},
-                new Module {Name = "Java Finals"},
-                new Module {Name = "Project website"}
+                new Module {module_name = "C#"},
+                new Module {module_name = "Java Finals"},
+                new Module {module_name = "Project website"}
             };
         }
 
