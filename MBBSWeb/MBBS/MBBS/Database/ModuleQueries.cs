@@ -10,6 +10,25 @@ namespace MBBS.Database
     public class ModuleQueries
     {
         SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MS_TableConnectionString"].ConnectionString);
+
+        public List<Object> GetAllModules()
+        {
+            con.Open();
+            List<Object> modules = new List<Object>();
+            SqlCommand cmd = new SqlCommand("SELECT ModuleID, ModuleName " +
+                "FROM Module", con);
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                Module module = new Module();
+                module.module_id = reader.GetString(0);
+                module.module_name = reader.GetString(1);
+                modules.Add(module);
+            }
+            con.Close();
+            return modules;
+        }
+
         public List<Object> GetDocentModules(int userID)
         {
             con.Open();
@@ -23,7 +42,7 @@ namespace MBBS.Database
             SqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                DocentModule docentModule = new DocentModule();
+                Module docentModule = new Module();
                 docentModule.module_id = reader.GetString(0);
                 docentModule.module_name = reader.GetString(1);
                 modules.Add(docentModule);
@@ -35,16 +54,16 @@ namespace MBBS.Database
         public ModuleContentModel GetModuleData(string moduleID, int subsectionID, string languageID)
         {
             ModuleContentModel moduleContent = new ModuleContentModel();
-            double version = GetSubsectionVersion(moduleID, subsectionID, languageID);
+            double version = GetSubsectionVersion(moduleID, subsectionID, languageID.ToUpper());
 
             con.Open();
             SqlCommand cmd = new SqlCommand("SELECT AuthorID, Content " +
                "FROM ModuleContent " +
                "WHERE ModuleID = @moduleID AND SubsectionID = @subsectionID " +
                "AND LanguageID = @languageID AND VersionNumber = @versionNumber", con);
-            cmd.Parameters.AddWithValue("@moduleID", moduleID);
+            cmd.Parameters.AddWithValue("@moduleID", moduleID.Trim());
             cmd.Parameters.AddWithValue("@subsectionID", subsectionID);
-            cmd.Parameters.AddWithValue("@languageID", languageID);
+            cmd.Parameters.AddWithValue("@languageID", languageID.Trim().ToUpper());
             cmd.Parameters.AddWithValue("@versionNumber", version);
             SqlDataReader reader = cmd.ExecuteReader();
 
@@ -54,12 +73,13 @@ namespace MBBS.Database
                 moduleContent.Content = reader.GetString(1);
                 moduleContent.VersionNumber = version;
             }
+            con.Close();
             return moduleContent;
         }
 
-        public List<SubsectionModel> GetSubsectionNames(string languageID)
+        public List<Subsection> GetSubsectionNames(string languageID)
         {
-            List<SubsectionModel> names = new List<SubsectionModel>();
+            List<Subsection> names = new List<Subsection>();
 
             con.Open();
             SqlCommand cmd = new SqlCommand("SELECT SubsectionID, SubsectionCode, SectionID, SubsectionName, RequiredBool " + 
@@ -68,49 +88,43 @@ namespace MBBS.Database
 
             while (reader.Read())
             {
-                SubsectionModel subsection = new SubsectionModel();
+                Subsection subsection = new Subsection();
                  subsection.SubsectionID = reader.GetInt32(0);
                 string subsectionCode = reader.GetDouble(1).ToString();
                 string sectionID = reader.GetInt32(2).ToString();
                 subsection.SubsectionCode = sectionID + "." +subsectionCode;
                 subsection.SubsectionName = reader.GetString(3);
                 Boolean requiredBool = true;
-                if(reader.GetByte(4) != 1)
+                if(reader.GetBoolean(4) != true)
                 {
                     requiredBool = false;
                 }
                 subsection.RequiredBool = requiredBool;
                 names.Add(subsection);
             }
+            con.Close();
                 return names;
         }
 
         public double GetSubsectionVersion(string moduleID, int subsectionID, string languageID)
         {
-            
-            double currentVersion = 0;
-            SqlConnection conVersion = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MS_TableConnectionString"].ConnectionString);
-            conVersion.Open();
-            SqlCommand cmd = new SqlCommand("SELECT ModuleContent.VersionNumber " +
-                "FROM ModuleContent " +
-                "WHERE ModuleID = @moduleID AND SubsectionID = @subsectionID " +
-                "AND LanguageID = @languageID", conVersion);
-            cmd.Parameters.AddWithValue("@moduleID", moduleID);
+            SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MS_TableConnectionString"].ConnectionString);
+
+            connection.Open();
+            SqlCommand cmd = new SqlCommand("SELECT ModuleContent.VersionNumber FROM ModuleContent WHERE ModuleID = @moduleID AND SubsectionID = @subsectionID AND LanguageID = @languageID ORDER BY VersionNumber DESC", connection);
+            cmd.Parameters.AddWithValue("@moduleID", moduleID.Trim());
             cmd.Parameters.AddWithValue("@subsectionID", subsectionID);
-            cmd.Parameters.AddWithValue("@languageID", languageID);
+            cmd.Parameters.AddWithValue("@languageID", languageID.Trim().ToUpper());
             SqlDataReader reader = cmd.ExecuteReader();
 
             while (reader.Read())
             {
                 double version = reader.GetDouble(0);
-                if(version > currentVersion)
-                {
-                    currentVersion = version;
-                }
+                connection.Close();
+                return version;
             }
-            conVersion.Close();
-            
-            return currentVersion;
+            connection.Close();
+            return 0;
         }
 
         public void PostModuleData(int userID)
@@ -120,16 +134,14 @@ namespace MBBS.Database
             con.Open();
             SqlCommand cmd = new SqlCommand("INSERT INTO ModuleContent(ModuleID, SubsectionID, LanguageID, AuthorID, Content, VersionNumber) " +
                 "VALUES (@moduleID, @subsectionID, @languageID, @userID, @content, @version)", con);
-            cmd.Parameters.AddWithValue("@moduleID", context.Request["moduleID"]);
+            cmd.Parameters.AddWithValue("@moduleID", context.Request["moduleID"].Trim());
             cmd.Parameters.AddWithValue("@subsectionID", context.Request["subsectionID"]);
-            cmd.Parameters.AddWithValue("@languageID", context.Request["languageID"]);
+            cmd.Parameters.AddWithValue("@languageID", context.Request["languageID"].Trim().ToUpper());
             cmd.Parameters.AddWithValue("@userID", userID);
             cmd.Parameters.AddWithValue("@content", context.Request["content"]);
             cmd.Parameters.AddWithValue("@version", version++);
             SqlDataReader reader = cmd.ExecuteReader();
-
-
-
+            con.Close();
         }
     }
 }
