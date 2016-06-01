@@ -51,13 +51,10 @@ namespace MBBS_Teacher.Pages
             try
             {
                 List<Module> modules = new List<Module>();
-                Task t = Task.Factory.StartNew(() => {
-                    text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/DocentModules", this.data.token);   
-                    modules = JsonConvert.DeserializeObject<List<Module>>(text);
-                                
-                });
+                
+                text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/DocentModules", this.data.token);   
+                modules = JsonConvert.DeserializeObject<List<Module>>(text);
 
-                Task.WaitAll(t);
                 foreach (Module module in modules)
                 {
                     moduleList.Items.Add(new ListViewItem { Content = module.module_id + " " + module.module_name });

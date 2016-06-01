@@ -19,7 +19,7 @@
             <StackLayout
                          Padding="0"
                          BackgroundColor="#ffffff">
-              <Button Text="{Binding Name}" 
+              <Button Text="{Binding module_name}" 
                       TextColor="#4d4d4d"
                       BackgroundColor="#ffffff" 
                       BorderRadius="0" 

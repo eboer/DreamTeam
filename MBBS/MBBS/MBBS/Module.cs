@@ -8,6 +8,8 @@ namespace MBBS
 {
     public class Module
     {
-        public string Name { get; set; }
+        public string module_id { get; set; }
+
+        public string module_name { get; set; }
     }
 }
