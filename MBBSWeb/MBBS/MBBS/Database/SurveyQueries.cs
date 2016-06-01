@@ -11,7 +11,45 @@ namespace MBBS.Database
     {
         SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MS_TableConnectionString"].ConnectionString);
 
-        public Dictionary<int, List<int>> CalculateRating(SqlDataReader reader)
+        public Dictionary<int, List<int>> CalculateRatingPerSubsection(SqlDataReader reader)
+        {
+            Dictionary<int, List<int>> surveyResults = new Dictionary<int, List<int>>();
+            int currentYear = 0;
+            int currentSubsection = 0;
+            List<int> ratings = new List<int>();
+
+            while (reader.Read())
+            {   
+                int year = reader.GetDateTime(0).Year;
+                if (year > currentYear)
+                {
+                    currentYear = year;
+                }
+                int subsectionID = reader.GetInt32(2);
+                if(currentSubsection != reader.GetInt32(2) && currentSubsection != 0)
+                {
+                    surveyResults.Add(currentSubsection, ratings);
+                    ratings = new List<int>();
+                    currentSubsection = reader.GetInt32(2);
+                }  
+                if(currentSubsection.Equals(0))
+                {
+                    currentSubsection = reader.GetInt32(2);
+                }             
+                if (year == currentYear)
+                {
+                    ratings.Add(reader.GetInt32(1));
+                }
+            }
+            if (currentYear != 0)
+            {
+                surveyResults.Add(currentSubsection, ratings);
+            }
+            con.Close();
+            return surveyResults;
+        }
+
+        public Dictionary<int, List<int>> CalculateRatingPerYear(SqlDataReader reader)
         {
             Dictionary<int, List<int>> surveyResults = new Dictionary<int, List<int>>();
             int currentYear = 0;
@@ -48,10 +86,29 @@ namespace MBBS.Database
                                             "INNER JOIN Answer " +
                                             "ON  CompletedSurvey.CompletedSurveyID = Answer.CompletedSurveyID " +
                                             "WHERE CompletedSurvey.ModuleID = @moduleID " +
-                                            "ORDER BY DateCompleted", con);
-            cmd.Parameters.AddWithValue("@moduleID", moduleID);
+                                            "ORDER BY DateCompleted DESC", con);
+            cmd.Parameters.AddWithValue("@moduleID", moduleID.Trim());
             SqlDataReader reader = cmd.ExecuteReader();
-            surveyResults = CalculateRating(reader);
+            surveyResults = CalculateRatingPerYear(reader);
+            con.Close();
+            return surveyResults;
+        }
+
+        public Dictionary<int, List<int>> GetCurrentSubsectionSurveyResults(string moduleID)
+        {
+            con.Open();
+            Dictionary<int, List<int>> surveyResults = new Dictionary<int, List<int>>();
+            SqlCommand cmd = new SqlCommand("SELECT CompletedSurvey.DateCompleted, Answer.Rating, SurveyQuestion.SubsectionID " +
+            "FROM CompletedSurvey " +
+            "INNER JOIN Answer " +
+            "ON  CompletedSurvey.CompletedSurveyID = Answer.CompletedSurveyID " +
+            "INNER JOIN SurveyQuestion " +
+            "ON Answer.QuestionID = SurveyQuestion.QuestionID " +
+            "WHERE CompletedSurvey.ModuleID = @moduleID " +
+            "ORDER BY SubsectionID, DateCompleted", con);
+            cmd.Parameters.AddWithValue("@moduleID", moduleID.Trim());
+            SqlDataReader reader = cmd.ExecuteReader();
+            surveyResults = CalculateRatingPerSubsection(reader);
             con.Close();
             return surveyResults;
         }
@@ -69,10 +126,10 @@ namespace MBBS.Database
             "WHERE CompletedSurvey.ModuleID = @moduleID " +
             "AND SurveyQuestion.SubsectionID = @subsectionID " +
             "ORDER BY DateCompleted", con);
-            cmd.Parameters.AddWithValue("@moduleID", moduleID);
+            cmd.Parameters.AddWithValue("@moduleID", moduleID.Trim());
             cmd.Parameters.AddWithValue("@subsectionID", subsectionID);
             SqlDataReader reader = cmd.ExecuteReader();
-            surveyResults = CalculateRating(reader);
+            surveyResults = CalculateRatingPerYear(reader);
             con.Close();
             return surveyResults;
         }
