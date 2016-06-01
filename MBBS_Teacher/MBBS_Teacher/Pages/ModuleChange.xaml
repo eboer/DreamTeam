@@ -11,6 +11,10 @@
     <Grid>
         <Label x:Name="header" Content="Hello Bert, Select a module"  VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Height="66" Background="#73AAD9"  Foreground="White" />
         <Button x:Name="back" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Back" Width="75" Height="20" Margin="10,20,0,0" Foreground="White" Background="#7B93AF" Click="back_Click" />
-
+        <RichTextBox Name="content" HorizontalAlignment="Stretch" VerticalAlignment="top" Height="400" MaxHeight="400" Margin="5,75,5,150"/>
+        <Button x:Name="save" Content="Save" HorizontalAlignment="Right" Margin="0,400,75,0"  Width="75" Height="20" Background="#7B93AF" Foreground="White" Click="save_Click"/>
+        <Button x:Name="saveAndExit" Content="Save and exit" HorizontalAlignment="Right" Margin="0,400,175,0"  Width="75" Height="20" Background="#7B93AF" Foreground="White" Click="saveAndExit_Click"/>
+        
+        
     </Grid>
 </UserControl>

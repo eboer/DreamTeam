@@ -26,6 +26,8 @@ namespace MBBS_Teacher.Pages
 
         private void login_Click(object sender, RoutedEventArgs e)
         {
+            Username.Text = "rubendewitte93@gmail.com";
+            Password.Password = "test";
             if (string.IsNullOrEmpty(Username.Text) || string.IsNullOrEmpty(Password.Password))
             {
                 Error.Content = "Please fill in the email and password";
