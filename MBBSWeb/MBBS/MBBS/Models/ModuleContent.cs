@@ -5,7 +5,7 @@ using System.Web;
 
 namespace MBBS.Models
 {
-    public class ModuleContentModel
+    public class ModuleContent
     {
         public int AuthorID { get; set; }
         public string Content { get; set; }
