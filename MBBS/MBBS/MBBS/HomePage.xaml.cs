@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Xamarin.Forms;
@@ -50,13 +51,20 @@ namespace MBBS
             }
         }
 
-        private void ModuleListView_OnItemTapped(object sender, ItemTappedEventArgs e)
+        private async void ModuleListView_OnItemTapped(object sender, ItemTappedEventArgs e)
         {
-            if (e.Item != null)
+            var stack = Navigation.NavigationStack; // Create a stack
+            if (stack[stack.Count - 1].GetType() != typeof (FormulierPage)) // Avoid opening multiple windows when spam clicking
             {
-                Module m = (Module)this.ModuleListView.SelectedItem;
-                Navigation.PushAsync(new FPage(token, m.module_id, m.module_name));
+                if (e.Item != null)
+                {
+                    Module m = (Module) this.ModuleListView.SelectedItem;
+                    await Navigation.PushAsync(new FormulierPage(token, m.module_id, m.module_name));
+                }
             }
-        }
+
+
+        } 
+
     }
 }

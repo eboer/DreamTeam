@@ -1,4 +1,5 @@
 ﻿using MigraDoc.DocumentObjectModel;
+using MigraDoc.Rendering;
 using Newtonsoft.Json;
 using PdfSharp.Drawing;
 using PdfSharp.Drawing.Layout;
@@ -21,11 +22,15 @@ namespace MBBS_Teacher.Pages
     public partial class PdfCreater : UserControl, ISwitchable
     {
         double myX = 50;
-        double myY = 0;
+        double myY = 50;
         double someWidth = 500;
         double someHeight = 50;
+        string splitString = "";
 
         Data data;
+        PdfDocument pdf;
+        XGraphics graph;
+        XFont font;
 
         public PdfCreater()
         {
@@ -47,8 +52,7 @@ namespace MBBS_Teacher.Pages
 
             PdfDocument pdf = new PdfDocument();
             pdf.Info.Title = "The first PDF document";
-            PdfPage pdfPage = pdf.AddPage();
-
+            PdfPage pdfPage = pdf.AddPage();    
             XGraphics graph = XGraphics.FromPdfPage(pdfPage);
             XFont font = new XFont("Verdana", 15, XFontStyle.Bold);
             XFont font2 = new XFont("Verdana", 10);
@@ -71,20 +75,38 @@ namespace MBBS_Teacher.Pages
                 }
 
                 double stringSpaceLength = value.Count(Char.IsWhiteSpace);
-                newHeight += (stringSpaceLength / 12) * 15;
+                newHeight += (stringSpaceLength / 12) * 11 + 50;
+     
+                if(pdfPage.Height < myY + newHeight)
+                {
+                    myY = 50;
+                    pdfPage = pdf.AddPage();
+                    graph = XGraphics.FromPdfPage(pdfPage);
+                    tf = new XTextFormatter(graph);
+                }
 
-                XRect rect = new XRect(myX, myY, someWidth, newHeight);
-                XRect rect2 = new XRect(myX, myY += 50, someWidth, newHeight);
+                XRect rect = new XRect(myX, myY, someWidth, someHeight);
+                XRect rect2 = new XRect(myX, myY + 50, someWidth, newHeight);
 
                 tf.DrawString(k.Key, font, XBrushes.Black, rect, XStringFormats.TopLeft);
-                this.myY = myY += newHeight;
                 tf.DrawString(value, font2, XBrushes.Black, rect2, XStringFormats.TopLeft);
+                
                 tf.Alignment = XParagraphAlignment.Left;
-            }
 
+                if (pdfPage.Height > myY + newHeight)
+                {
+                    myY += newHeight;
+                }
+            }
+          
             string pdfFilename = "firstpage.pdf";
             pdf.Save(pdfFilename);
             Process.Start(pdfFilename);
         }
+
+        //public void drawText(double myY, XRect rect)
+        //{
+            
+        //}
     }
 }
