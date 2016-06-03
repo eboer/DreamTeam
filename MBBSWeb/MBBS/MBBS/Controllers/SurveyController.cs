@@ -86,6 +86,27 @@ namespace MBBS.Controllers
                     return Unauthorized();
                 }
             }
+
+            
+        }
+
+        [RoutePrefix("api/Survey")]
+        public class SubsectionSurveyController: ApiController
+        {
+            [Route("AverageRatingSubsections")]
+            public IHttpActionResult Get(string moduleID)
+            {
+                int userID = 1;
+                if (userID != 0)
+                {
+                    SurveyCalculators calculator = new SurveyCalculators();
+                    return Ok(calculator.GetAverageRatingPerSubsection(moduleID));
+                }
+                else
+                {
+                    return Unauthorized();
+                }
+            }
         }
     }
 }
