@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MBBS;assembly=MBBS"
+             x:Class="MBBS.FPage"
+             Title="Module rating"
+             BackgroundColor="#e6e6e6">
+   <ContentPage.Resources>
+    <ResourceDictionary>
+      <local:RatingConverter x:Key="RatingConverter" />
+    </ResourceDictionary>
+  </ContentPage.Resources>  
+
+  <ContentPage.Content>
+    <ScrollView Orientation="Vertical" VerticalOptions="FillAndExpand">
+      <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand">
+        <ListView x:Name="ModuleListView" HasUnevenRows="True">
+          <ListView.Header>
+            <StackLayout Padding="10,5,0,5" BackgroundColor="#4d4d4d">
+              <Label x:Name="TitleLabel" TextColor="#ffffff"/>
+            </StackLayout>
+          </ListView.Header>
+          <ListView.ItemTemplate>
+            <DataTemplate>
+              <ViewCell>
+                <Grid BackgroundColor="#e6e6e6">
+                  <Grid MinimumHeightRequest="40"/>
+                  <StackLayout
+                               Padding="4"
+                               BackgroundColor="#e6e6e6">
+                    <Label Text="{Binding QuestionText}"
+                            TextColor="#4d4d4d"
+                            BackgroundColor="#e6e6e6"
+                            MinimumWidthRequest="100"
+                            MinimumHeightRequest="40"
+                            VerticalOptions="Center"
+                          />
+                  
+                    <StackLayout Orientation="Horizontal" Spacing="0" HorizontalOptions="Center" Grid.Column="1">
+                      <Grid HeightRequest="50" WidthRequest="50" x:Name="StarGrid2">
+                        <Grid.Behaviors>
+                          <!--Do not remove name as it is used in binding-->
+                          <local:StarBehavior x:Name="starOne" GroupName="{Binding QuestionID}"/>
+                        </Grid.Behaviors>
+                        <Image
+                                Source="{local:ImageResource MBBS.Images.star_outline.png}" />
+
+                        <Image
+                                Source="{local:ImageResource MBBS.Images.star_selected.png}"
+                                IsVisible="{Binding Source={x:Reference starOne},
+                                            Path=IsStarred}"/>
+                      </Grid>
+                      <Grid HeightRequest="50" WidthRequest="50" HorizontalOptions="Center">
+                        <Grid.Behaviors>
+                          <!--Do not remove name as it is used in binding-->
+                          <local:StarBehavior x:Name="starTwo" GroupName="{Binding QuestionID}"/>
+                        </Grid.Behaviors>
+                        <Image
+                                Source="{local:ImageResource MBBS.Images.star_outline.png}" />
+
+                        <Image
+                                Source="{local:ImageResource MBBS.Images.star_selected.png}"
+                                IsVisible="{Binding Source={x:Reference starTwo},
+                                            Path=IsStarred}"/>
+                      </Grid>
+                      <Grid HeightRequest="50" WidthRequest="50" HorizontalOptions="Center" >
+                        <Grid.Behaviors>
+                          <!--Do not remove name as it is used in binding-->
+                          <local:StarBehavior x:Name="starThree" GroupName="{Binding QuestionID}"/>
+                        </Grid.Behaviors>
+                        <Image
+                                Source="{local:ImageResource MBBS.Images.star_outline.png}" />
+
+                        <Image
+                                Source="{local:ImageResource MBBS.Images.star_selected.png}"
+                                IsVisible="{Binding Source={x:Reference starThree},
+                                            Path=IsStarred}"/>
+                      </Grid>
+                      <Grid HeightRequest="50" WidthRequest="50" HorizontalOptions="Center">
+                        <Grid.Behaviors>
+                          <!--Do not remove name as it is used in binding-->
+                          <local:StarBehavior x:Name="starFour" GroupName="{Binding QuestionID}"/>
+                        </Grid.Behaviors>
+                        <Image
+                                Source="{local:ImageResource MBBS.Images.star_outline.png}" />
+
+                        <Image
+                                Source="{local:ImageResource MBBS.Images.star_selected.png}"
+                                IsVisible="{Binding Source={x:Reference starFour},
+                                            Path=IsStarred}"/>
+                      </Grid>
+                      <Grid HeightRequest="50" WidthRequest="50" HorizontalOptions="Center">
+                        <Grid.Behaviors>
+                          <!--D not remove name as it is used in binding-->
+                          <local:StarBehavior x:Name="starFive" GroupName="{Binding QuestionID}"/>
+                        </Grid.Behaviors>
+                        <Image
+                                Source="{local:ImageResource MBBS.Images.star_outline.png}" />
+
+                        <Image
+                                Source="{local:ImageResource MBBS.Images.star_selected.png}"
+                                IsVisible="{Binding Source={x:Reference starFive},
+                                            Path=IsStarred}"/>
+                      </Grid>
+                    </StackLayout>
+                    
+                    
+                  </StackLayout>
+                </Grid>
+              </ViewCell>
+            </DataTemplate>
+          </ListView.ItemTemplate>
+          <Label x:Name="MessageLabel"/>
+        </ListView>
+      </StackLayout>
+    </ScrollView>
+  </ContentPage.Content>
+</ContentPage>
