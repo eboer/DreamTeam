@@ -51,9 +51,9 @@ namespace MBBS.Database
             return modules;
         }
 
-        public ModuleContentModel GetModuleData(string moduleID, int subsectionID, string languageID)
+        public ModuleContent GetModuleData(string moduleID, int subsectionID, string languageID)
         {
-            ModuleContentModel moduleContent = new ModuleContentModel();
+            ModuleContent moduleContent = new ModuleContent();
             double version = GetSubsectionVersion(moduleID, subsectionID, languageID.ToUpper());
 
             con.Open();
