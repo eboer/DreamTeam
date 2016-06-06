@@ -1,18 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MBBS_Teacher.Pages
 {
@@ -27,10 +19,22 @@ namespace MBBS_Teacher.Pages
             InitializeComponent();
         }
 
-        public void UtilizeState(object state)
+        public async void UtilizeState(object state)
         {
             data = (Data)state;
-            string moduleResond = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/GetData?moduleID=+" + data.ModuleName + "&subsectionID=" + data.ModuleChange + "&languageID=en", data.token);
+            string moduleResond = null;
+            Task moduleTask = Task.Run(() =>
+            {
+                try
+                {
+                    moduleResond = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/GetData?moduleID=+" + data.ModuleName + "&subsectionID=" + data.ModuleChange + "&languageID=en", data.token);
+                }
+                catch (WebException exept)
+                {
+                    Console.WriteLine(exept.ToString());
+                }
+            });
+            await Task.WhenAll(moduleTask);
             Module.SubsectionData respondString = JsonConvert.DeserializeObject<Module.SubsectionData>(moduleResond);
             this.header.Content = data.ModuleName;
             content.AppendText(respondString.Content);
