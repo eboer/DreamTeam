@@ -35,7 +35,7 @@ namespace MBBS_Teacher.Pages
         public void fillChart()
         {
             string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Survey/AverageRatingPerYear?moduleID=" + data.ModuleName, data.token);
-            WebRequestHelper.sendPostData("http://mbbsweb.azurewebsites.net/api/Module/PostData", data.token, data.ModuleName, "11", "NL", "dit is test data");
+           
             Console.WriteLine(text);
             Dictionary<string, double> values = JsonConvert.DeserializeObject<Dictionary<string, double>>(text);
             ((LineSeries)GradeChart.Series[0]).ItemsSource =
@@ -54,7 +54,12 @@ namespace MBBS_Teacher.Pages
 
         public void LoadScoreChart()
         {
-            ((BarSeries)ScoreChart.Series[0]).ItemsSource =
+            string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Survey/AverageRatingSubsections?moduleID=" + data.ModuleName, data.token);
+            Dictionary<string, double> results = JsonConvert.DeserializeObject<Dictionary<string, double>>(text);
+         //   var myKey = results.FirstOrDefault(x => x.Value == "one").Key;
+            Console.WriteLine(text);
+            ((BarSeries)ScoreChart.Series[0]).ItemsSource = results;
+                /*
             new KeyValuePair<String, int>[]{
             new KeyValuePair<String, int>("Introductie", 7),
             new KeyValuePair<String, int>("Toetsing", 6),
@@ -62,7 +67,7 @@ namespace MBBS_Teacher.Pages
             new KeyValuePair<String, int>("Structuur & Organisatie", 3),
             new KeyValuePair<String, int>("Literatuur/Programmatuur", 8),
             new KeyValuePair<String, int>("Module Evaluatie", 9),
-            new KeyValuePair<String, int>("Bijlagen", 4)};
+            new KeyValuePair<String, int>("Bijlagen", 4)};*/
         }
 
         public void UtilizeState(object state)

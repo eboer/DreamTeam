@@ -53,17 +53,15 @@ namespace MBBS
 
         private async void ModuleListView_OnItemTapped(object sender, ItemTappedEventArgs e)
         {
-            var stack = Navigation.NavigationStack; // Create a stack
-            if (stack[stack.Count - 1].GetType() != typeof (FormulierPage)) // Avoid opening multiple windows when spam clicking
+            var stack = Navigation.NavigationStack; //create stack
+            if (stack[stack.Count - 1].GetType() != typeof(FPage))
             {
                 if (e.Item != null)
                 {
-                    Module m = (Module) this.ModuleListView.SelectedItem;
-                    await Navigation.PushAsync(new FormulierPage(token, m.module_id, m.module_name));
+                    Module m = (Module)this.ModuleListView.SelectedItem;
+                    Navigation.PushAsync(new FPage(token, m.module_id, m.module_name));
                 }
             }
-
-
         } 
 
     }

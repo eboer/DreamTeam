@@ -33,8 +33,6 @@ namespace MBBS_Teacher
                 string moduleResond = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/GetData?moduleID=+" + moduleId + "&subsectionID=" + subsec.SubsectionID + "&languageID=en", token);
                 SubsectionData respondString = JsonConvert.DeserializeObject<SubsectionData>(moduleResond);
                 moduleDetails.Add(subsec.SubsectionName, respondString.Content);
-               
-               
 
             }
 

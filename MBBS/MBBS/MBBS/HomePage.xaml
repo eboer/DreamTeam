@@ -16,7 +16,7 @@
           <DataTemplate>
             <ViewCell >
               <Grid>
-                <Grid MinimumHeightRequest="10"/>
+                <Grid MinimumHeightRequest="40"/>
                 <StackLayout
                              Padding="4"
                              BackgroundColor="#ffffff">
@@ -25,6 +25,7 @@
                           TextColor="#4d4d4d"
                           BackgroundColor="#ffffff"  
                           MinimumWidthRequest="100"
+                          MinimumHeightRequest="40"
                           VerticalOptions="Center"
                           />
                 </StackLayout>

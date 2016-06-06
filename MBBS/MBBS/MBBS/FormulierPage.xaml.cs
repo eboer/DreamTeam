@@ -17,7 +17,6 @@ namespace MBBS
             InitializeComponent();
             TestLabel.Text = moduleName;
             this.Title = moduleName;
-
         }
     }
 }
