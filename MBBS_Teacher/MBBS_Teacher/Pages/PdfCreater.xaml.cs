@@ -25,7 +25,7 @@ namespace MBBS_Teacher.Pages
         double myY = 50;
         double someWidth = 500;
         double someHeight = 50;
-        string splitString = "";
+        
 
         Data data;
         PdfDocument pdf;
@@ -58,6 +58,7 @@ namespace MBBS_Teacher.Pages
             XFont font2 = new XFont("Verdana", 10);
             XStringFormat format = new XStringFormat();
             XTextFormatter tf = new XTextFormatter(graph);
+            Boolean justDoIt = true;
 
             pdfPage.Orientation = PdfSharp.PageOrientation.Portrait;
             pdfPage.Width = XUnit.FromInch(8.5);
@@ -76,27 +77,45 @@ namespace MBBS_Teacher.Pages
 
                 double stringSpaceLength = value.Count(Char.IsWhiteSpace);
                 newHeight += (stringSpaceLength / 12) * 11 + 50;
-     
-                if(pdfPage.Height < myY + newHeight)
+
+                XRect rect = new XRect(myX, myY, someWidth, someHeight);
+                XRect rect2 = new XRect(myX, myY + 50, someWidth, newHeight);
+
+                string splitString = value;
+                int middlePos = 0;
+                if (splitString.Count(Char.IsWhiteSpace) > 500)
                 {
+                    middlePos = splitString.Length / 2;
+                    splitString = splitString.Substring(0, middlePos);
                     myY = 50;
+                    justDoIt = false;
+                    //Section section = new Section();
+                    //Paragraph paragraph = section.AddParagraph();
+                    //paragraph.AddFormattedText(splitString);
+                    tf.DrawString(splitString, font, XBrushes.Black, rect);
                     pdfPage = pdf.AddPage();
                     graph = XGraphics.FromPdfPage(pdfPage);
                     tf = new XTextFormatter(graph);
                 }
 
-                XRect rect = new XRect(myX, myY, someWidth, someHeight);
-                XRect rect2 = new XRect(myX, myY + 50, someWidth, newHeight);
+                if (pdfPage.Height < myY + newHeight && justDoIt == true)
+                {
+                    myY = 50;
+                    pdfPage = pdf.AddPage();
+                    graph = XGraphics.FromPdfPage(pdfPage);
+                    tf = new XTextFormatter(graph);
+                }    
 
                 tf.DrawString(k.Key, font, XBrushes.Black, rect, XStringFormats.TopLeft);
                 tf.DrawString(value, font2, XBrushes.Black, rect2, XStringFormats.TopLeft);
-                
+
                 tf.Alignment = XParagraphAlignment.Left;
 
                 if (pdfPage.Height > myY + newHeight)
                 {
                     myY += newHeight;
                 }
+                justDoIt = true;
             }
           
             string pdfFilename = "firstpage.pdf";
@@ -110,3 +129,4 @@ namespace MBBS_Teacher.Pages
         //}
     }
 }
+;
