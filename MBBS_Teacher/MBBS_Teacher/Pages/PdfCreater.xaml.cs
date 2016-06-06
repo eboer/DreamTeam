@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -28,9 +29,12 @@ namespace MBBS_Teacher.Pages
         
 
         Data data;
-        PdfDocument pdf;
         XGraphics graph;
+        PdfPage pdfPage;
         XFont font;
+        XFont font2;
+        PdfDocument pdf = new PdfDocument();
+        XTextFormatter tf;
 
         public PdfCreater()
         {
@@ -40,25 +44,69 @@ namespace MBBS_Teacher.Pages
         public void UtilizeState(object state)
         {
             data = (Data)state;
-            string text = null;
 
-            List<Module> modules = new List<Module>();
-            Task t = Task.Factory.StartNew(() =>
+            drawPdf();
+        }
+
+        private List<Module> getModuleData()
+        { 
+            string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/DocentModules", this.data.token);
+            return JsonConvert.DeserializeObject<List<Module>>(text);
+        }
+
+        public void drawSomething(double myY, XUnit Height, double newHeight, string title, string content)
+        {
+            XRect rect = new XRect(myX, myY, someWidth, someHeight);
+            XRect rect2 = new XRect(myX, myY + 50, someWidth, newHeight);
+            tf.DrawString(title, font, XBrushes.Black, rect, XStringFormats.TopLeft);
+            double contentSpaceLength = content.Count(Char.IsWhiteSpace);
+            double contentHeight = (contentSpaceLength / 12) * 11 + 50;
+            if (myY + contentHeight < Height)
             {
-                text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/DocentModules", this.data.token);
-                modules = JsonConvert.DeserializeObject<List<Module>>(text);
-            });
-            Task.WaitAll(t);
+                tf.DrawString(content, font2, XBrushes.Black, rect2, XStringFormats.TopLeft);
+            }
+            else
+            {
+                string[] splittedString = content.Split('.');
+                foreach(string s in splittedString)
+                {
+                    double sSpaceLength = s.Count(Char.IsWhiteSpace);
+                    newHeight = (sSpaceLength / 12) * 11 + 30;
+                    if(myX + newHeight > Height)
+                    {
+                        pdfPage = pdf.AddPage();
+                        graph = XGraphics.FromPdfPage(pdfPage);
+                        tf = new XTextFormatter(graph);
+                        myY = 0;
+                    }
+                    rect2 = new XRect(myX, myY + 50, someWidth, newHeight);
+                    tf.DrawString(s, font2, XBrushes.Black, rect2, XStringFormats.TopLeft);
+                    
+                    myY += newHeight;
 
-            PdfDocument pdf = new PdfDocument();
+                }
+            }
+        }
+
+        public void drawPdf()
+        { 
+           // string text = null;
+            List<Module> modules = new List<Module>();
+            Task t = Task.Run(() =>
+            {
+               modules = getModuleData();
+            });
+            Task.WhenAll(t);
+
             pdf.Info.Title = "The first PDF document";
-            PdfPage pdfPage = pdf.AddPage();    
+            pdfPage = pdf.AddPage();
             XGraphics graph = XGraphics.FromPdfPage(pdfPage);
-            XFont font = new XFont("Verdana", 15, XFontStyle.Bold);
-            XFont font2 = new XFont("Verdana", 10);
+            
+            font = new XFont("Verdana", 15, XFontStyle.Bold);
+            font2 = new XFont("Verdana", 10);
             XStringFormat format = new XStringFormat();
-            XTextFormatter tf = new XTextFormatter(graph);
-            Boolean justDoIt = true;
+            tf = new XTextFormatter(graph);
+            
 
             pdfPage.Orientation = PdfSharp.PageOrientation.Portrait;
             pdfPage.Width = XUnit.FromInch(8.5);
@@ -75,58 +123,25 @@ namespace MBBS_Teacher.Pages
                     value = k.Value;
                 }
 
+                var stringSize = graph.Graphics.MeasureString(value, new System.Drawing.Font("verdana", 10));
                 double stringSpaceLength = value.Count(Char.IsWhiteSpace);
                 newHeight += (stringSpaceLength / 12) * 11 + 50;
 
-                XRect rect = new XRect(myX, myY, someWidth, someHeight);
-                XRect rect2 = new XRect(myX, myY + 50, someWidth, newHeight);
-
-                string splitString = value;
-                int middlePos = 0;
-                if (splitString.Count(Char.IsWhiteSpace) > 500)
-                {
-                    middlePos = splitString.Length / 2;
-                    splitString = splitString.Substring(0, middlePos);
-                    myY = 50;
-                    justDoIt = false;
-                    //Section section = new Section();
-                    //Paragraph paragraph = section.AddParagraph();
-                    //paragraph.AddFormattedText(splitString);
-                    tf.DrawString(splitString, font, XBrushes.Black, rect);
-                    pdfPage = pdf.AddPage();
-                    graph = XGraphics.FromPdfPage(pdfPage);
-                    tf = new XTextFormatter(graph);
-                }
-
-                if (pdfPage.Height < myY + newHeight && justDoIt == true)
+                if (pdfPage.Height < myY + newHeight)
                 {
                     myY = 50;
                     pdfPage = pdf.AddPage();
                     graph = XGraphics.FromPdfPage(pdfPage);
                     tf = new XTextFormatter(graph);
-                }    
-
-                tf.DrawString(k.Key, font, XBrushes.Black, rect, XStringFormats.TopLeft);
-                tf.DrawString(value, font2, XBrushes.Black, rect2, XStringFormats.TopLeft);
-
-                tf.Alignment = XParagraphAlignment.Left;
-
-                if (pdfPage.Height > myY + newHeight)
-                {
-                    myY += newHeight;
                 }
-                justDoIt = true;
+                drawSomething(myY,pdfPage.Height,newHeight,k.Key,value);
+                 myY += newHeight;
             }
-          
+
             string pdfFilename = "firstpage.pdf";
             pdf.Save(pdfFilename);
             Process.Start(pdfFilename);
         }
-
-        //public void drawText(double myY, XRect rect)
-        //{
-            
-        //}
     }
 }
 ;
