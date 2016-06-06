@@ -53,13 +53,15 @@ namespace MBBS
 
         private async void ModuleListView_OnItemTapped(object sender, ItemTappedEventArgs e)
         {
-            if (e.Item != null)
+            var stack = Navigation.NavigationStack; //create stack
+            if (stack[stack.Count - 1].GetType() != typeof(FPage))
             {
-                Module m = (Module)this.ModuleListView.SelectedItem;
-                Navigation.PushAsync(new FormulierPage(token, m.module_id, m.module_name));
+                if (e.Item != null)
+                {
+                    Module m = (Module)this.ModuleListView.SelectedItem;
+                    Navigation.PushAsync(new FPage(token, m.module_id, m.module_name));
+                }
             }
-
-
         } 
 
     }
