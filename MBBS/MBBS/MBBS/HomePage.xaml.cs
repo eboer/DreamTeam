@@ -3,29 +3,66 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-
+using Newtonsoft.Json;
 using Xamarin.Forms;
 
 namespace MBBS
 {
     public partial class HomePage : ContentPage
     {
+        private string token;
+        List<Module> modules = new List<Module>();
+
         public HomePage(string token)
         {
+            this.token = token;
+            LoadModules();
             InitializeComponent();
-            ModuleListView.ItemsSource = new List<Module>
+
+            foreach (Module m in modules)
             {
-                new Module {module_name = "C#"},
-                new Module {module_name = "Java Finals"},
-                new Module {module_name = "Project website"}
-            };
+                MessageLabel.Text += m.module_name;
+            }
+
             Debug.WriteLine(token); //weghalen
         }
 
-        private async void Button_OnClicked(object sender, EventArgs e)
+        private async void LoadModules()
         {
-            Navigation.PushAsync(new FormulierPage());
+            try
+            {
+                WebRequestHelper help = new WebRequestHelper();
+                string data = await help.getData("http://mbbsweb.azurewebsites.net/api/Module/AllModules");
+                modules = JsonConvert.DeserializeObject<List<Module>>(data);
+                if (string.IsNullOrEmpty(data) || modules == null)
+                {
+                    MessageLabel.Text = "No data found.";
+                }
+                else
+                {
+                    ModuleListView.ItemsSource = modules;
+                }
+            }
+            catch (Exception)
+            {
+                MessageLabel.Text = "Er is iets fout gegaan met het ophalen van de modules, probeer het later nog eens!";
+            }
         }
+
+        private async void ModuleListView_OnItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            var stack = Navigation.NavigationStack; //create stack
+            if (stack[stack.Count - 1].GetType() != typeof(FPage))
+            {
+                if (e.Item != null)
+                {
+                    Module m = (Module)this.ModuleListView.SelectedItem;
+                    Navigation.PushAsync(new FPage(token, m.module_id, m.module_name));
+                }
+            }
+        } 
+
     }
 }

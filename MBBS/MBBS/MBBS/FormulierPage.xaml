@@ -2,12 +2,13 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MBBS.FormulierPage"
-             Title="MBBS - C#"
+             Title="MBBS"
              BackgroundColor="#e6e6e6">
   <ContentPage.Content>
     <ScrollView>
       <StackLayout>
-        <Label Text="Voorwoord"
+        <Label x:Name="TestLabel"
+                Text="Voorwoord"
                TextColor="#4d4d4d" />
         <Entry x:Name="VoorwoordEntry"
                TextColor="#4d4d4d"

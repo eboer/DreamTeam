@@ -10,9 +10,13 @@ namespace MBBS
 {
     public partial class FormulierPage : ContentPage
     {
-        public FormulierPage()
+        private string moduleName;
+        private string moduleID;
+        public FormulierPage(string token, string moduleID, string moduleName)
         {
             InitializeComponent();
+            TestLabel.Text = moduleName;
+            this.Title = moduleName;
         }
     }
 }

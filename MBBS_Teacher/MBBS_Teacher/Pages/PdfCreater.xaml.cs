@@ -1,15 +1,11 @@
-﻿using MigraDoc.DocumentObjectModel;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using PdfSharp.Drawing;
 using PdfSharp.Drawing.Layout;
 using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Printing;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
@@ -21,11 +17,20 @@ namespace MBBS_Teacher.Pages
     public partial class PdfCreater : UserControl, ISwitchable
     {
         double myX = 50;
-        double myY = 0;
+        double myY = 50;
         double someWidth = 500;
         double someHeight = 50;
+        Boolean heightIsUpdated = false;
+        int entryNumber = 1;
+        
 
         Data data;
+        XGraphics graph;
+        PdfPage pdfPage;
+        XFont font;
+        XFont font2;
+        PdfDocument pdf = new PdfDocument();
+        XTextFormatter tf;
 
         public PdfCreater()
         {
@@ -35,25 +40,86 @@ namespace MBBS_Teacher.Pages
         public void UtilizeState(object state)
         {
             data = (Data)state;
-            string text = null;
 
-            List<Module> modules = new List<Module>();
-            Task t = Task.Factory.StartNew(() =>
+            drawPdf();
+        }
+
+        private List<Module> getModuleData()
+        { 
+            string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/DocentModules", this.data.token);
+            return JsonConvert.DeserializeObject<List<Module>>(text);
+        }
+
+        public void drawSomething(double myY, XUnit Height, double newHeight, string title, string content)
+        {
+            XRect rect = new XRect(myX, myY, someWidth, someHeight);
+            XRect rect2 = new XRect(myX, myY + 50, someWidth, newHeight);
+            tf.DrawString(title, font, XBrushes.Black, rect, XStringFormats.TopLeft);
+            double contentSpaceLength = content.Count(Char.IsWhiteSpace);
+            double contentHeight = (contentSpaceLength / 12) * 11 + 50;
+            if (myY + contentHeight < Height)
             {
-                text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/DocentModules", this.data.token);
-                modules = JsonConvert.DeserializeObject<List<Module>>(text);
+                tf.DrawString(content, font2, XBrushes.Black, rect2, XStringFormats.TopLeft);
+            }
+            else
+            {
+                string totalString = "";
+                string removedPart = "";
+                string[] splittedString = content.Split('.');
+                for(int i = splittedString.Length - 1; i > 0; i--)
+                {
+                    totalString = "";
+                    for(int x = 0; x < i; x++)
+                    {
+                        totalString += splittedString[x];
+                    }
+                    removedPart = splittedString[i] + removedPart;
+                    if(myX + ((totalString.Count(char.IsWhiteSpace)/12) * 11 + 50) < Height)
+                    {
+
+                        rect2 = new XRect(myX, myY + 50, someWidth, ((totalString.Count(char.IsWhiteSpace) / 12) * 11 + 50));
+                        tf.DrawString(totalString, font2, XBrushes.Black, rect2, XStringFormats.TopLeft);
+
+                        pdfPage = pdf.AddPage();
+                        graph = XGraphics.FromPdfPage(pdfPage);
+                        tf = new XTextFormatter(graph);
+                        myY = 50;
+          
+                        rect2 = new XRect(myX, myY, someWidth, ((removedPart.Count(char.IsWhiteSpace) / 12) * 11 + 50));
+                        tf.DrawString(removedPart, font2, XBrushes.Black, rect2, XStringFormats.TopLeft);
+                        Console.WriteLine(removedPart);
+                        this.myY += ((removedPart.Count(char.IsWhiteSpace) / 12) * 11 + 50);
+                        Console.WriteLine(myY.ToString());
+                        totalString = "";
+                        removedPart = "";
+                        heightIsUpdated = true;
+                        i = -1;
+                    }
+
+                }
+                
+            }
+        }
+
+        public void drawPdf()
+        { 
+           // string text = null;
+            List<Module> modules = new List<Module>();
+            Task t = Task.Run(() =>
+            {
+               modules = getModuleData();
             });
-            Task.WaitAll(t);
+            Task.WhenAll(t);
 
-            PdfDocument pdf = new PdfDocument();
             pdf.Info.Title = "The first PDF document";
-            PdfPage pdfPage = pdf.AddPage();
-
+            pdfPage = pdf.AddPage();
             XGraphics graph = XGraphics.FromPdfPage(pdfPage);
-            XFont font = new XFont("Verdana", 15, XFontStyle.Bold);
-            XFont font2 = new XFont("Verdana", 10);
+            
+            font = new XFont("Verdana", 15, XFontStyle.Bold);
+            font2 = new XFont("Verdana", 10);
             XStringFormat format = new XStringFormat();
-            XTextFormatter tf = new XTextFormatter(graph);
+            tf = new XTextFormatter(graph);
+            
 
             pdfPage.Orientation = PdfSharp.PageOrientation.Portrait;
             pdfPage.Width = XUnit.FromInch(8.5);
@@ -68,18 +134,31 @@ namespace MBBS_Teacher.Pages
                 if (k.Value != null)
                 {
                     value = k.Value;
+
+
+
+                    double stringSpaceLength = value.Count(Char.IsWhiteSpace);
+                    newHeight += (stringSpaceLength / 12) * 11 + 50;
+
+                    if (pdfPage.Height < myY + newHeight && entryNumber != 1)
+                    {
+                        myY = 50;
+                        pdfPage = pdf.AddPage();
+                        graph = XGraphics.FromPdfPage(pdfPage);
+                        tf = new XTextFormatter(graph);
+                    }
+
+                    drawSomething(myY, pdfPage.Height, newHeight, k.Key, value);
+                    if (!heightIsUpdated)
+                    {
+                        myY += newHeight;
+                    }
+                    else
+                    {
+                        heightIsUpdated = false;
+                    }
+                    entryNumber++;
                 }
-
-                double stringSpaceLength = value.Count(Char.IsWhiteSpace);
-                newHeight += (stringSpaceLength / 12) * 15;
-
-                XRect rect = new XRect(myX, myY, someWidth, newHeight);
-                XRect rect2 = new XRect(myX, myY += 50, someWidth, newHeight);
-
-                tf.DrawString(k.Key, font, XBrushes.Black, rect, XStringFormats.TopLeft);
-                this.myY = myY += newHeight;
-                tf.DrawString(value, font2, XBrushes.Black, rect2, XStringFormats.TopLeft);
-                tf.Alignment = XParagraphAlignment.Left;
             }
 
             string pdfFilename = "firstpage.pdf";
@@ -88,3 +167,4 @@ namespace MBBS_Teacher.Pages
         }
     }
 }
+;

@@ -1,20 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Web;
 using Newtonsoft.Json;
 
 namespace MBBS_Teacher.Pages
@@ -45,16 +36,18 @@ namespace MBBS_Teacher.Pages
                 
        }
 
-       private void getData()
-       {
-            
+        private async void getData()
+        {
+
             try
             {
                 List<Module> modules = new List<Module>();
-                
-                text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/DocentModules", this.data.token);   
-                modules = JsonConvert.DeserializeObject<List<Module>>(text);
-
+                Task getModuleTask = Task.Run(() =>
+                {
+                    text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/DocentModules", this.data.token);
+                    modules = JsonConvert.DeserializeObject<List<Module>>(text);
+                });
+                await Task.WhenAll(getModuleTask);
                 foreach (Module module in modules)
                 {
                     moduleList.Items.Add(new ListViewItem { Content = module.module_id + " " + module.module_name });
@@ -87,9 +80,9 @@ namespace MBBS_Teacher.Pages
                 }
             }
 
-       }
+        }
 
-       private void moduleList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void moduleList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
        {
                
             var item = sender as ListViewItem;

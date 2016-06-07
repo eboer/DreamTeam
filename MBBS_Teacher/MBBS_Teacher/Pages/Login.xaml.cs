@@ -24,7 +24,7 @@ namespace MBBS_Teacher.Pages
         }
 
 
-        private void login_Click(object sender, RoutedEventArgs e)
+        private async void login_Click(object sender, RoutedEventArgs e)
         {
             Username.Text = "rubendewitte93@gmail.com";
             Password.Password = "test";
@@ -39,6 +39,50 @@ namespace MBBS_Teacher.Pages
                 string text = null;
                 string errorText = null;
                 Data data = new Data();
+                Task loginTask = Task.Run(() =>
+               {
+                   try
+                   {
+text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Account/Login?email=" + uName + "&password=" + pWord);
+                   }
+                   catch (WebException exept)
+                   {
+                       if (exept.Response != null)
+                       {
+                           using (var errorResponse = (HttpWebResponse)exept.Response)
+                           {
+                               using (var reader = new StreamReader(errorResponse.GetResponseStream()))
+                               {
+                                   string error = reader.ReadToEnd();
+                               }
+                           }
+
+                           if (exept.ToString().Contains("500"))
+                           {
+                               errorText = "The server is unavailable, please try again later ";
+                           }
+                           else
+                           {
+                               errorText = "Username and/or password incorrect";
+                           }
+                       }
+
+                   }
+               });
+                await Task.WhenAll(loginTask);
+                Console.WriteLine(text);
+                if (text != null)
+                {
+                    data.token = text;
+                    data.token = data.token.TrimEnd('"');
+                    data.token = data.token.TrimStart('"');
+                    data.LoginName = Username.Text;
+                    Switcher.Switch(new PdfCreater(), data);
+                }
+                else
+                {
+                    Error.Content = errorText;
+                }/*
                 Task t = Task.Factory.StartNew(() =>
                 {
                     try
@@ -83,7 +127,7 @@ namespace MBBS_Teacher.Pages
                 else
                 {
                     Error.Content = errorText;
-                }
+                }*/
             }
         }
 
@@ -98,8 +142,10 @@ namespace MBBS_Teacher.Pages
             Switcher.Switch(new Register());
         }
 
-        private void fakelogin_Click(object sender, RoutedEventArgs e)
+        private async void fakelogin_Click(object sender, RoutedEventArgs e)
         {
+            Username.Text = "rubendewitte93@gmail.com";
+            Password.Password = "test";
             if (string.IsNullOrEmpty(Username.Text) || string.IsNullOrEmpty(Password.Password))
             {
                 Error.Content = "Please fill in the email and password";
@@ -111,7 +157,7 @@ namespace MBBS_Teacher.Pages
                 string text = null;
                 string errorText = null;
                 Data data = new Data();
-                Task t = Task.Factory.StartNew(() =>
+                Task loginTask = Task.Run(() =>
                 {
                     try
                     {
@@ -119,20 +165,15 @@ namespace MBBS_Teacher.Pages
                     }
                     catch (WebException exept)
                     {
-                        if (exept.Response != null)
+                        if (exept != null)
                         {
-                            using (var errorResponse = (HttpWebResponse)exept.Response)
-                            {
-                                using (var reader = new StreamReader(errorResponse.GetResponseStream()))
-                                {
-                                    string error = reader.ReadToEnd();
-                                    Console.WriteLine(error);
-                                }
-                            }
-
                             if (exept.ToString().Contains("500"))
                             {
                                 errorText = "The server is unavailable, please try again later ";
+                            }
+                            else if (exept.ToString().Contains("De externe naam kan niet worden omgezet: 'mbbsweb.azurewebsites.net'")) 
+                            {
+                                errorText = "There is a problem with your internet connection";
                             }
                             else
                             {
@@ -142,8 +183,8 @@ namespace MBBS_Teacher.Pages
 
                     }
                 });
-
-                Task.WaitAll(t);
+                await Task.WhenAll(loginTask);
+                Console.WriteLine(errorText);
                 if (text != null)
                 {
                     data.token = text;

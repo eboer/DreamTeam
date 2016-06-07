@@ -4,32 +4,37 @@
              x:Class="MBBS.HomePage"
              Title="Stenden MBBS"
              BackgroundColor="#e6e6e6" >
-  
-  <ListView x:Name="ModuleListView" HasUnevenRows="True">
-    <ListView.Header>
-      <StackLayout Padding="10,5,0,5" BackgroundColor="#4d4d4d">
-          <Label Text="Stenden Modules" TextColor="#ffffff"/>
-      </StackLayout>
-    </ListView.Header>
-    <ListView.ItemTemplate>
-      <DataTemplate>
-        <ViewCell >
-          <Grid>
-            <Grid HeightRequest="5"/>
-            <StackLayout
-                         Padding="0"
-                         BackgroundColor="#ffffff">
-              <Button Text="{Binding module_name}" 
-                      TextColor="#4d4d4d"
-                      BackgroundColor="#ffffff" 
-                      BorderRadius="0" 
-                      Clicked="Button_OnClicked"
-                      MinimumWidthRequest="100"
-                      />
-            </StackLayout>
-          </Grid>
-        </ViewCell>
-      </DataTemplate>
-    </ListView.ItemTemplate>
-  </ListView>
+  <ScrollView Orientation="Vertical" VerticalOptions="FillAndExpand">
+    <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand">
+      <ListView x:Name="ModuleListView" HasUnevenRows="True" ItemTapped="ModuleListView_OnItemTapped">
+        <ListView.Header>
+          <StackLayout Padding="10,5,0,5" BackgroundColor="#4d4d4d">
+              <Label Text="Stenden Modules" TextColor="#ffffff"/>
+          </StackLayout>
+        </ListView.Header>
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <ViewCell >
+              <Grid>
+                <Grid MinimumHeightRequest="40"/>
+                <StackLayout
+                             Padding="4"
+                             BackgroundColor="#ffffff">
+                  <Label Text="{Binding module_name}" 
+                          x:Name="{Binding module_id}"
+                          TextColor="#4d4d4d"
+                          BackgroundColor="#ffffff"  
+                          MinimumWidthRequest="100"
+                          MinimumHeightRequest="40"
+                          VerticalOptions="Center"
+                          />
+                </StackLayout>
+              </Grid>
+            </ViewCell>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+      <Label x:Name="MessageLabel"/>
+     </StackLayout>
+   </ScrollView>
 </ContentPage>
