@@ -11,11 +11,11 @@ namespace MBBS.Database
     {
         SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MS_TableConnectionString"].ConnectionString);
 
-        public Dictionary<int, List<int>> CalculateRatingPerSubsection(SqlDataReader reader)
+        public Dictionary<object, List<int>> CalculateRatingPerSubsection(SqlDataReader reader)
         {
-            Dictionary<int, List<int>> surveyResults = new Dictionary<int, List<int>>();
+            Dictionary<object, List<int>> surveyResults = new Dictionary<object, List<int>>();
             int currentYear = 0;
-            int currentSubsection = 0;
+            string currentSubsection = null;
             List<int> ratings = new List<int>();
 
             while (reader.Read())
@@ -25,16 +25,16 @@ namespace MBBS.Database
                 {
                     currentYear = year;
                 }
-                int subsectionID = reader.GetInt32(2);
-                if(currentSubsection != reader.GetInt32(2) && currentSubsection != 0)
+                string subsectionName = reader.GetString(3);
+                if(currentSubsection != reader.GetString(3) && currentSubsection != null)
                 {
                     surveyResults.Add(currentSubsection, ratings);
                     ratings = new List<int>();
-                    currentSubsection = reader.GetInt32(2);
+                    currentSubsection = reader.GetString(3);
                 }  
-                if(currentSubsection.Equals(0))
+                if(currentSubsection == null)
                 {
-                    currentSubsection = reader.GetInt32(2);
+                    currentSubsection = reader.GetString(3);
                 }             
                 if (year == currentYear)
                 {
@@ -45,18 +45,16 @@ namespace MBBS.Database
             {
                 surveyResults.Add(currentSubsection, ratings);
             }
-            con.Close();
             return surveyResults;
         }
 
-        public Dictionary<int, List<int>> CalculateRatingPerYear(SqlDataReader reader)
+        public Dictionary<object, List<int>> CalculateRatingPerYear(SqlDataReader reader)
         {
-            Dictionary<int, List<int>> surveyResults = new Dictionary<int, List<int>>();
+            Dictionary<object, List<int>> surveyResults = new Dictionary<object, List<int>>();
             int currentYear = 0;
             List<int> ratings = new List<int>();
             while (reader.Read())
             {
-
                 int year = reader.GetDateTime(0).Year;
                 if (year != currentYear)
                 {
@@ -73,14 +71,13 @@ namespace MBBS.Database
             {
                 surveyResults.Add(currentYear, ratings);
             }
-            con.Close();
             return surveyResults;
         }
 
-        public Dictionary<int, List<int>> GetAllSurveyResults(string moduleID)
+        public Dictionary<object, List<int>> GetAllSurveyResults(string moduleID)
         {
             con.Open();
-            Dictionary<int, List<int>> surveyResults = new Dictionary<int, List<int>>();
+            Dictionary<object, List<int>> surveyResults = new Dictionary<object, List<int>>();
             SqlCommand cmd = new SqlCommand("SELECT CompletedSurvey.DateCompleted, Answer.Rating " +
                                             "FROM CompletedSurvey " +
                                             "INNER JOIN Answer " +
@@ -94,18 +91,20 @@ namespace MBBS.Database
             return surveyResults;
         }
 
-        public Dictionary<int, List<int>> GetCurrentSubsectionSurveyResults(string moduleID)
+        public Dictionary<object, List<int>> GetCurrentSubsectionSurveyResults(string moduleID)
         {
             con.Open();
-            Dictionary<int, List<int>> surveyResults = new Dictionary<int, List<int>>();
-            SqlCommand cmd = new SqlCommand("SELECT CompletedSurvey.DateCompleted, Answer.Rating, SurveyQuestion.SubsectionID " +
+            Dictionary<object, List<int>> surveyResults = new Dictionary<object, List<int>>();
+            SqlCommand cmd = new SqlCommand("SELECT CompletedSurvey.DateCompleted, Answer.Rating, SurveyQuestion.SubsectionID, Subsection.SubsectionName " +
             "FROM CompletedSurvey " +
             "INNER JOIN Answer " +
             "ON  CompletedSurvey.CompletedSurveyID = Answer.CompletedSurveyID " +
             "INNER JOIN SurveyQuestion " +
             "ON Answer.QuestionID = SurveyQuestion.QuestionID " +
+            "INNER JOIN Subsection " +
+            "ON SurveyQuestion.SubsectionID = Subsection.SubsectionID " +
             "WHERE CompletedSurvey.ModuleID = @moduleID " +
-            "ORDER BY SubsectionID, DateCompleted", con);
+            "ORDER BY Subsection.SubsectionID, DateCompleted", con);
             cmd.Parameters.AddWithValue("@moduleID", moduleID.Trim());
             SqlDataReader reader = cmd.ExecuteReader();
             surveyResults = CalculateRatingPerSubsection(reader);
@@ -113,10 +112,10 @@ namespace MBBS.Database
             return surveyResults;
         }
 
-        public Dictionary<int, List<int>> GetSubsectionSurveyResults(string moduleID, int subsectionID)
+        public Dictionary<object, List<int>> GetSubsectionSurveyResults(string moduleID, int subsectionID)
         {
             con.Open();
-            Dictionary<int, List<int>> surveyResults = new Dictionary<int, List<int>>();
+            Dictionary<object, List<int>> surveyResults = new Dictionary<object, List<int>>();
             SqlCommand cmd = new SqlCommand("SELECT CompletedSurvey.DateCompleted, Answer.Rating, SurveyQuestion.SubsectionID " +
             "FROM CompletedSurvey " +
             "INNER JOIN Answer " +
@@ -170,8 +169,8 @@ namespace MBBS.Database
             cmd.Parameters.AddWithValue("@languageID", context.Request["languageID"]);
             cmd.Parameters.AddWithValue("@userID", userID);
             cmd.Parameters.AddWithValue("@content", context.Request["content"]);
-            //cmd.Parameters.AddWithValue("@version", version++);
             SqlDataReader reader = cmd.ExecuteReader();
+            con.Close();
         }
     }
 }

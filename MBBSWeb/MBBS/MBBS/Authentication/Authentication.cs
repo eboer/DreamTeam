@@ -8,6 +8,8 @@ namespace MBBS.Authentication
 {
     public class Authenticate
     {
+        
+
         public string generateToken()
         {
             Guid g = Guid.NewGuid();
@@ -27,7 +29,7 @@ namespace MBBS.Authentication
             {
                 SqlCommand cmd = new SqlCommand(
                     "IF EXISTS (SELECT NULL FROM Token WHERE UserID = @userID) " +
-                    "UPDATE Token SET Token = @token, Expires = @expires " + 
+                    "UPDATE Token SET Token = @token, Expires = @expires WHERE UserID = @userID " + 
                     "ELSE INSERT INTO Token(UserID, Token, Expires) VALUES (@userID, @token, @expires)", con);
                 cmd.Parameters.AddWithValue("@userID", userID);
                 cmd.Parameters.AddWithValue("@token", token);
