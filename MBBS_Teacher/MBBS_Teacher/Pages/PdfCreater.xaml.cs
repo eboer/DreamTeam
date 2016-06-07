@@ -1,17 +1,11 @@
-﻿using MigraDoc.DocumentObjectModel;
-using MigraDoc.Rendering;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using PdfSharp.Drawing;
 using PdfSharp.Drawing.Layout;
 using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Printing;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
@@ -26,6 +20,8 @@ namespace MBBS_Teacher.Pages
         double myY = 50;
         double someWidth = 500;
         double someHeight = 50;
+        Boolean heightIsUpdated = false;
+        int entryNumber = 1;
         
 
         Data data;
@@ -67,24 +63,41 @@ namespace MBBS_Teacher.Pages
             }
             else
             {
+                string totalString = "";
+                string removedPart = "";
                 string[] splittedString = content.Split('.');
-                foreach(string s in splittedString)
+                for(int i = splittedString.Length - 1; i > 0; i--)
                 {
-                    double sSpaceLength = s.Count(Char.IsWhiteSpace);
-                    newHeight = (sSpaceLength / 12) * 11 + 30;
-                    if(myX + newHeight > Height)
+                    totalString = "";
+                    for(int x = 0; x < i; x++)
                     {
+                        totalString += splittedString[x];
+                    }
+                    removedPart = splittedString[i] + removedPart;
+                    if(myX + ((totalString.Count(char.IsWhiteSpace)/12) * 11 + 50) < Height)
+                    {
+
+                        rect2 = new XRect(myX, myY + 50, someWidth, ((totalString.Count(char.IsWhiteSpace) / 12) * 11 + 50));
+                        tf.DrawString(totalString, font2, XBrushes.Black, rect2, XStringFormats.TopLeft);
+
                         pdfPage = pdf.AddPage();
                         graph = XGraphics.FromPdfPage(pdfPage);
                         tf = new XTextFormatter(graph);
-                        myY = 0;
+                        myY = 50;
+          
+                        rect2 = new XRect(myX, myY, someWidth, ((removedPart.Count(char.IsWhiteSpace) / 12) * 11 + 50));
+                        tf.DrawString(removedPart, font2, XBrushes.Black, rect2, XStringFormats.TopLeft);
+                        Console.WriteLine(removedPart);
+                        this.myY += ((removedPart.Count(char.IsWhiteSpace) / 12) * 11 + 50);
+                        Console.WriteLine(myY.ToString());
+                        totalString = "";
+                        removedPart = "";
+                        heightIsUpdated = true;
+                        i = -1;
                     }
-                    rect2 = new XRect(myX, myY + 50, someWidth, newHeight);
-                    tf.DrawString(s, font2, XBrushes.Black, rect2, XStringFormats.TopLeft);
-                    
-                    myY += newHeight;
 
                 }
+                
             }
         }
 
@@ -121,21 +134,31 @@ namespace MBBS_Teacher.Pages
                 if (k.Value != null)
                 {
                     value = k.Value;
-                }
 
-                var stringSize = graph.Graphics.MeasureString(value, new System.Drawing.Font("verdana", 10));
-                double stringSpaceLength = value.Count(Char.IsWhiteSpace);
-                newHeight += (stringSpaceLength / 12) * 11 + 50;
 
-                if (pdfPage.Height < myY + newHeight)
-                {
-                    myY = 50;
-                    pdfPage = pdf.AddPage();
-                    graph = XGraphics.FromPdfPage(pdfPage);
-                    tf = new XTextFormatter(graph);
+
+                    double stringSpaceLength = value.Count(Char.IsWhiteSpace);
+                    newHeight += (stringSpaceLength / 12) * 11 + 50;
+
+                    if (pdfPage.Height < myY + newHeight && entryNumber != 1)
+                    {
+                        myY = 50;
+                        pdfPage = pdf.AddPage();
+                        graph = XGraphics.FromPdfPage(pdfPage);
+                        tf = new XTextFormatter(graph);
+                    }
+
+                    drawSomething(myY, pdfPage.Height, newHeight, k.Key, value);
+                    if (!heightIsUpdated)
+                    {
+                        myY += newHeight;
+                    }
+                    else
+                    {
+                        heightIsUpdated = false;
+                    }
+                    entryNumber++;
                 }
-                drawSomething(myY,pdfPage.Height,newHeight,k.Key,value);
-                 myY += newHeight;
             }
 
             string pdfFilename = "firstpage.pdf";

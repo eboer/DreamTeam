@@ -43,7 +43,7 @@ namespace MBBS_Teacher.Pages
                {
                    try
                    {
-                       text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Account/Login?email=" + uName + "&password=" + pWord);
+text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Account/Login?email=" + uName + "&password=" + pWord);
                    }
                    catch (WebException exept)
                    {
