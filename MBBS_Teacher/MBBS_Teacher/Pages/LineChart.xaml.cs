@@ -1,21 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.DataVisualization.Charting;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MBBS_Teacher.Pages
 {
@@ -59,15 +47,6 @@ namespace MBBS_Teacher.Pages
          //   var myKey = results.FirstOrDefault(x => x.Value == "one").Key;
             Console.WriteLine(text);
             ((BarSeries)ScoreChart.Series[0]).ItemsSource = results;
-                /*
-            new KeyValuePair<String, int>[]{
-            new KeyValuePair<String, int>("Introductie", 7),
-            new KeyValuePair<String, int>("Toetsing", 6),
-            new KeyValuePair<String, int>("Programma", 4),
-            new KeyValuePair<String, int>("Structuur & Organisatie", 3),
-            new KeyValuePair<String, int>("Literatuur/Programmatuur", 8),
-            new KeyValuePair<String, int>("Module Evaluatie", 9),
-            new KeyValuePair<String, int>("Bijlagen", 4)};*/
         }
 
         public void UtilizeState(object state)

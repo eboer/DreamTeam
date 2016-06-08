@@ -9,6 +9,7 @@
         >
 
     <Grid Background="#E6E6E6">
+        
         <Button x:Name="fakelogin" Content="fakeLogin" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Margin="0,200,0,0" Click="fakelogin_Click" Background="#73AAD9" Foreground="White" />
         <Button x:Name="login" Content="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Margin="0,100,0,0" Click="login_Click" Background="#73AAD9" Foreground="White" />
         <Label Name="Error" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,60,0,0" Foreground="Red" />
@@ -16,5 +17,8 @@
         <PasswordBox x:Name="Password" HorizontalAlignment="Center" Height="23"  VerticalAlignment="Center" Width="180" Margin="0,0,0,0"/>
         <Label x:Name="header" Content="Login/register"  VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Height="66"  Background="#73AAD9" Foreground="White" />
         <Label x:Name="footer" Content="Register" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Bottom" Foreground="#B0B0B0" MouseLeftButtonDown="footer_MouseLeftButtonDown" />
+        <Popup Placement="Center" Name="popUp">
+            <ProgressBar Name="loginProgress" Maximum="100" Minimum="0" IsIndeterminate="True" Height="50" Width="250" Margin="0,0,0,0" />
+        </Popup>
     </Grid>
 </UserControl>

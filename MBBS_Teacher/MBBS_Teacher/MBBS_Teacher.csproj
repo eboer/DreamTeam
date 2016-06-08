@@ -109,6 +109,7 @@
     <Compile Include="Pages\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PdfWriter.cs" />
     <Compile Include="SizeConverter .cs" />
     <Compile Include="Subsecties.cs" />
     <Compile Include="Switcher.cs" />

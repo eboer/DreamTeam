@@ -135,6 +135,8 @@ text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Account/Lo
         {
             TextBox Username = (TextBox)sender;
             Username.Text = string.Empty;
+            
+
         }
 
         private void footer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -144,6 +146,7 @@ text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Account/Lo
 
         private async void fakelogin_Click(object sender, RoutedEventArgs e)
         {
+            popUp.IsOpen = true;
             Username.Text = "rubendewitte93@gmail.com";
             Password.Password = "test";
             if (string.IsNullOrEmpty(Username.Text) || string.IsNullOrEmpty(Password.Password))

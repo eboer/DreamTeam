@@ -19,7 +19,6 @@ namespace MBBS_Teacher.Pages
         public ModuleDetail()
         {
             InitializeComponent();
-            
         }
 
         public async void UtilizeState(object state)
@@ -63,13 +62,29 @@ namespace MBBS_Teacher.Pages
             }
         }
 
-        private void moduleListDetail_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private async void moduleListDetail_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            popUp.IsOpen = true;
             var item = sender as ListViewItem;
             if (item != null)
             {
-                data.ModuleChange = item.Content.ToString().Split(' ')[0];
-                Switcher.Switch(new LineChart(), data);
+                if (item.ToString().Contains("Download module"))
+                {
+                    this.popUp.IsOpen = true;
+                    Task t = Task.Run(async () =>
+                    {
+                        PdfWriter writer = new PdfWriter(data);
+                        await writer.drawPdf();
+                    });
+                    await Task.WhenAll(t);
+                    
+                    this.popUp.IsOpen = false;
+                }
+                else
+                {
+                    data.ModuleChange = item.Content.ToString().Split(' ')[0];
+                    Switcher.Switch(new LineChart(), data);
+                }
             }
         }
 
