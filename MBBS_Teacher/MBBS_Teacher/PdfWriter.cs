@@ -77,9 +77,7 @@ namespace MBBS_Teacher
 
                         rect2 = new XRect(myX, myY, someWidth, ((removedPart.Count(char.IsWhiteSpace) / 12) * 11 + 50));
                         tf.DrawString(removedPart, font2, XBrushes.Black, rect2, XStringFormats.TopLeft);
-                        Console.WriteLine(removedPart);
                         this.myY += ((removedPart.Count(char.IsWhiteSpace) / 12) * 11 + 50);
-                        Console.WriteLine(myY.ToString());
                         totalString = "";
                         removedPart = "";
                         heightIsUpdated = true;
@@ -91,9 +89,7 @@ namespace MBBS_Teacher
             }
         }
 
-        public async 
-        Task
-drawPdf()
+        public async Task drawPdf()
         {
             // string text = null;
             List<Module> modules = new List<Module>();
