@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace MBBS
 {
-    class Question
+    class SurveyData
     {
         public string QuestionID { get; set; }
-        public int SubsectionID { get; set; }
-        public int QuestionTypeID { get; set; }
-        public string QuestionText { get; set; }
+        public int Rating { get; set; }
+        public string Comment { get; set; }
     }
 }

@@ -58,6 +58,7 @@
       <DependentUpon>RegisterPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="StarBehavior.cs" />
+    <Compile Include="SurveyData.cs" />
     <Compile Include="WebRequestHelper.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -2,15 +2,18 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MBBS;assembly=MBBS"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
              x:Class="MBBS.FPage"
              Title="Module rating"
              BackgroundColor="#e6e6e6">
    <ContentPage.Resources>
     <ResourceDictionary>
+      <System:String x:Key="test">"{Binding QuestionID}"</System:String>
       <local:RatingConverter x:Key="RatingConverter" />
     </ResourceDictionary>
   </ContentPage.Resources>  
 
+  
   <ContentPage.Content>
     <ScrollView Orientation="Vertical" VerticalOptions="FillAndExpand">
       <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand">
@@ -40,7 +43,7 @@
                       <Grid HeightRequest="50" WidthRequest="50" x:Name="StarGrid2">
                         <Grid.Behaviors>
                           <!--Do not remove name as it is used in binding-->
-                          <local:StarBehavior x:Name="starOne" GroupName="{Binding QuestionID}"/>
+                          <local:StarBehavior x:Name="starOne" GroupName="{StaticResource test}"/>
                         </Grid.Behaviors>
                         <Image
                                 Source="{local:ImageResource MBBS.Images.star_outline.png}" />
@@ -49,11 +52,13 @@
                                 Source="{local:ImageResource MBBS.Images.star_selected.png}"
                                 IsVisible="{Binding Source={x:Reference starOne},
                                             Path=IsStarred}"/>
+                        <Label Text="{Binding QuestionID}"/>
                       </Grid>
                       <Grid HeightRequest="50" WidthRequest="50" HorizontalOptions="Center">
+                        <Label Text="{Binding QuestionID}"/>
                         <Grid.Behaviors>
                           <!--Do not remove name as it is used in binding-->
-                          <local:StarBehavior x:Name="starTwo" GroupName="{Binding QuestionID}"/>
+                          <local:StarBehavior x:Name="starTwo" GroupName="{Binding QuestionID}" />
                         </Grid.Behaviors>
                         <Image
                                 Source="{local:ImageResource MBBS.Images.star_outline.png}" />
@@ -62,6 +67,7 @@
                                 Source="{local:ImageResource MBBS.Images.star_selected.png}"
                                 IsVisible="{Binding Source={x:Reference starTwo},
                                             Path=IsStarred}"/>
+                      
                       </Grid>
                       <Grid HeightRequest="50" WidthRequest="50" HorizontalOptions="Center" >
                         <Grid.Behaviors>
@@ -88,6 +94,7 @@
                                 Source="{local:ImageResource MBBS.Images.star_selected.png}"
                                 IsVisible="{Binding Source={x:Reference starFour},
                                             Path=IsStarred}"/>
+                       <Label Text="{Binding QuestionID}"/>
                       </Grid>
                       <Grid HeightRequest="50" WidthRequest="50" HorizontalOptions="Center">
                         <Grid.Behaviors>
@@ -103,16 +110,52 @@
                                             Path=IsStarred}"/>
                       </Grid>
                     </StackLayout>
-                    
+                    <Grid>
+                      <Entry x:Name="Comment" 
+                             TextColor="#4d4d4d"
+                             BackgroundColor="#ffffff" />
+                    </Grid>
                     
                   </StackLayout>
+                   
                 </Grid>
-              </ViewCell>
+              
+                </ViewCell>
             </DataTemplate>
+          
           </ListView.ItemTemplate>
-          <Label x:Name="MessageLabel"/>
+          <ListView.Footer>
+            <StackLayout>
+            
+            <Label x:Name="MessageLabel"/>
+            
+            <Button Text="Submit"
+                          BackgroundColor="#003788"
+                          WidthRequest="120"
+                          HeightRequest="40"
+                          BorderWidth="0"
+                          BorderRadius="0"
+                          HorizontalOptions="Center"
+                          Clicked="ButtonSubmit_OnClicked" />
+              </StackLayout>
+          
+          </ListView.Footer>
+          
+          
+        
+          
+
         </ListView>
+        
+      
+
       </StackLayout>
+      
+    
+          
     </ScrollView>
+  
+  
+  
   </ContentPage.Content>
 </ContentPage>

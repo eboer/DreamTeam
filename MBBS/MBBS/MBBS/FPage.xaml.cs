@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -48,6 +50,42 @@ namespace MBBS
             }
 
         }
+
+        private void ButtonSubmit_OnClicked(object sender, EventArgs e)
+        {
+            List<SurveyData> surveyData = new List<SurveyData>();
+            int test = 1;
+            foreach (var question in questions)
+            {
+                SurveyData tempData = new SurveyData();
+                tempData.QuestionID = question.QuestionID;
+                tempData.Rating = 5;
+                tempData.Comment = "test " + test;
+                Debug.WriteLine(tempData.QuestionID);
+                Debug.WriteLine(tempData.Rating);
+                Debug.WriteLine(tempData.Comment);
+                test++;
+
+                surveyData.Add(tempData);
+                
+            }
+            string json = JsonConvert.SerializeObject(surveyData);
+            Debug.WriteLine(json);
+            
+            string url = "http://mbbsweb.azurewebsites.net/api/Survey/PostSurveyAnswers";
+
+            MakeGetRequest(url);
+            DisplayAlert("Success!", "You have submitted the survey", "OK");
+            //Navigation.PopModalAsync();
+        }
+
+        public static async void MakeGetRequest(string url)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            var response = await request.GetResponseAsync();
+            var respStream = response.GetResponseStream();
+        }
+
     }
 
 
