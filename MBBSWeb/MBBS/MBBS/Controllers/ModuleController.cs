@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Net;
-using System.Web.Http;
+﻿using System.Web.Http;
 using MBBS.Database;
 using MBBS.Authentication;
 
@@ -38,7 +33,7 @@ namespace MBBS.Controllers
         public IHttpActionResult Get(string moduleID, int subsectionID, string languageID)
         {
             int userID = authenticate.confirmToken();
-            //int userID = 1;
+
             if (userID != 0)
             {
                 ModuleQueries query = new ModuleQueries();
@@ -49,7 +44,6 @@ namespace MBBS.Controllers
                 return Unauthorized();
             }
         }
-    
 
         [Route("PostData")]
         public IHttpActionResult Post()
@@ -66,12 +60,12 @@ namespace MBBS.Controllers
                 return Unauthorized();
             }
         }
-        //new JavaScriptSerializer().Serialize(ListOfMyObject);
 
         [Route("GetSubsectionNames")]
         public IHttpActionResult Get(string languageID)
         {
-            int userID = authenticate.confirmToken();
+            //int userID = authenticate.confirmToken();
+            int userID = 1;
             if (userID != 0)
             {
                 ModuleQueries query = new ModuleQueries();
@@ -85,8 +79,9 @@ namespace MBBS.Controllers
         }
 
     }
+
     [RoutePrefix("api/Module")]
-    public class AllModuleController : ApiController
+    public class AllModulesController : ApiController
     {
         [Route("AllModules")]
         public IHttpActionResult Get()
@@ -94,5 +89,69 @@ namespace MBBS.Controllers
                 ModuleQueries query = new ModuleQueries();
                 return Ok(query.GetAllModules());
         }
+
+        [Route("GetSectionNames")]
+        public IHttpActionResult Get(string languageID)
+        {
+            //int userID = authenticate.confirmToken();
+            int userID = 1;
+            if (userID != 0)
+            {
+                ModuleQueries query = new ModuleQueries();
+
+                return Ok(query.GetSectionNames(languageID));
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
     }
- }
+
+    [RoutePrefix("api/Module")]
+    public class MatrixController : ApiController
+    {
+        Authenticate authenticate = new Authenticate();
+
+        [Route("GetMatrixData")]
+        public IHttpActionResult Get(string moduleID, string languageID)
+        {
+            //int userID = authenticate.confirmToken();
+            int userID = 1;
+            if (userID != 0)
+            {
+                ModuleQueries query = new ModuleQueries();  
+                return Ok(query.GetMatrixData(moduleID, languageID));
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
+        [Route("PostCompetency")]
+        public IHttpActionResult Post()
+        {
+            int userID = authenticate.confirmToken();
+            if (userID != 0)
+            {
+                ModuleQueries query = new ModuleQueries();
+                query.PostCompetency(userID);
+                return Ok();
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+    }
+
+    [RoutePrefix("api/Module")]
+    public class TestingController : ApiController
+    {
+
+    }
+
+    //new JavaScriptSerializer().Serialize(ListOfMyObject);
+}

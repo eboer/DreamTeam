@@ -245,6 +245,7 @@
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Database\ModuleQueries.cs" />
     <Compile Include="Database\SurveyQueries.cs" />
+    <Compile Include="Database\TranslationQueries.cs" />
     <Compile Include="Database\UserQueries.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -258,7 +259,9 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ModuleContent.cs" />
     <Compile Include="Models\Question.cs" />
+    <Compile Include="Models\Section.cs" />
     <Compile Include="Models\Subsection.cs" />
+    <Compile Include="Models\SubsectionRating.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />

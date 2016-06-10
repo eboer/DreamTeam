@@ -1,21 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.DataVisualization.Charting;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MBBS_Teacher.Pages
 {
@@ -43,31 +33,14 @@ namespace MBBS_Teacher.Pages
 
         }
 
-        public void LoadPieChartData()
-        {
-            ((PieSeries)PieChart.Series [0]).ItemsSource =
-            new KeyValuePair<String, int>[]{
-            new KeyValuePair<String, int>("First Exam", 7),
-            new KeyValuePair<String, int>("Re-exam", 6),
-            new KeyValuePair<String, int>("Failed", 4) };
-        }
+       
 
         public void LoadScoreChart()
         {
             string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Survey/AverageRatingSubsections?moduleID=" + data.ModuleName, data.token);
             Dictionary<string, double> results = JsonConvert.DeserializeObject<Dictionary<string, double>>(text);
-         //   var myKey = results.FirstOrDefault(x => x.Value == "one").Key;
-            Console.WriteLine(text);
+
             ((BarSeries)ScoreChart.Series[0]).ItemsSource = results;
-                /*
-            new KeyValuePair<String, int>[]{
-            new KeyValuePair<String, int>("Introductie", 7),
-            new KeyValuePair<String, int>("Toetsing", 6),
-            new KeyValuePair<String, int>("Programma", 4),
-            new KeyValuePair<String, int>("Structuur & Organisatie", 3),
-            new KeyValuePair<String, int>("Literatuur/Programmatuur", 8),
-            new KeyValuePair<String, int>("Module Evaluatie", 9),
-            new KeyValuePair<String, int>("Bijlagen", 4)};*/
         }
 
         public void UtilizeState(object state)
@@ -75,13 +48,68 @@ namespace MBBS_Teacher.Pages
             data = (Data)state;
             this.header.Content = data.ModuleName;
             fillChart();
-            LoadPieChartData();
+            
             LoadScoreChart();
+
+            LoadComments();
         }
 
+        private void LoadComments()
+        {
+            string text = "";
+            try
+            {
+                text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Survey/GetComments?moduleID=" + data.ModuleName + "&languageID=en", data.token);
+            }
+            catch
+            {
+                Task t = Task.Run(async () =>
+                {
+                    await Task.Delay(20);
+                });
+                Task.WaitAll(t);
+                LoadComments();
+            }
+            List<Comments> commentsList = JsonConvert.DeserializeObject<List<Comments>>(text);
+            commentList.ItemsSource = commentsList;
+            Console.WriteLine(text);
+        }
+            
         private void back_Click(object sender, RoutedEventArgs e)
         {
             Switcher.Switch(new ModuleDetail(), data);
         }
+        private void commentList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var item = sender as ListViewItem;
+            Comments content = (Comments)item.Content;
+            Console.WriteLine("pressed");
+            
+            questionText.AppendText(content.Comment);
+            Console.WriteLine("appended");
+
+        }
+    }
+
+    internal class Comments
+    {
+        [JsonProperty("QuestionID")]
+        public string QuestionID { get; set; }
+
+        [JsonProperty("QuestionText")]
+        public string QuestionText { get; set; }
+
+        [JsonProperty("SubsectionID")]
+        public string SubsectionID { get; set; }
+
+        [JsonProperty("SubsectionName")]
+        public string SubsectionName { get; set; }
+
+        [JsonProperty("DateCompleted")]
+        public string DateCompleted { get; set; }
+
+        [JsonProperty("Comment")]
+        public string Comment { get; set; }
+
     }
 }

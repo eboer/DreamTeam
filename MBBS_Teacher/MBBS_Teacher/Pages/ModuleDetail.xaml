@@ -64,5 +64,8 @@
                 </Grid>
             </TabItem>
         </TabControl>
+        <Popup Placement="Center" Name="popUp">
+            <ProgressBar Name="getPdf" Maximum="100" Minimum="0" IsIndeterminate="True" Height="50" Width="250" Margin="0,0,0,0" />
+        </Popup>
     </Grid>
 </UserControl>

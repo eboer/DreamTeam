@@ -54,21 +54,24 @@
                     </DVC:Chart>
                 </Grid>
             </TabItem>
-            <TabItem Header="Module Succes" HorizontalAlignment="Right" Margin="0,0,0,0" Background="#3FA9F5" BorderThickness="0" BorderBrush="Transparent">
-                <Grid Background="#FFE5E5E5">
-                    <Label Name="lawl" Content="Correctly implemented piechart is correctly implemented!" HorizontalAlignment="Center" />
-                    <DVC:Chart Name="PieChart">
-                        <DVC:Chart.Series>
-                            <DVC:PieSeries ItemsSource="{Binding LoadPieChartData}" 
-                       IndependentValueBinding="{Binding Path=Key}" 
-                       DependentValueBinding="{Binding Path=Value}" />
-                        </DVC:Chart.Series>
-                    </DVC:Chart>
-                </Grid>
-            </TabItem>
+            
             <TabItem Header="Module Comments" HorizontalAlignment="Right" Margin="0,0,0,0" Background="#3FA9F5" BorderThickness="0" BorderBrush="Transparent">
                 <Grid Background="#FFE5E5E5">
-                    
+                    <ListView x:Name="commentList" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0" Background="#E6E6E6">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding QuestionText}" />
+                            </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="commentList_MouseLeftButtonDown"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                    <RichTextBox IsReadOnly="True" HorizontalAlignment="Right" Width="250" VerticalAlignment="Stretch" x:Name="questionText" />
                 </Grid>
             </TabItem>
         </TabControl>
