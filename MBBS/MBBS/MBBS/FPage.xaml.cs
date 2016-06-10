@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -72,18 +74,72 @@ namespace MBBS
             string json = JsonConvert.SerializeObject(surveyData);
             Debug.WriteLine(json);
             
-            string url = "http://mbbsweb.azurewebsites.net/api/Survey/PostSurveyAnswers";
+            string url = "http://mbbsweb.azurewebsites.net/api/Survey/PostSurveyAnswers?content=" + json;
 
-            MakeGetRequest(url);
+            
+
+            MakeJsonRequest(url, json);
             DisplayAlert("Success!", "You have submitted the survey", "OK");
             //Navigation.PopModalAsync();
         }
 
-        public static async void MakeGetRequest(string url)
+        public static async void MakeJsonRequest(string url, string json)
         {
+            /*var client = new HttpClient();
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = null;
+            response = await client.PostAsync(url, content);
+            Debug.WriteLine(response);
+            if (response.IsSuccessStatusCode)
+            {
+                Debug.WriteLine(@"                 TodoItem succesfully saved.");
+            }*/
+
+
+            /*var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Post, url);
+            //byte[] jsonArray = GetBytes(json);
+            byte[] array = Encoding.UTF8.GetBytes(json);
+            request.Content = new ByteArrayContent(array);
+            //request.ContentType = "application/json";
+            var response = await client.SendAsync(request);*/
+
+
+            //WebClient wc = new WebClient();
+
+
+
+            /*HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            //request.Method = "POST";
+            //request.ContentType = "application/json";
+            //request.Length = data.Length;
+            
+            
+
+            var response = await request.GetResponseAsync();
+            var respStream = response.GetResponseStream();*/
+
+            //create the webrequest
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            //get the respnse
             var response = await request.GetResponseAsync();
             var respStream = response.GetResponseStream();
+            //read the webresponse
+            StreamReader reader = new StreamReader(respStream);
+            string text = reader.ReadToEnd();
+            
+
+
+
+
+
+        }
+
+        static byte[] GetBytes(string str)
+        {
+            byte[] bytes = new byte[str.Length * sizeof(char)];
+            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            return bytes;
         }
 
     }
