@@ -111,7 +111,7 @@
                       </Grid>
                     </StackLayout>
                     <Grid>
-                      <Entry x:Name="Comment" 
+                      <Entry x:Name="commentEntry" 
                              TextColor="#4d4d4d"
                              BackgroundColor="#ffffff" />
                     </Grid>

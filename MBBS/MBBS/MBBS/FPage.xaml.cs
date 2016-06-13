@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
+using Windows.UI.Xaml.Controls;
 
 namespace MBBS
 {
@@ -43,6 +44,9 @@ namespace MBBS
                 }
                 else
                 {
+
+                }
+                {
                     ModuleListView.ItemsSource = questions;
                 }
             }
@@ -57,17 +61,22 @@ namespace MBBS
         private void ButtonSubmit_OnClicked(object sender, EventArgs e)
         {
             List<SurveyData> surveyData = new List<SurveyData>();
-            int test = 1;
+            int test = 5;
+            int rating = 1;
             foreach (var question in questions)
             {
                 SurveyData tempData = new SurveyData();
                 tempData.QuestionID = question.QuestionID;
-                tempData.Rating = 5;
+                tempData.Rating = rating;
+
+                //tempData.Comment = "abc";
+
                 tempData.Comment = "test " + test;
                 /*Debug.WriteLine(tempData.QuestionID);
                 Debug.WriteLine(tempData.Rating);
                 Debug.WriteLine(tempData.Comment);*/
                 test++;
+                rating++;
 
                 surveyData.Add(tempData);
                 
@@ -76,70 +85,30 @@ namespace MBBS
             JObject jObject = new JObject();
             jObject["ModuleID"] = JToken.FromObject(moduleID);
             jObject["Answers"] = JToken.FromObject(surveyData);
-            String json = JsonConvert.SerializeObject(jObject);
+            string json = JsonConvert.SerializeObject(jObject);
             
             Debug.WriteLine(json);
 
             string url = "http://mbbsweb.azurewebsites.net/api/Survey/PostSurveyAnswers?content=" + json;
 
-            MakeJsonRequest(url, json);
+            MakeJsonRequest(url, json, token);
             DisplayAlert("Success!", "You have submitted the survey", "OK");
             //Navigation.PopModalAsync();
         }
 
-        public static async void MakeJsonRequest(string url, string json)
+        public static async void MakeJsonRequest(string url, string json, string authorization)
         {
-            /*var client = new HttpClient();
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = null;
-            response = await client.PostAsync(url, content);
-            Debug.WriteLine(response);
-            if (response.IsSuccessStatusCode)
-            {
-                Debug.WriteLine(@"                 TodoItem succesfully saved.");
-            }*/
-
-
-            /*var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Post, url);
-            //byte[] jsonArray = GetBytes(json);
-            byte[] array = Encoding.UTF8.GetBytes(json);
-            request.Content = new ByteArrayContent(array);
-            //request.ContentType = "application/json";
-            var response = await client.SendAsync(request);*/
-
-
-            //WebClient wc = new WebClient();
-
-
-
-            /*HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            //request.Method = "POST";
-            //request.ContentType = "application/json";
-            //request.Length = data.Length;
-            
-            
-
-            var response = await request.GetResponseAsync();
-            var respStream = response.GetResponseStream();*/
-
             //create the webrequest
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+
+            
+            request.Headers["Authorization"] = authorization;
             //get the respnse
             var response = await request.GetResponseAsync();
             var respStream = response.GetResponseStream();
             //read the webresponse
             StreamReader reader = new StreamReader(respStream);
             string text = reader.ReadToEnd();
-
-
-
-
-
         }
-        
-
     }
-
-
 }
