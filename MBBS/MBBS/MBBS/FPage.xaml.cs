@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
 
 namespace MBBS
@@ -63,20 +64,23 @@ namespace MBBS
                 tempData.QuestionID = question.QuestionID;
                 tempData.Rating = 5;
                 tempData.Comment = "test " + test;
-                Debug.WriteLine(tempData.QuestionID);
+                /*Debug.WriteLine(tempData.QuestionID);
                 Debug.WriteLine(tempData.Rating);
-                Debug.WriteLine(tempData.Comment);
+                Debug.WriteLine(tempData.Comment);*/
                 test++;
 
                 surveyData.Add(tempData);
                 
             }
-            string json = JsonConvert.SerializeObject(surveyData);
+            
+            JObject jObject = new JObject();
+            jObject["ModuleID"] = JToken.FromObject(moduleID);
+            jObject["Answers"] = JToken.FromObject(surveyData);
+            String json = JsonConvert.SerializeObject(jObject);
+            
             Debug.WriteLine(json);
-            
-            string url = "http://mbbsweb.azurewebsites.net/api/Survey/PostSurveyAnswers?content=" + json;
 
-            
+            string url = "http://mbbsweb.azurewebsites.net/api/Survey/PostSurveyAnswers?content=" + json;
 
             MakeJsonRequest(url, json);
             DisplayAlert("Success!", "You have submitted the survey", "OK");
@@ -126,21 +130,14 @@ namespace MBBS
             var respStream = response.GetResponseStream();
             //read the webresponse
             StreamReader reader = new StreamReader(respStream);
-            string text = reader.ReadToEnd(); // hoi ruben
-            
+            string text = reader.ReadToEnd();
 
 
 
 
 
         }
-
-        static byte[] GetBytes(string str)
-        {
-            byte[] bytes = new byte[str.Length * sizeof(char)];
-            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-            return bytes;
-        }
+        
 
     }
 
