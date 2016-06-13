@@ -126,7 +126,7 @@ namespace MBBS
             var respStream = response.GetResponseStream();
             //read the webresponse
             StreamReader reader = new StreamReader(respStream);
-            string text = reader.ReadToEnd();
+            string text = reader.ReadToEnd(); // hoi ruben
             
 
 
