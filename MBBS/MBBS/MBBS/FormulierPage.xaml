@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MBBS;assembly=MBBS"
-             x:Class="App4.Page1"
+             x:Class="MBBS.FormulierPage"
              Title="Rate Session" BackgroundColor="White">
   <ContentPage.Resources>
     <ResourceDictionary>
@@ -197,6 +197,8 @@
       <Label Text="{Binding Source={x:Reference star2Five},
                    Path=Rating, Converter={StaticResource RatingConverter}}"
              HorizontalOptions="Center"/>
+      <Button Clicked="Button_OnClicked" Text="Click it."/>
+      <Label x:Name="testLabel"/>
     </StackLayout>
   </Grid>
 </ContentPage>
