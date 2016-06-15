@@ -24,14 +24,14 @@ namespace MBBS
         public FPage(string token, string moduleID, string moduleName)
         {
             InitializeComponent();
-            LoadModules();
+            //LoadModules();
             this.token = token;
             this.moduleName = moduleName;
             this.moduleID = moduleID;
             TitleLabel.Text = moduleName;
         }
 
-        private async void LoadModules()
+        /*private async void LoadModules()
         {
             try
             {
@@ -56,7 +56,7 @@ namespace MBBS
                 MessageLabel.Text = "No data found.";
             }
 
-        }
+        }*/
 
         private void ButtonSubmit_OnClicked(object sender, EventArgs e)
         {

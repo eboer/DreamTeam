@@ -1,41 +1,202 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MBBS.FormulierPage"
-             Title="MBBS"
-             BackgroundColor="#e6e6e6">
-  <ContentPage.Content>
-    <ScrollView>
-      <StackLayout>
-        <Label x:Name="TestLabel"
-                Text="Voorwoord"
-               TextColor="#4d4d4d" />
-        <Entry x:Name="VoorwoordEntry"
-               TextColor="#4d4d4d"
-               BackgroundColor="#ffffff" />
-        <Label Text="Introductie"
-               TextColor="#4d4d4d"/>
-        <Entry x:Name="IntroductieEntry"
-               TextColor="#4d4d4d"
-               BackgroundColor="#ffffff"
-               IsPassword="true" />
-        <Label Text="Toetsing"
-               TextColor="#4d4d4d"/>
-        <Entry x:Name="ToetsingEntry"
-               TextColor="#4d4d4d"
-               BackgroundColor="#ffffff"
-               IsPassword="true" />
-        <Label Text="Programma"
-               TextColor="#4d4d4d"/>
-        <Entry x:Name="ProgrammaEntry"
-               TextColor="#4d4d4d"
-               BackgroundColor="#ffffff"
-               IsPassword="true" />
-        <Button Text="Verstuur beoordeling"
-                BackgroundColor="#003788"
-                BorderWidth="0"
-                BorderRadius="0" />
-      </StackLayout>
-    </ScrollView>
-  </ContentPage.Content>
+             xmlns:local="clr-namespace:MBBS;assembly=MBBS"
+             x:Class="App4.Page1"
+             Title="Rate Session" BackgroundColor="White">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <local:RatingVisibleConverter x:Key="RatingVisibleConverter" />
+      <local:RatingConverter x:Key="RatingConverter" />
+    </ResourceDictionary>
+  </ContentPage.Resources>
+
+  <ContentPage.ToolbarItems>
+    <ToolbarItem Text="Cancel" Command="{Binding DoneCommand}" x:Name="ToolbarDone"/>
+  </ContentPage.ToolbarItems>
+  <Grid Padding="24">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+
+    <StackLayout VerticalOptions="Center" Spacing="0">
+      <Image Source="icon_sessions_big_purple.png" HorizontalOptions="Center" />
+      <Label Text="{Binding Session.Title}"
+          HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
+
+      <Grid RowSpacing="18" HorizontalOptions="Center">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackLayout Orientation="Horizontal" Spacing="0" HorizontalOptions="Center" Grid.Column="1">
+          <Grid HeightRequest="40" WidthRequest="40" x:Name="StarGrid2">
+            <Grid.Behaviors>
+              <!--Do not remove name as it is used in binding-->
+              <local:StarBehavior x:Name="starOne" GroupName="myStar"/>
+            </Grid.Behaviors>
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_outline.png}" />
+
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_selected.png}"
+                    IsVisible="{Binding Source={x:Reference starOne},
+                                            Path=IsStarred}"/>
+          </Grid>
+          <Grid HeightRequest="40" WidthRequest="40" HorizontalOptions="Center">
+            <Grid.Behaviors>
+              <!--Do not remove name as it is used in binding-->
+              <local:StarBehavior x:Name="starTwo" GroupName="myStar"/>
+            </Grid.Behaviors>
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_outline.png}" />
+
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_selected.png}"
+                    IsVisible="{Binding Source={x:Reference starTwo},
+                                            Path=IsStarred}"/>
+          </Grid>
+          <Grid HeightRequest="40" WidthRequest="40" HorizontalOptions="Center" >
+            <Grid.Behaviors>
+              <!--Do not remove name as it is used in binding-->
+              <local:StarBehavior x:Name="starThree" GroupName="myStar"/>
+            </Grid.Behaviors>
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_outline.png}" />
+
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_selected.png}"
+                    IsVisible="{Binding Source={x:Reference starThree},
+                                            Path=IsStarred}"/>
+          </Grid>
+          <Grid HeightRequest="40" WidthRequest="40" HorizontalOptions="Center">
+            <Grid.Behaviors>
+              <!--Do not remove name as it is used in binding-->
+              <local:StarBehavior x:Name="starFour" GroupName="myStar"/>
+            </Grid.Behaviors>
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_outline.png}" />
+
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_selected.png}"
+                    IsVisible="{Binding Source={x:Reference starFour},
+                                            Path=IsStarred}"/>
+          </Grid>
+          <Grid HeightRequest="40" WidthRequest="40" HorizontalOptions="Center">
+            <Grid.Behaviors>
+              <!--D not remove name as it is used in binding-->
+              <local:StarBehavior x:Name="starFive" GroupName="myStar"/>
+            </Grid.Behaviors>
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_outline.png}" />
+
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_selected.png}"
+                    IsVisible="{Binding Source={x:Reference starFive},
+                                            Path=IsStarred}"/>
+          </Grid>
+        </StackLayout>
+      </Grid>
+
+      <Label Text="{Binding Source={x:Reference starFive},
+                   Path=Rating, Converter={StaticResource RatingConverter}}"
+             HorizontalOptions="Center"/>
+    </StackLayout>
+    <StackLayout Padding="5" Grid.Row="1">
+
+      <Image Source="icon_sessions_big_purple.png" HorizontalOptions="Center" />
+      <Label Text="{Binding Session.Title}"
+          HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
+
+      <Grid RowSpacing="18" HorizontalOptions="Center">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackLayout Orientation="Horizontal" Spacing="0" HorizontalOptions="Center" Grid.Column="1">
+          <Grid HeightRequest="40" WidthRequest="40" x:Name="StarGrid">
+            <Grid.Behaviors>
+              <!--Do not remove name as it is used in binding-->
+              <local:StarBehavior x:Name="star2One" GroupName="myStar2"/>
+            </Grid.Behaviors>
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_outline.png}" />
+
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_selected.png}"
+                    IsVisible="{Binding Source={x:Reference star2One},
+                                            Path=IsStarred}"/>
+          </Grid>
+          <Grid HeightRequest="40" WidthRequest="40" HorizontalOptions="Center">
+            <Grid.Behaviors>
+              <!--Do not remove name as it is used in binding-->
+              <local:StarBehavior x:Name="star2Two" GroupName="myStar2"/>
+            </Grid.Behaviors>
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_outline.png}" />
+
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_selected.png}"
+                    IsVisible="{Binding Source={x:Reference star2Two},
+                                            Path=IsStarred}"/>
+          </Grid>
+          <Grid HeightRequest="40" WidthRequest="40" HorizontalOptions="Center" >
+            <Grid.Behaviors>
+              <!--Do not remove name as it is used in binding-->
+              <local:StarBehavior x:Name="star2Three" GroupName="myStar2"/>
+            </Grid.Behaviors>
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_outline.png}" />
+
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_selected.png}"
+                    IsVisible="{Binding Source={x:Reference star2Three},
+                                            Path=IsStarred}"/>
+          </Grid>
+          <Grid HeightRequest="40" WidthRequest="40" HorizontalOptions="Center">
+            <Grid.Behaviors>
+              <!--Do not remove name as it is used in binding-->
+              <local:StarBehavior x:Name="star2Four" GroupName="myStar2"/>
+            </Grid.Behaviors>
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_outline.png}" />
+
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_selected.png}"
+                    IsVisible="{Binding Source={x:Reference star2Four},
+                                            Path=IsStarred}"/>
+          </Grid>
+          <Grid HeightRequest="40" WidthRequest="40" HorizontalOptions="Center">
+            <Grid.Behaviors>
+              <!--D not remove name as it is used in binding-->
+              <local:StarBehavior x:Name="star2Five" GroupName="myStar2"/>
+            </Grid.Behaviors>
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_outline.png}" />
+
+            <Image
+                    Source="{local:ImageResource MBBS.Images.star_selected.png}"
+                    IsVisible="{Binding Source={x:Reference star2Five},
+                                            Path=IsStarred}"/>
+          </Grid>
+        </StackLayout>
+      </Grid>
+
+      <Label Text="{Binding Source={x:Reference star2Five},
+                   Path=Rating, Converter={StaticResource RatingConverter}}"
+             HorizontalOptions="Center"/>
+    </StackLayout>
+  </Grid>
 </ContentPage>
