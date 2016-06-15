@@ -1,4 +1,13 @@
-﻿using System;
+﻿//===========================================================================================
+//Project: MBBS
+//Description:
+//   
+//
+//Date: 10-6-2016
+//Author: Janine Lanting
+//===========================================================================================
+
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -8,7 +17,7 @@ namespace MBBS.Authentication
 {
     public class Authenticate
     {
-        
+
 
         public string generateToken()
         {
@@ -22,6 +31,7 @@ namespace MBBS.Authentication
         public string setToken(int userID)
         {
             string token = generateToken();
+            //DateTime time = DateTime.Now.AddSeconds(30);
             DateTime time = DateTime.Now.AddMinutes(30);
             SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MS_TableConnectionString"].ConnectionString);
             con.Open();

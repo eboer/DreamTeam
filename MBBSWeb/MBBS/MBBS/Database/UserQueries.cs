@@ -26,10 +26,50 @@ namespace MBBS.Database
             return userID;
         }
 
-        public void CreateUser(string firstName, string lastName, string email, int userType)
+        public void AddDocentData(int docentID)
+        {
+            HttpContext context = HttpContext.Current;
+            con.Open();
+            SqlCommand cmd = new SqlCommand("INSERT INTO DocentData(DocentID, DocentCode, Room) " +
+               "VALUES (@docentID, @docentCode, @room)", con);
+            cmd.Parameters.AddWithValue("@docentID", docentID);
+            cmd.Parameters.AddWithValue("@docentCode", context.Request["docentCode"].Trim());
+            cmd.Parameters.AddWithValue("@room", context.Request["roomNumber"].Trim());
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            con.Close();
+        }
+
+        public int CreateUser()
+        {
+            HttpContext context = HttpContext.Current;
+            con.Open();
+            SqlCommand cmd = new SqlCommand("INSERT INTO Users(FirstName, LastName, Email, UserTypeID) " +
+                 "OUTPUT inserted.UserID " +
+                 "VALUES (@firstName, @lastName, @email, @userType)", con);
+
+            cmd.Parameters.AddWithValue("@firstName", context.Request["firstName"].Trim());
+            cmd.Parameters.AddWithValue("@lastName", context.Request["lastName"].Trim());
+            cmd.Parameters.AddWithValue("@email", context.Request["email"].Trim());
+            cmd.Parameters.AddWithValue("@userType", context.Request["userType"]);
+ 
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            int userID = 0;
+            while (reader.Read())
+            {
+                userID = reader.GetInt32(0);
+            }
+            con.Close();
+            return userID;
+        }
+
+        public int CreateUser(string firstName, string lastName, string email, int userType)
         {
             con.Open();
-            SqlCommand cmd = new SqlCommand("INSERT INTO Users(FirstName, LastName, Email, UserTypeID) VALUES (@firstName, @lastName, @email, " + userType + ")", con);
+            SqlCommand cmd = new SqlCommand("INSERT INTO Users(FirstName, LastName, Email, UserTypeID) " +
+                 "OUTPUT inserted.UserID " + 
+                 "VALUES (@firstName, @lastName, @email, " + userType + ")", con);
             //Must declare the scalar variable 
             cmd.Parameters.AddWithValue("@firstName", firstName);
             cmd.Parameters.AddWithValue("@lastName", lastName);
@@ -37,7 +77,13 @@ namespace MBBS.Database
             //cmd.Parameters.AddWithValue("@userTypeID", userType);
 
             SqlDataReader reader = cmd.ExecuteReader();
+            int userID = 0;
+            while (reader.Read())
+            {
+                userID = reader.GetInt32(0);
+            }
             con.Close();
+            return userID;
         }
 
         public string GetPassword(int userID)
@@ -63,9 +109,5 @@ namespace MBBS.Database
             cmd.Parameters.AddWithValue("@password", password);
             SqlDataReader reader = cmd.ExecuteReader();
         }
-
-        
-
-
     }
 }
