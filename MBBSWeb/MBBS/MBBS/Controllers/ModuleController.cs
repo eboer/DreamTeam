@@ -10,6 +10,7 @@
 using System.Web.Http;
 using MBBS.Database;
 using MBBS.Authentication;
+using MBBS.Models;
 
 namespace MBBS.Controllers
 {
@@ -25,12 +26,12 @@ namespace MBBS.Controllers
         [Route("DocentModules")]
         public IHttpActionResult Get()
         {
-            int userID = authenticate.confirmToken();
-            if (userID != 0)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
             {
                 ModuleQueries query = new ModuleQueries();
 
-                return Ok(query.GetDocentModules(userID));
+                return Ok(query.GetDocentModules(user.UserID));
             }
             else
             {
@@ -42,11 +43,11 @@ namespace MBBS.Controllers
         [Route("AddDocentModule")]
         public IHttpActionResult Post()
         {
-            int userID = authenticate.confirmToken();
-            if (userID != 0)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0 && !user.UserTypeID.Equals(1))
             {
                 ModuleQueries query = new ModuleQueries();
-                query.PostDocentModule(userID);
+                query.PostDocentModule(user.UserID);
                 return Ok();
             }
             else
@@ -64,8 +65,8 @@ namespace MBBS.Controllers
         [Route("GetMatrixData")]
         public IHttpActionResult Get(string moduleID, string languageID)
         {
-            int userID = authenticate.confirmToken();
-            if (userID != 0)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
             {
                 ModuleQueries query = new ModuleQueries();
                 return Ok(query.GetMatrixData(moduleID, languageID));
@@ -79,11 +80,11 @@ namespace MBBS.Controllers
         [Route("PostCompetency")]
         public IHttpActionResult Post()
         {
-            int userID = authenticate.confirmToken();
-            if (userID != 0)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0 && !user.UserTypeID.Equals(1))
             {
                 ModuleQueries query = new ModuleQueries();
-                query.PostCompetency(userID);
+                query.PostCompetency(user.UserID);
                 return Ok();
             }
             else
@@ -97,20 +98,21 @@ namespace MBBS.Controllers
     public class ModuleController : ApiController
     {
         Authenticate authenticate = new Authenticate();
-        //[Route("CreateModule")]
-        // Only administrator can create modules
 
         [Route("GetModuleInfo")]
         public IHttpActionResult Get(string moduleID)
         {
-            // int userID = authenticate.confirmToken();
-            int userID = 6;
-            if (userID != 0)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
             {
                 ModuleQueries query = new ModuleQueries();
-                //ModuleInfo 
-                //query.GetModuleInfo(moduleID);
-                return Ok();
+                ModuleInfo moduleInfo = new ModuleInfo();
+                moduleInfo = query.GetModuleInfo(moduleID);
+                if(string.IsNullOrEmpty(moduleInfo.ModuleName))
+                {
+                    return BadRequest("The module you requested does not exist.");
+                }
+                return Ok(moduleInfo);
             }
             else
             {
@@ -127,8 +129,8 @@ namespace MBBS.Controllers
         [Route("GetData")]
         public IHttpActionResult Get(string moduleID, int subsectionID, string languageID)
         {
-            int userID = authenticate.confirmToken();
-            if (userID != 0)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
             {
                 ModuleQueries query = new ModuleQueries();
                 return Ok(query.GetModuleData(moduleID, subsectionID, languageID));
@@ -142,11 +144,11 @@ namespace MBBS.Controllers
         [Route("PostData")]
         public IHttpActionResult Post()
         {
-            int userID = authenticate.confirmToken();
-            if (userID != 0)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0 && !user.UserTypeID.Equals(1))
             {
                 ModuleQueries query = new ModuleQueries();
-                query.PostModuleData(userID);
+                query.PostModuleData(user.UserID);
             return Ok();
             }
             else
@@ -158,8 +160,8 @@ namespace MBBS.Controllers
         [Route("GetSubsectionNames")]
         public IHttpActionResult Get(string languageID)
         {
-            int userID = authenticate.confirmToken();
-            if (userID != 0)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
             {
                 ModuleQueries query = new ModuleQueries();
                 
@@ -189,8 +191,8 @@ namespace MBBS.Controllers
         public IHttpActionResult Get(string languageID)
         {
 
-            int userID = authenticate.confirmToken();
-            if (userID != 0)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
             {
                 ModuleQueries query = new ModuleQueries();
 
@@ -212,8 +214,8 @@ namespace MBBS.Controllers
         [Route("GetVersions")]
         public IHttpActionResult Get(string moduleID, string languageID)
         {
-            int userID = authenticate.confirmToken();
-            if (userID != 0)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
             {
                 ModuleQueries query = new ModuleQueries();
                 return Ok(query.GetVersionData(moduleID, languageID));
@@ -227,10 +229,20 @@ namespace MBBS.Controllers
         [Route("PostVersion")]
         public IHttpActionResult Post()
         {
-            ModuleQueries query = new ModuleQueries();
-           // query.
-            return Ok();
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0 && !user.UserTypeID.Equals(1))
+            {
+                ModuleQueries query = new ModuleQueries();
+                query.PostVersionData(user.UserID);
+                return Ok();
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
+            
+            
     }
     
 }

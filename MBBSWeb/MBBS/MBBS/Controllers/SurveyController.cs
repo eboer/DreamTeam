@@ -34,10 +34,10 @@ namespace MBBS.Controllers
         [Route("PostAnswers")]
         public IHttpActionResult Post()
         {
-            int userID = authenticate.confirmToken();
+            AuthenticatedUser user = authenticate.confirmToken();
             try
             {
-                if (userID != 0)
+                if (user.UserID != 0)
                 {
                     ObjectBuilder listBuilder = new ObjectBuilder();
                     SurveyQueries query = new SurveyQueries();
@@ -67,9 +67,9 @@ namespace MBBS.Controllers
         [Route("AverageRatingPerYear")]
         public IHttpActionResult Get(string moduleID)
         {
-            int userID = authenticate.confirmToken();
+            AuthenticatedUser user = authenticate.confirmToken();
 
-            if (userID != 0)
+            if (user.UserID != 0)
             {
                 SurveyCalculators calculator = new SurveyCalculators();
                 return Ok(calculator.GetAverageRatingPerYear(moduleID));
@@ -83,8 +83,8 @@ namespace MBBS.Controllers
         [Route("AverageRatingPerSubsection")]
         public IHttpActionResult Get(string moduleID, int subsectionID)
         {
-            int userID = authenticate.confirmToken();
-            if (userID != 0)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
             {
                 SurveyCalculators calculator = new SurveyCalculators();
                 return Ok(calculator.GetAverageRatingPerYearPerSubsection(moduleID, subsectionID));
@@ -104,9 +104,9 @@ namespace MBBS.Controllers
         [Route("AverageRatingSubsections")]
         public IHttpActionResult Get(string moduleID)
         {
-            int userID = authenticate.confirmToken();
+            AuthenticatedUser user = authenticate.confirmToken();
 
-            if (userID != 0)
+            if (user.UserID != 0)
             {
                 SurveyCalculators calculator = new SurveyCalculators();
                 return Ok(calculator.GetAverageRatingPerSubsection(moduleID));
@@ -126,8 +126,8 @@ namespace MBBS.Controllers
         [Route("GetComments")]
         public IHttpActionResult Get(string moduleID, string languageID)
         {
-            int userID = authenticate.confirmToken();
-            if (userID != 0)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
             {
                 SurveyQueries query = new SurveyQueries();
                 return Ok(query.GetComments(moduleID, languageID));
@@ -141,26 +141,18 @@ namespace MBBS.Controllers
         [Route("PostSurveyAnswers")]
         public IHttpActionResult Post()
         {
-            int test = 5;
-            return Ok("success1");
-        }
-
-        [Route("PostSurveyAnswers")]
-        public IHttpActionResult Get()
-        {
-            int test = 5;
-            return Ok("success_Get");
+            return Ok("You finally got the post working");
         }
 
         [Route("PostSurveyAnswers")]
         public IHttpActionResult Get(string content)
         {
-            int userID = authenticate.confirmToken();
-            if (userID != 0)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
             {
                 ObjectBuilder builder = new ObjectBuilder();
                 SurveyQueries query = new SurveyQueries();
-                CompletedSurvey completedSurvey = builder.BuildCompletedSurvey(content, userID);
+                CompletedSurvey completedSurvey = builder.BuildCompletedSurvey(content, user.UserID);
                 query.PostAnswers(completedSurvey);
 
                 return Ok("success");

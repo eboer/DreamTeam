@@ -11,20 +11,7 @@ namespace MBBS.Database
     {
         SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MS_TableConnectionString"].ConnectionString);
 
-        public int GetUserId(string email)
-        {
-            int userID = 0;
-            con.Open();
-            SqlCommand cmd = new SqlCommand("SELECT UserID FROM Users WHERE email = @email", con);
-            cmd.Parameters.AddWithValue("@email", email);
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                userID = reader.GetInt32(0);
-            }
-            con.Close();
-            return userID;
-        }
+        
 
         public void AddDocentData(int docentID)
         {
@@ -86,6 +73,21 @@ namespace MBBS.Database
             return userID;
         }
 
+        public int GetUserId(string email)
+        {
+            int userID = 0;
+            con.Open();
+            SqlCommand cmd = new SqlCommand("SELECT UserID FROM Users WHERE email = @email", con);
+            cmd.Parameters.AddWithValue("@email", email);
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                userID = reader.GetInt32(0);
+            }
+            con.Close();
+            return userID;
+        }
+
         public string GetPassword(int userID)
         {
             string retrievedPassword = null;
@@ -108,6 +110,30 @@ namespace MBBS.Database
             cmd.Parameters.AddWithValue("@userID", userID);
             cmd.Parameters.AddWithValue("@password", password);
             SqlDataReader reader = cmd.ExecuteReader();
+        }
+
+        public string UpdatePassword(int userID)
+        {
+            HttpContext context = HttpContext.Current;
+            con.Open();
+            SqlCommand cmd = new SqlCommand("Update LoginCode " +
+                "SET Password = @newPassword " +
+                "WHERE UserID = @userID " + 
+                "AND Password = @oldPassword", con);
+            cmd.Parameters.AddWithValue("@newPassword", context.Request["newPassword"].Trim());
+            cmd.Parameters.AddWithValue("@oldPassword", context.Request["oldPassword"].Trim());
+            cmd.Parameters.AddWithValue("@userID", userID);
+            int result = cmd.ExecuteNonQuery();
+            con.Close();
+            if (result.Equals(0))
+            {
+                return "Old password was not correct";
+            }
+            if (result.Equals(1))
+            {
+                return "success";
+            }
+            return "Something has gone terribly wrong.";
         }
     }
 }

@@ -12,6 +12,7 @@ using System.Web.Http;
 using MBBS.Database;
 using MBBS.Authentication;
 using System.Web;
+using MBBS.Models;
 
 namespace MBBS.Controllers
 {
@@ -19,6 +20,68 @@ namespace MBBS.Controllers
     public class UserController : ApiController
     {
         Authenticate authenticate = new Authenticate();
+
+        [Route("Login")]
+        public IHttpActionResult Get(string email, string password)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            {
+                return Unauthorized();
+            }
+            int userID = 0;
+            UserQueries query = new UserQueries();
+            try
+            {
+                userID = query.GetUserId(email);
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+            if (userID != 0)
+            {
+                string retrievedPassword = query.GetPassword(userID);
+
+                if (password.Equals(retrievedPassword))
+                {
+
+                    return Ok(authenticate.setToken(userID));
+                }
+            }
+            return Unauthorized();
+        }
+
+        [Route("Login")]
+        public IHttpActionResult Post()
+        {
+            string email = System.Web.HttpContext.Current.Request["email"];
+            string password = System.Web.HttpContext.Current.Request["password"];
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            {
+                return Unauthorized();
+            }
+            int userID = 0;
+            UserQueries query = new UserQueries();
+            try
+            {
+                userID = query.GetUserId(email);
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+            if (userID != 0)
+            {
+                string retrievedPassword = query.GetPassword(userID);
+
+                if (password.Equals(retrievedPassword))
+                {
+
+                    return Ok(authenticate.setToken(userID));
+                }
+            }
+            return Unauthorized();
+        }
 
         [Route("Register")]
         public IHttpActionResult Get(string email, string firstName, string lastName, string password)
@@ -107,69 +170,33 @@ namespace MBBS.Controllers
             return Ok("Success");
         }
 
-        [Route("Login")]
-        public IHttpActionResult Get(string email, string password)
+        [RoutePrefix("api/Account")]
+        public class PasswordController : ApiController
         {
-            if(string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            [Route("UpdatePassword")]
+            public IHttpActionResult Post()
             {
-                return Unauthorized();
-            }
-            int userID = 0;
-            UserQueries query = new UserQueries();
-            try
-            {
-                userID = query.GetUserId(email);
-            }
-            catch (Exception e)
-            {
-                return InternalServerError(e);
-            }
-            if(userID != 0)
-            {
-                string retrievedPassword = query.GetPassword(userID);
+                Authenticate authenticate = new Authenticate();
 
-                if (password.Equals(retrievedPassword))
+                AuthenticatedUser user = authenticate.confirmToken();
+                if (user.UserID != 0)
                 {
+                    UserQueries query = new UserQueries();
+                    string result = query.UpdatePassword(user.UserID);
+                    if(result.Equals("success"))
+                    {
+                        return Ok();
+                    }
+                    return BadRequest(result);
                     
-                        return Ok(authenticate.setToken(userID));
                 }
-            }
-            return Unauthorized();
-        }
-
-        [Route("Login")]
-        public IHttpActionResult Post()
-        {
-            string email = System.Web.HttpContext.Current.Request["email"];
-            string password = System.Web.HttpContext.Current.Request["password"];
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
-            {
-                return Unauthorized();
-            }
-            int userID = 0;
-            UserQueries query = new UserQueries();
-            try
-            {
-                userID = query.GetUserId(email);
-            }
-            catch (Exception e)
-            {
-                return InternalServerError(e);
-            }
-            if (userID != 0)
-            {
-                string retrievedPassword = query.GetPassword(userID);
-
-                if (password.Equals(retrievedPassword))
+                else
                 {
-
-                    return Ok(authenticate.setToken(userID));
+                    return Unauthorized();
                 }
             }
-            return Unauthorized();
         }
-
-
+        
     }
 
     
