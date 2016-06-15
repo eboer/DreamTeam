@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MBBS;assembly=MBBS"
              x:Class="MBBS.FormulierPage"
-             Title="Rate Session" BackgroundColor="White">
+             Title="Rate Session" BackgroundColor="#e6e6e6">
   <ContentPage.Resources>
     <ResourceDictionary>
       <local:RatingVisibleConverter x:Key="RatingVisibleConverter" />
@@ -397,6 +397,15 @@
     </StackLayout>
 
     </Grid>
+  
+  <Button Text="Send " 
+              BackgroundColor="#e6e6e6" 
+              FontSize="12" 
+              TextColor="#737373" 
+              BorderWidth="0" 
+              BorderRadius="0" 
+              HorizontalOptions="Center"
+              Clicked="Button_OnClicked" />
   </StackLayout>
  </ScrollView>
 </ContentPage>
