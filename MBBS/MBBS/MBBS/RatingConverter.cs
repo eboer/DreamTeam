@@ -14,7 +14,7 @@ namespace MBBS
         {
             var rating = (int)value;
             if (rating == 0)
-                return "Klik dan!";
+                return "0";
             if (rating == 1)
                 return 1;
             if (rating == 2)

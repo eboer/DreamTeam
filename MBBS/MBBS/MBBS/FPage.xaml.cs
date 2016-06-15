@@ -31,7 +31,7 @@ namespace MBBS
             TitleLabel.Text = moduleName;
         }
 
-        /*private async void LoadModules()
+        private async void LoadModules()
         {
             try
             {
@@ -56,13 +56,13 @@ namespace MBBS
                 MessageLabel.Text = "No data found.";
             }
 
-        }*/
+        }
 
         private void ButtonSubmit_OnClicked(object sender, EventArgs e)
         {
             List<SurveyData> surveyData = new List<SurveyData>();
             int test = 5;
-            int rating = 1;
+            string rating = "1";
             foreach (var question in questions)
             {
                 SurveyData tempData = new SurveyData();
@@ -76,7 +76,6 @@ namespace MBBS
                 Debug.WriteLine(tempData.Rating);
                 Debug.WriteLine(tempData.Comment);*/
                 test++;
-                rating++;
 
                 surveyData.Add(tempData);
                 

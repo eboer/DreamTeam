@@ -95,6 +95,9 @@
                     IsVisible="{Binding Source={x:Reference star1Five},
                                             Path=IsStarred}"/>
           </Grid>
+          <Label x:Name="Star1Data" Text="{Binding Source={x:Reference star1Five}, 
+           Path=Rating, 
+           Converter={StaticResource RatingConverter}}"/>
         </StackLayout>
         <Grid>
           <Entry x:Name="commentEntry1"
@@ -192,6 +195,9 @@
                   IsVisible="{Binding Source={x:Reference star2Five},
                                             Path=IsStarred}"/>
         </Grid>
+        <Label x:Name="Star2Data" Text="{Binding Source={x:Reference star2Five}, 
+           Path=Rating, 
+           Converter={StaticResource RatingConverter}}"/>
       </StackLayout>
       <Grid>
         <Entry x:Name="commentEntry2"
@@ -290,6 +296,9 @@
                   IsVisible="{Binding Source={x:Reference star3Five},
                                             Path=IsStarred}"/>
         </Grid>
+        <Label x:Name="Star3Data" Text="{Binding Source={x:Reference star3Five}, 
+           Path=Rating, 
+           Converter={StaticResource RatingConverter}}"/>
       </StackLayout>
       <Grid>
         <Entry x:Name="commentEntry3"
@@ -387,6 +396,9 @@
                   IsVisible="{Binding Source={x:Reference star4Five},
                                             Path=IsStarred}"/>
         </Grid>
+        <Label x:Name="Star4Data" Text="{Binding Source={x:Reference star4Five}, 
+           Path=Rating, 
+           Converter={StaticResource RatingConverter}}"/>
       </StackLayout>
       <Grid>
         <Entry x:Name="commentEntry4"
@@ -397,6 +409,8 @@
     </StackLayout>
 
     </Grid>
+    
+    
   
   <Button Text="Send " 
               BackgroundColor="#e6e6e6" 
