@@ -43,27 +43,11 @@ namespace MBBS
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-
-/*#if DEBUG || ENABLE_TEST_CLOUD
-            return true;
-#endif
-
-            //var session = value as Session;
-            if (session == null)
-                return false;
-
-            if (!session.StartTime.HasValue)
-                return false;
-
-            //if it has started or is about to start
-            if (session.StartTime.Value.AddMinutes(-15) < DateTime.UtcNow)
-                return true;
-
-            return false;*/
+            //convert if rating is visible
             return true;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

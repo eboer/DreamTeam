@@ -14,6 +14,7 @@ namespace MBBS
         static List<StarBehavior> defaultBehaviors = new List<StarBehavior>();
         static Dictionary<string, List<StarBehavior>> starGroups = new Dictionary<string, List<StarBehavior>>();
 
+        //add bindable property GroupName
         public static readonly BindableProperty GroupNameProperty =
                BindableProperty.Create("GroupName",
                 typeof(string),
@@ -28,6 +29,7 @@ namespace MBBS
             get { return (string)GetValue(GroupNameProperty); }
         }
 
+        //add bindable property Rating
         public static readonly BindableProperty RatingProperty =
             BindableProperty.Create("Rating",
                 typeof(int),
@@ -39,6 +41,7 @@ namespace MBBS
             get { return (int)GetValue(RatingProperty); }
         }
 
+        //Call when grouname is changed
         static void OnGroupNameChanged(BindableObject bindable, object oldValue, object newValue)
         {
             StarBehavior behavior = (StarBehavior)bindable;
@@ -85,7 +88,7 @@ namespace MBBS
 
         }
 
-
+        // add bindable propert IsStarred
         public static readonly BindableProperty IsStarredProperty =
             BindableProperty.Create("IsStarred",
                 typeof(bool),
@@ -99,6 +102,7 @@ namespace MBBS
             get { return (bool)GetValue(IsStarredProperty); }
         }
 
+        //Call when star is changed
         static void OnIsStarredChanged(BindableObject bindable, object oldValue, object newValue)
         {
             StarBehavior behavior = (StarBehavior)bindable;
@@ -119,7 +123,7 @@ namespace MBBS
 
                 bool itemReached = false;
                 int count = 1, position = 0;
-                // all positions to left IsStarred = true and all position to the right is false
+                //All positions to left IsStarred = true and all position to the right is false
                 foreach (var item in behaviors)
                 {
                     if (item != behavior && !itemReached)
@@ -140,8 +144,6 @@ namespace MBBS
                 }
 
             }
-
-
         }
 
         public StarBehavior()
