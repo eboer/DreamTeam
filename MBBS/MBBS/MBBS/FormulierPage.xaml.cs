@@ -92,7 +92,7 @@ namespace MBBS
             tempData4.Comment = commentEntry4.Text;
             surveyData.Add(tempData4);
 
-            // Conver to json string and add moduleID
+            // Convert to json string and add moduleID
             JObject jObject = new JObject();
             jObject["ModuleID"] = JToken.FromObject(moduleID);
             jObject["Answers"] = JToken.FromObject(surveyData);
@@ -101,7 +101,7 @@ namespace MBBS
             // Add json string to uri
             string url = "http://mbbsweb.azurewebsites.net/api/Survey/PostSurveyAnswers?content=" + json;
 
-            // test
+            // Test
             Debug.WriteLine(json);
 
             // Submit the json data
@@ -117,15 +117,15 @@ namespace MBBS
 
         public static async void MakeJsonRequest(string url, string json, string authorization)
         {
-            //create the webrequest
+            // Create the webrequest
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 
 
             request.Headers["Authorization"] = authorization;
-            //get the response
+            // Get the response
             var response = await request.GetResponseAsync();
             var respStream = response.GetResponseStream();
-            //read the webresponse
+            // Read the webresponse
             StreamReader reader = new StreamReader(respStream);
             string text = reader.ReadToEnd();
         }

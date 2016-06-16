@@ -99,7 +99,6 @@ namespace MBBS
         {
             //create the webrequest
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-
             
             request.Headers["Authorization"] = authorization;
             //get the respnse
