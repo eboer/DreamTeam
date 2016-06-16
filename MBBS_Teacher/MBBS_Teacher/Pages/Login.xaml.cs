@@ -73,9 +73,9 @@ text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Account/Lo
                 Console.WriteLine(text);
                 if (text != null)
                 {
-                    data.token = text;
-                    data.token = data.token.TrimEnd('"');
-                    data.token = data.token.TrimStart('"');
+                    data.Token = text;
+                    data.Token = data.Token.TrimEnd('"');
+                    data.Token = data.Token.TrimStart('"');
                     data.LoginName = Username.Text;
                     Switcher.Switch(new PdfCreater(), data);
                 }
@@ -118,9 +118,9 @@ text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Account/Lo
                 Task.WaitAll(t);
                 if (text != null)
                 {
-                    data.token = text;
-                    data.token = data.token.TrimEnd('"');
-                    data.token = data.token.TrimStart('"');
+                    data.Token = text;
+                    data.Token = data.Token.TrimEnd('"');
+                    data.Token = data.Token.TrimStart('"');
                     data.LoginName = Username.Text;
                     Switcher.Switch(new PdfCreater(), data);
                 }
@@ -190,9 +190,9 @@ text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Account/Lo
                 Console.WriteLine(errorText);
                 if (text != null)
                 {
-                    data.token = text;
-                    data.token = data.token.TrimEnd('"');
-                    data.token = data.token.TrimStart('"');
+                    data.Token = text;
+                    data.Token = data.Token.TrimEnd('"');
+                    data.Token = data.Token.TrimStart('"');
                     data.LoginName = Username.Text;
                     Switcher.Switch(new Modulelist(), data);
                 }

@@ -31,7 +31,7 @@
         <Button x:Name="back" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Back" Width="75" Height="20" Margin="10,20,0,0" Foreground="White" Background="#7B93AF" Click="back_Click" />
         <TabControl x:Name="tabControl" HorizontalAlignment="Stretch" Margin="0,62,0,0" VerticalAlignment="Stretch" BorderThickness="0" BorderBrush="#73AAD9">
             
-            <TabItem Header="Settings" HorizontalAlignment="Left" Margin="0,0,0,0" Height="60" Background="#3FA9F5" Foreground="White" >
+            <TabItem Header="Settings" HorizontalAlignment="Left" Margin="0,0,0,0" Height="60" Background="#3FA9F5">
                 <Grid Background="#FFE5E5E5">
                     <ListView x:Name="SettingsList" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" VerticalAlignment="top">
                         <ListView.View>
@@ -47,7 +47,7 @@
                     </ListView>
                 </Grid>
             </TabItem>
-            <TabItem Header="Edit Module" HorizontalAlignment="Right" Margin="0,0,0,0" Background="#3FA9F5" BorderThickness="0" BorderBrush="Transparent" Foreground="White">
+            <TabItem Header="Edit Module" HorizontalAlignment="Right" Margin="0,0,0,0" Background="#3FA9F5" BorderThickness="0" BorderBrush="Transparent">
                 <Grid Background="#FFE5E5E5">
                     <ListView x:Name="EditView" HorizontalAlignment="Stretch" Height="auto" Margin="0,0,0,0" VerticalAlignment="Top">
                         <ListView.View>
@@ -65,7 +65,10 @@
             </TabItem>
         </TabControl>
         <Popup Placement="Center" Name="popUp">
-            <ProgressBar Name="getPdf" Maximum="100" Minimum="0" IsIndeterminate="True" Height="50" Width="250" Margin="0,0,0,0" />
+            <Grid>
+                <ProgressBar Name="getPdf" Maximum="100" Minimum="0" IsIndeterminate="True" Height="50" Width="250" Margin="0,0,0,0" />
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Downloading module data" />
+            </Grid>
         </Popup>
     </Grid>
 </UserControl>

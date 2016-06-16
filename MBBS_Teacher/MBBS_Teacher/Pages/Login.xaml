@@ -18,7 +18,10 @@
         <Label x:Name="header" Content="Login/register"  VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Height="66"  Background="#73AAD9" Foreground="White" />
         <Label x:Name="footer" Content="Register" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Bottom" Foreground="#B0B0B0" MouseLeftButtonDown="footer_MouseLeftButtonDown" />
         <Popup Placement="Center" Name="popUp">
-            <ProgressBar Name="loginProgress" Maximum="100" Minimum="0" IsIndeterminate="True" Height="50" Width="250" Margin="0,0,0,0" />
+            <Grid>
+                <ProgressBar Name="loginProgress" Maximum="100" Minimum="0" IsIndeterminate="True" Height="50" Width="250" Margin="0,0,0,0" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Authenticating" />
+            </Grid>
         </Popup>
     </Grid>
 </UserControl>

@@ -27,7 +27,7 @@ namespace MBBS_Teacher.Pages
             {
                 try
                 {
-                    moduleResond = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/GetData?moduleID=+" + data.ModuleName + "&subsectionID=" + data.ModuleChange + "&languageID=en", data.token);
+                    moduleResond = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/GetData?moduleID=+" + data.ModuleName + "&subsectionID=" + data.ModuleChange + "&languageID=" + data.Lang, data.Token);
                 }
                 catch (WebException exept)
                 {
@@ -47,13 +47,13 @@ namespace MBBS_Teacher.Pages
 
         private void save_Click(object sender, RoutedEventArgs e)
         {
-            WebRequestHelper.sendPostData("http://mbbsweb.azurewebsites.net/api/Module/PostData", data.token, data.ModuleName, data.ModuleChange, "en", new TextRange(content.Document.ContentStart, content.Document.ContentEnd).Text);
+            WebRequestHelper.sendPostData("http://mbbsweb.azurewebsites.net/api/Module/PostData", data.Token, data.ModuleName, data.ModuleChange, "en", new TextRange(content.Document.ContentStart, content.Document.ContentEnd).Text);
             Switcher.Switch(new ModuleChange(), data);
         }
 
         private void saveAndExit_Click(object sender, RoutedEventArgs e)
         {
-            WebRequestHelper.sendPostData("http://mbbsweb.azurewebsites.net/api/Module/PostData", data.token, data.ModuleName, data.ModuleChange, "en", new TextRange(content.Document.ContentStart, content.Document.ContentEnd).Text);
+            WebRequestHelper.sendPostData("http://mbbsweb.azurewebsites.net/api/Module/PostData", data.Token, data.ModuleName, data.ModuleChange, "en", new TextRange(content.Document.ContentStart, content.Document.ContentEnd).Text);
             Switcher.Switch(new ModuleDetail(), data);
         }
     }

@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="Data.cs" />
+    <Compile Include="ElementSource.cs" />
     <Compile Include="FormulierPage.xaml.cs">
       <DependentUpon>FormulierPage.xaml</DependentUpon>
     </Compile>

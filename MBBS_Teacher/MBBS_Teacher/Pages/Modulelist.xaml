@@ -9,22 +9,63 @@
       >
 
     <Grid Background="#E6E6E6">
+        
         <Label x:Name="header" Content="Hello Bert, Select a module"  VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Height="66" Background="#73AAD9"  Foreground="White" />
         <Button x:Name="back" HorizontalAlignment="Left" VerticalAlignment="Top" Content="log out" Width="75" Height="20" Margin="10,20,0,0" Foreground="White" Background="#7B93AF" Click="back_Click" />
         <Label x:Name="footer" Content="Bert's modules" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="0,200,0,0" VerticalAlignment="top" Height="30" Background="#73AAD9"  Foreground="White" />
-        <ListView x:Name="moduleList" HorizontalAlignment="Stretch" Height="auto" Margin="0,231,0,0" VerticalAlignment="Top" BorderThickness="0" Background="#E6E6E6" >
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Module"  Width="100" />
-                </GridView>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock  Margin="10,231,0,0" Grid.Column="0">Your Modules</TextBlock>
+            <ListView x:Name="moduleList" HorizontalAlignment="Left" Height="auto" Margin="0,251,0,0" MaxWidth="300"  VerticalAlignment="Top" BorderThickness="0" Background="#E6E6E6" Grid.Column="0">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock>
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0} {1}">
+                                        <Binding Path="module_name" />
+                                        <Binding Path="module_lang" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
 
-            </ListView.View>
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="moduleList_MouseLeftButtonDown"/>
-                </Style>
-            </ListView.ItemContainerStyle>
-        </ListView>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="moduleList_MouseLeftButtonDown"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+
+            <TextBlock  Margin="10,231,0,0" Grid.Column="1">All Modules</TextBlock>
+            <ListView x:Name="allModuleList" HorizontalAlignment="Left" Height="auto" Margin="0,251,0,0" VerticalAlignment="Top" BorderThickness="0" Background="#E6E6E6" Grid.Column="1">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock>
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0} {1}">
+                                        <Binding Path="module_name" />
+                                        <Binding Path="module_lang" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="allModuleList_MouseLeftButtonDown"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+        </Grid>
         <Image x:Name="headerImage" HorizontalAlignment="Stretch" Height="133" VerticalAlignment="Top" Margin="0,67,0,0" Source="Logo.png"/>
 
     </Grid>

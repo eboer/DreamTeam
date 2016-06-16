@@ -40,10 +40,10 @@
                           />
                   
                     <StackLayout Orientation="Horizontal" Spacing="0" HorizontalOptions="Center" Grid.Column="1">
-                      <Grid HeightRequest="50" WidthRequest="50" x:Name="StarGrid2">
+                      <Grid HeightRequest="50" WidthRequest="50" x:Name="StarGrid1" >
                         <Grid.Behaviors>
                           <!--Do not remove name as it is used in binding-->
-                          <local:StarBehavior x:Name="starOne" GroupName="{StaticResource test}"/>
+                          <local:StarBehavior x:Name="starOne" GroupName="{Binding QuestionId, Source={util:ElementSource ModuleListView}}"/>
                         </Grid.Behaviors>
                         <Image
                                 Source="{local:ImageResource MBBS.Images.star_outline.png}" />
@@ -54,11 +54,11 @@
                                             Path=IsStarred}"/>
                         <Label Text="{Binding QuestionID}"/>
                       </Grid>
-                      <Grid HeightRequest="50" WidthRequest="50" HorizontalOptions="Center">
+                      <Grid HeightRequest="50" WidthRequest="50" x:Name="StarGrid2" HorizontalOptions="Center">
                         <Label Text="{Binding QuestionID}"/>
                         <Grid.Behaviors>
                           <!--Do not remove name as it is used in binding-->
-                          <local:StarBehavior x:Name="starTwo" GroupName="{Binding QuestionID}" />
+                          <local:StarBehavior x:Name="starTwo" GroupName="{Binding QuestionId, Source={x:Reference ModuleListView}" />
                         </Grid.Behaviors>
                         <Image
                                 Source="{local:ImageResource MBBS.Images.star_outline.png}" />
@@ -69,10 +69,10 @@
                                             Path=IsStarred}"/>
                       
                       </Grid>
-                      <Grid HeightRequest="50" WidthRequest="50" HorizontalOptions="Center" >
+                      <Grid HeightRequest="50" WidthRequest="50" x:Name="StarGrid3"  HorizontalOptions="Center" >
                         <Grid.Behaviors>
                           <!--Do not remove name as it is used in binding-->
-                          <local:StarBehavior x:Name="starThree" GroupName="{Binding QuestionID}"/>
+                          <local:StarBehavior x:Name="starThree" GroupName="{Binding QuestionId}"/>
                         </Grid.Behaviors>
                         <Image
                                 Source="{local:ImageResource MBBS.Images.star_outline.png}" />
@@ -82,7 +82,7 @@
                                 IsVisible="{Binding Source={x:Reference starThree},
                                             Path=IsStarred}"/>
                       </Grid>
-                      <Grid HeightRequest="50" WidthRequest="50" HorizontalOptions="Center">
+                      <Grid HeightRequest="50" WidthRequest="50" x:Name="StarGrid4" HorizontalOptions="Center">
                         <Grid.Behaviors>
                           <!--Do not remove name as it is used in binding-->
                           <local:StarBehavior x:Name="starFour" GroupName="{Binding QuestionID}"/>
@@ -96,7 +96,7 @@
                                             Path=IsStarred}"/>
                        <Label Text="{Binding QuestionID}"/>
                       </Grid>
-                      <Grid HeightRequest="50" WidthRequest="50" HorizontalOptions="Center">
+                      <Grid HeightRequest="50" WidthRequest="50" x:Name="StarGrid5" HorizontalOptions="Center">
                         <Grid.Behaviors>
                           <!--D not remove name as it is used in binding-->
                           <local:StarBehavior x:Name="starFive" GroupName="{Binding QuestionID}"/>

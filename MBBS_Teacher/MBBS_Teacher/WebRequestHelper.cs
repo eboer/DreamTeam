@@ -6,12 +6,12 @@ namespace MBBS_Teacher
 {
     static class WebRequestHelper
     {
-        //getData using the token
+        //getData using the Token
         public static string getData(string url, string authorization)
         {
             //create the httpwebrequest
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            //add the token in the header
+            //add the Token in the header
             request.Headers.Add("Authorization", authorization);
             //get the webresponse
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -22,7 +22,7 @@ namespace MBBS_Teacher
             return text;
         }
 
-        //getData without the token (for loging/register)
+        //getData without the Token (for loging/register)
         public static string getData(string url)
         {
             //create the webrequest
@@ -42,7 +42,7 @@ namespace MBBS_Teacher
             {
                 //create the request
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                //add the token
+                //add the Token
                 request.Headers.Add("Authorization", authorization);
                 //create the post data
                 var postMsg = "moduleId=" + moduleId;
@@ -71,6 +71,41 @@ namespace MBBS_Teacher
                 return exept.ToString();
             }
             
+
+        }
+        public static string sendPostSignup(string url, string moduleId, string authorization)
+        {
+            try
+            {
+                //create the request
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                //add the Token
+                request.Headers.Add("Authorization", authorization);
+                //create the post data
+                var postMsg = "moduleId=" + moduleId;
+               
+                //encode the post data
+                var data = Encoding.ASCII.GetBytes(postMsg);
+                //set request method to most
+                request.Method = "POST";
+                //set the content type and length
+                request.ContentType = "application/x-www-form-urlencoded";
+                request.ContentLength = data.Length;
+                //write the post data
+                using (var stream = request.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                //get the response
+                var response = (HttpWebResponse)request.GetResponse();
+                string responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
+                return responseString;
+            }
+            catch (WebException exept)
+            {
+                return exept.ToString();
+            }
+
 
         }
     }

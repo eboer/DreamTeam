@@ -52,7 +52,7 @@ namespace MBBS_Teacher.Pages
 
         private List<Module> getModuleData()
         { 
-            string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/DocentModules", this.data.token);
+            string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/DocentModules", this.data.Token);
             return JsonConvert.DeserializeObject<List<Module>>(text);
         }
 
@@ -131,7 +131,7 @@ namespace MBBS_Teacher.Pages
             pdfPage.Width = XUnit.FromInch(8.5);
             pdfPage.Height = XUnit.FromInch(11);
 
-            Dictionary<string, string> p = Module.getModuleData(data.token, data.ModuleName);
+            Dictionary<string, string> p = Module.getModuleData(data.Token, data.Lang, data.ModuleName);
 
             foreach (KeyValuePair<string, string> k in p)
             {

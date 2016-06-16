@@ -22,7 +22,10 @@ namespace MBBS
         public FPage(string token, string moduleID, string moduleName)
         {
             InitializeComponent();
+            BindingContext = this;
             LoadModules();
+            this.BindingContext = questions;
+            //starTwo.BindinContext = this;
             this.token = token;
             this.moduleName = moduleName;
             this.moduleID = moduleID;

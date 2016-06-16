@@ -1,10 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.DataVisualization.Charting;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace MBBS_Teacher.Pages
@@ -24,12 +27,18 @@ namespace MBBS_Teacher.Pages
         //fills the chart with data
         public void fillChart()
         {
-            string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Survey/AverageRatingPerYear?moduleID=" + data.ModuleName, data.token);
-           
-            Console.WriteLine(text);
-            Dictionary<string, double> values = JsonConvert.DeserializeObject<Dictionary<string, double>>(text);
-            ((LineSeries)GradeChart.Series[0]).ItemsSource =
-            values;
+            try
+            {
+                string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Survey/AverageRatingPerYear?moduleID=" + data.ModuleName, data.Token);
+                Dictionary<string, double> values = JsonConvert.DeserializeObject<Dictionary<string, double>>(text);
+                ((LineSeries)GradeChart.Series[0]).ItemsSource =
+                values.Reverse();
+            }
+            catch
+            {
+                fillChart();
+            }
+            
 
         }
 
@@ -37,7 +46,7 @@ namespace MBBS_Teacher.Pages
 
         public void LoadScoreChart()
         {
-            string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Survey/AverageRatingSubsections?moduleID=" + data.ModuleName, data.token);
+            string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Survey/AverageRatingSubsections?moduleID=" + data.ModuleName, data.Token);
             Dictionary<string, double> results = JsonConvert.DeserializeObject<Dictionary<string, double>>(text);
 
             ((BarSeries)ScoreChart.Series[0]).ItemsSource = results;
@@ -59,7 +68,7 @@ namespace MBBS_Teacher.Pages
             string text = "";
             try
             {
-                text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Survey/GetComments?moduleID=" + data.ModuleName + "&languageID=en", data.token);
+                text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Survey/GetComments?moduleID=" + data.ModuleName + "&languageID=" + data.Lang, data.Token);
             }
             catch
             {
@@ -81,13 +90,11 @@ namespace MBBS_Teacher.Pages
         }
         private void commentList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            TextRange txt = new TextRange(questionText.Document.ContentStart, questionText.Document.ContentEnd);
+            txt.Text = "";
             var item = sender as ListViewItem;
-            Comments content = (Comments)item.Content;
-            Console.WriteLine("pressed");
-            
+            Comments content = (Comments)item.Content;            
             questionText.AppendText(content.Comment);
-            Console.WriteLine("appended");
-
         }
     }
 

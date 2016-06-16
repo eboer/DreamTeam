@@ -1,11 +1,14 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PdfSharp.Drawing;
 using PdfSharp.Drawing.Layout;
 using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MBBS_Teacher
@@ -37,7 +40,7 @@ namespace MBBS_Teacher
 
         private List<Module> getModuleData()
         {
-            string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/DocentModules", this.data.token);
+            string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/DocentModules", this.data.Token);
             return JsonConvert.DeserializeObject<List<Module>>(text);
         }
         public void drawSomething(double myY, XUnit Height, double newHeight, string title, string content)
@@ -112,8 +115,8 @@ namespace MBBS_Teacher
             pdfPage.Orientation = PdfSharp.PageOrientation.Portrait;
             pdfPage.Width = XUnit.FromInch(8.5);
             pdfPage.Height = XUnit.FromInch(11);
-
-            Dictionary<string, string> p = Module.getModuleData(data.token, data.ModuleName);
+            getTitlePage();
+            Dictionary<string, string> p = Module.getModuleData(data.Token, data.Lang, data.ModuleName);
 
             foreach (KeyValuePair<string, string> k in p)
             {
@@ -123,10 +126,9 @@ namespace MBBS_Teacher
                 {
                     value = k.Value;
 
-
-
                     double stringSpaceLength = value.Count(Char.IsWhiteSpace);
                     newHeight += (stringSpaceLength / 12) * 11 + 50;
+                    newHeight += (Regex.Matches(value, @"\r\n").Count * 5);
 
                     if (pdfPage.Height < myY + newHeight && entryNumber != 1)
                     {
@@ -159,6 +161,17 @@ namespace MBBS_Teacher
                 Console.WriteLine("already in use");
             }
             Process.Start(pdfFilename);
+        }
+
+        private void getTitlePage()
+        {
+            JsonReader reader = new JsonTextReader(new StringReader(WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/GetModuleInfo?moduleID=" + data.ModuleName,data.Token)));
+            string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/GetModuleInfo?moduleID=" + data.ModuleName,data.Token);
+            while (reader.Read())
+            {
+                Console.WriteLine("Token {0} , Value {1}", reader.TokenType, reader.Value);
+            }
+            Console.WriteLine(text);
         }
     }
 }
