@@ -9,7 +9,7 @@ namespace MBBS
     class SurveyData
     {
         public string QuestionID { get; set; }
-        public int Rating { get; set; }
+        public string Rating { get; set; }
         public string Comment { get; set; }
     }
 }

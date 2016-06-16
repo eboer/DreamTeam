@@ -91,6 +91,48 @@ namespace MBBS.Database
             return surveyResults;
         }
 
+        public List<Answer> GetComments(string moduleID, string languageID)
+        {
+            con.Open();
+            List<Answer> comments = new List<Answer>();
+            Dictionary<object, List<int>> surveyResults = new Dictionary<object, List<int>>();
+            SqlCommand cmd = new SqlCommand("SELECT " +
+                "Answer.QuestionID, QuestionTranslation.QuestionText, Subsection.SubsectionID, " +
+                "Subsection.SubsectionName, CompletedSurvey.DateCompleted, Answer.Rating, Answer.Comment " +
+                "FROM CompletedSurvey " +
+                "INNER JOIN Answer " +
+                "ON  CompletedSurvey.CompletedSurveyID = Answer.CompletedSurveyID " +
+                "INNER JOIN SurveyQuestion " +
+                "ON Answer.QuestionID = SurveyQuestion.QuestionID " + 
+                "INNER JOIN Subsection " +
+                "ON SurveyQuestion.SubsectionID = Subsection.SubsectionID " +
+                "INNER JOIN QuestionTranslation " +
+                "ON SurveyQuestion.QuestionID = QuestionTranslation.QuestionID " +
+                "WHERE CompletedSurvey.ModuleID = @moduleID " +
+                "AND Answer.Comment IS NOT NULL " +
+                "AND QuestionTranslation.LanguageID = @languageID " +
+                "ORDER BY DateCompleted DESC", con);
+            cmd.Parameters.AddWithValue("@moduleID", moduleID.Trim());
+            cmd.Parameters.AddWithValue("@languageID", languageID.Trim().ToUpper());
+            
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                Answer answer = new Answer();    
+                answer.QuestionID = reader.GetDouble(0);
+                answer.QuestionText = reader.GetString(1);
+                answer.SubsectionID = reader.GetInt32(2);
+                answer.SubsectionName = reader.GetString(3);
+                answer.DateCompleted = reader.GetDateTime(4);
+                answer.Rating = reader.GetInt32(5);
+                answer.Comment = reader.GetString(6);
+                comments.Add(answer);
+            }
+
+            con.Close();
+            return comments;
+        }
+
         public Dictionary<object, List<int>> GetCurrentSubsectionSurveyResults(string moduleID)
         {
             con.Open();
@@ -155,22 +197,52 @@ namespace MBBS.Database
             }
             con.Close();
             return questions;
-        }
+        } 
 
-        public void PostAnswers(int userID, string test)
+        public void PostAnswers(CompletedSurvey completedSurvey)
         {
             HttpContext context = HttpContext.Current;
-          
+            int completedSurveyID = PostCompletedSurvey(completedSurvey.ModuleID, completedSurvey.StudentID);
+            string valueString = "";
+            foreach (Answer answer in completedSurvey.Answers)
+            { 
+                string addValue = string.Format("({0}, {1}, {2}, '{3}')", completedSurveyID, answer.QuestionID, answer.Rating, answer.Comment);
+                if (!string.IsNullOrEmpty(valueString))
+                {
+                    valueString += ",";
+                }
+                valueString += addValue;
+            }
+            if(!string.IsNullOrEmpty(valueString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand(string.Format("INSERT INTO Answer(CompletedSurveyID, QuestionID, Rating, Comment) " +
+                    "VALUES {0}", valueString), con);
+                SqlDataReader reader = cmd.ExecuteReader();
+                con.Close();
+            }
+           
+        }
+
+        public int PostCompletedSurvey(string moduleID, int userID)
+        {
             con.Open();
-            SqlCommand cmd = new SqlCommand("INSERT INTO ModuleContent(ModuleID, SubsectionID, LanguageID, AuthorID, Content, VersionNumber) " +
-                "VALUES (@moduleID, @subsectionID, @languageID, @userID, @content, @version)", con);
-            cmd.Parameters.AddWithValue("@moduleID", context.Request["moduleID"]);
-            cmd.Parameters.AddWithValue("@subsectionID", context.Request["subsectionID"]);
-            cmd.Parameters.AddWithValue("@languageID", context.Request["languageID"]);
+            SqlCommand cmd = new SqlCommand("INSERT INTO CompletedSurvey(ModuleID, StudentID, DateCompleted) " +
+                            "OUTPUT inserted.CompletedSurveyID " +
+                            "VALUES(@moduleID, @userID, @dateCompleted)", con);
+            cmd.Parameters.AddWithValue("@moduleID", moduleID);
             cmd.Parameters.AddWithValue("@userID", userID);
-            cmd.Parameters.AddWithValue("@content", context.Request["content"]);
+            cmd.Parameters.AddWithValue("@dateCompleted", DateTime.Now);
             SqlDataReader reader = cmd.ExecuteReader();
+
+
+            int completedSurveyID = 0;
+            while (reader.Read())
+            {
+               completedSurveyID = reader.GetInt32(0);
+            }
             con.Close();
+            return completedSurveyID;
         }
     }
 }

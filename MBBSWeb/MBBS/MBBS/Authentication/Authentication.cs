@@ -1,4 +1,14 @@
-﻿using System;
+﻿//===========================================================================================
+//Project: MBBS
+//Description:
+//   
+//
+//Date: 10-6-2016
+//Author: Janine Lanting
+//===========================================================================================
+
+using MBBS.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -8,7 +18,7 @@ namespace MBBS.Authentication
 {
     public class Authenticate
     {
-        
+
 
         public string generateToken()
         {
@@ -22,6 +32,7 @@ namespace MBBS.Authentication
         public string setToken(int userID)
         {
             string token = generateToken();
+            //DateTime time = DateTime.Now.AddSeconds(30);
             DateTime time = DateTime.Now.AddMinutes(30);
             SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MS_TableConnectionString"].ConnectionString);
             con.Open();
@@ -38,7 +49,7 @@ namespace MBBS.Authentication
                 SqlDataReader reader = cmd.ExecuteReader();
                 con.Close();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 con.Close();
                 return null;
@@ -46,14 +57,17 @@ namespace MBBS.Authentication
             return token;
         }
 
-        private int getUserID(string token)
+        private AuthenticatedUser getUserID(string token)
         {
-            int userID;
+            AuthenticatedUser user = new AuthenticatedUser();
             SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MS_TableConnectionString"].ConnectionString);
             con.Open();
             try
             {
-                SqlCommand cmd = new SqlCommand("SELECT UserID, expires FROM Token WHERE Token = @token", con);
+                SqlCommand cmd = new SqlCommand("SELECT Token.UserID, Expires, UserTypeID FROM Token " +
+                    "INNER JOIN Users " +
+                    "On Token.UserID = Users.UserID " +
+                    "WHERE Token = @token", con);
                 cmd.Parameters.AddWithValue("@token", token);
 
                 SqlDataReader reader = cmd.ExecuteReader();
@@ -61,29 +75,31 @@ namespace MBBS.Authentication
                 {
                     while (reader.Read())
                     {
-                        userID = reader.GetInt32(0);
+                        user.UserID = reader.GetInt32(0);
                         DateTime time = reader.GetDateTime(1);
                         if (time < DateTime.Now)
                         {
-                            deleteToken(userID);
-                            return 0;
+                            deleteToken(user.UserID);
+                            user.UserID = 0;
+                            return user;
                         }
+                        user.UserTypeID = reader.GetInt32(2);
                         con.Close();
-                        return userID;
+                        return user;
                     }
-                    return 0;
+                    return user;
                 }
                 else
                 {
-                    return 0;
+                    return user;
                 }
                 
                 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 con.Close();
-                return 0;
+                return user;
             }
            
         }
@@ -100,13 +116,13 @@ namespace MBBS.Authentication
                 SqlDataReader reader = cmd.ExecuteReader();
                 con.Close();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 con.Close();
             }
         }
 
-        public int confirmToken()
+        public AuthenticatedUser confirmToken()
         {
             string token = System.Web.HttpContext.Current.Request.Headers["Authorization"];
             return getUserID(token);

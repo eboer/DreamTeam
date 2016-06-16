@@ -59,7 +59,7 @@ namespace MBBS
                 if (e.Item != null)
                 {
                     Module m = (Module)this.ModuleListView.SelectedItem;
-                    Navigation.PushAsync(new FPage(token, m.module_id, m.module_name));
+                    await Navigation.PushAsync(new FormulierPage(token, m.module_id, m.module_name));
                 }
             }
         } 

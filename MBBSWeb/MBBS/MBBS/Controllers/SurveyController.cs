@@ -1,8 +1,14 @@
-﻿using System;
+﻿//===========================================================================================
+//Project: MBBS
+//Description:
+//   
+//
+//Date: 10-6-2016
+//Author: Janine Lanting
+//===========================================================================================
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using MBBS.Authentication;
 using MBBS.Builders;
@@ -28,12 +34,12 @@ namespace MBBS.Controllers
         [Route("PostAnswers")]
         public IHttpActionResult Post()
         {
-            int userID = authenticate.confirmToken();
+            AuthenticatedUser user = authenticate.confirmToken();
             try
             {
-                if (userID != 0)
+                if (user.UserID != 0)
                 {
-                    AnswerListBuilder listBuilder = new AnswerListBuilder();
+                    ObjectBuilder listBuilder = new ObjectBuilder();
                     SurveyQueries query = new SurveyQueries();
                     List<Answer> answers = listBuilder.BuildAnswerList(HttpContext.Current.Request["answers"]);
                 }
@@ -50,63 +56,120 @@ namespace MBBS.Controllers
             
         }
 
-        [RoutePrefix("api/Survey")]
-        public class QuestionController : ApiController
+       
+    }
+
+    [RoutePrefix("api/Survey")]
+    public class RatingController : ApiController
+    {
+        Authenticate authenticate = new Authenticate();
+
+        [Route("AverageRatingPerYear")]
+        public IHttpActionResult Get(string moduleID)
         {
-            Authenticate authenticate = new Authenticate();
+            AuthenticatedUser user = authenticate.confirmToken();
 
-            [Route("AverageRatingPerYear")]
-            public IHttpActionResult Get(string moduleID)
+            if (user.UserID != 0)
             {
-                //int userID = authenticate.confirmToken();
-                int userID = 1;
-                if (userID != 0)
-                {
-                    SurveyCalculators calculator = new SurveyCalculators();
-                    return Ok(calculator.GetAverageRatingPerYear(moduleID));
-                }
-                else
-                {
-                    return Unauthorized();
-                }
+                SurveyCalculators calculator = new SurveyCalculators();
+                return Ok(calculator.GetAverageRatingPerYear(moduleID));
             }
-
-            [Route("AverageRatingPerSubsection")]
-            public IHttpActionResult Get(string moduleID, int subsectionID)
+            else
             {
-                //int userID = authenticate.confirmToken();
-                int userID = 1;
-                if (userID != 0)
-                {
-                    SurveyCalculators calculator = new SurveyCalculators();
-                    return Ok(calculator.GetAverageRatingPerYearPerSubsection(moduleID, subsectionID));
-                }
-                else
-                {
-                    return Unauthorized();
-                }
+                return Unauthorized();
             }
-
-            
         }
 
-        [RoutePrefix("api/Survey")]
-        public class SubsectionSurveyController: ApiController
+        [Route("AverageRatingPerSubsection")]
+        public IHttpActionResult Get(string moduleID, int subsectionID)
         {
-            [Route("AverageRatingSubsections")]
-            public IHttpActionResult Get(string moduleID)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
             {
-                int userID = 1;
-                if (userID != 0)
-                {
-                    SurveyCalculators calculator = new SurveyCalculators();
-                    return Ok(calculator.GetAverageRatingPerSubsection(moduleID));
-                }
-                else
-                {
-                    return Unauthorized();
-                }
+                SurveyCalculators calculator = new SurveyCalculators();
+                return Ok(calculator.GetAverageRatingPerYearPerSubsection(moduleID, subsectionID));
+            }
+            else
+            {
+                return Unauthorized();
             }
         }
     }
+
+    [RoutePrefix("api/Survey")]
+    public class SubsectionSurveyController : ApiController
+    {
+        Authenticate authenticate = new Authenticate();
+
+        [Route("AverageRatingSubsections")]
+        public IHttpActionResult Get(string moduleID)
+        {
+            AuthenticatedUser user = authenticate.confirmToken();
+
+            if (user.UserID != 0)
+            {
+                SurveyCalculators calculator = new SurveyCalculators();
+                return Ok(calculator.GetAverageRatingPerSubsection(moduleID));
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+    }
+
+    [RoutePrefix("api/Survey")]
+    public class CommentsController : ApiController
+    {
+        Authenticate authenticate = new Authenticate();
+
+        [Route("GetComments")]
+        public IHttpActionResult Get(string moduleID, string languageID)
+        {
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
+            {
+                SurveyQueries query = new SurveyQueries();
+                return Ok(query.GetComments(moduleID, languageID));
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
+        [Route("PostSurveyAnswers")]
+        public IHttpActionResult Post()
+        {
+            return Ok("You finally got the post working");
+        }
+
+        [Route("PostSurveyAnswers")]
+        public IHttpActionResult Get(string content)
+        {
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
+            {
+                ObjectBuilder builder = new ObjectBuilder();
+                SurveyQueries query = new SurveyQueries();
+                CompletedSurvey completedSurvey = builder.BuildCompletedSurvey(content, user.UserID);
+                query.PostAnswers(completedSurvey);
+
+                return Ok("success");
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
+        [Route("PostSurveyAnswers")]
+        public IHttpActionResult Post([FromBody] string value)
+        {
+            
+            return Ok("success");
+        }
+    }
+
+    
 }
