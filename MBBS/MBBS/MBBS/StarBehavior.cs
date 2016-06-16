@@ -15,10 +15,11 @@ namespace MBBS
         static Dictionary<string, List<StarBehavior>> starGroups = new Dictionary<string, List<StarBehavior>>();
 
         public static readonly BindableProperty GroupNameProperty =
-            BindableProperty.Create("GroupName",
+               BindableProperty.Create("GroupName",
                 typeof(string),
                 typeof(StarBehavior),
                 null,
+                defaultBindingMode: BindingMode.TwoWay,
                 propertyChanged: OnGroupNameChanged);
 
         public string GroupName

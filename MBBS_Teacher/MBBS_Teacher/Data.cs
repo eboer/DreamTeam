@@ -11,6 +11,7 @@ namespace MBBS_Teacher
         public string LoginName { get; set; }
         public string ModuleName { get; set; }
         public string ModuleChange { get; set; }
-        public string token { get; set; }
+        public string Token { get; set; }
+        public string Lang { get; set; }
     }
 }

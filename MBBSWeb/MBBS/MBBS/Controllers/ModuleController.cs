@@ -1,23 +1,37 @@
-﻿using System.Web.Http;
+﻿//===========================================================================================
+//Project: MBBS
+//Description:
+//   
+//
+//Date: 10-6-2016
+//Author: Janine Lanting
+//===========================================================================================
+
+using System.Web.Http;
 using MBBS.Database;
 using MBBS.Authentication;
+using MBBS.Models;
 
 namespace MBBS.Controllers
 {
+    
     [RoutePrefix("api/Module")]
-    public class ModuleController : ApiController
+    public class DocentModuleController : ApiController
     {
         Authenticate authenticate = new Authenticate();
 
+        /// <summary>
+        /// Returns list of modules which docent manages
+        /// </summary>
         [Route("DocentModules")]
         public IHttpActionResult Get()
         {
-            int userID = authenticate.confirmToken();
-            if (userID != 0)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
             {
                 ModuleQueries query = new ModuleQueries();
 
-                return Ok(query.GetDocentModules(userID));
+                return Ok(query.GetDocentModules(user.UserID));
             }
             else
             {
@@ -26,15 +40,97 @@ namespace MBBS.Controllers
 
         }
 
-        //[Route("CreateModule")]
-        // Only administrator can create modules
+        [Route("AddDocentModule")]
+        public IHttpActionResult Post()
+        {
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0 && !user.UserTypeID.Equals(1))
+            {
+                ModuleQueries query = new ModuleQueries();
+                query.PostDocentModule(user.UserID);
+                return Ok();
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+    }
+
+    [RoutePrefix("api/Module")]
+    public class MatrixController : ApiController
+    {
+        Authenticate authenticate = new Authenticate();
+
+        [Route("GetMatrixData")]
+        public IHttpActionResult Get(string moduleID, string languageID)
+        {
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
+            {
+                ModuleQueries query = new ModuleQueries();
+                return Ok(query.GetMatrixData(moduleID, languageID));
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
+        [Route("PostCompetency")]
+        public IHttpActionResult Post()
+        {
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0 && !user.UserTypeID.Equals(1))
+            {
+                ModuleQueries query = new ModuleQueries();
+                query.PostCompetency(user.UserID);
+                return Ok();
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+    }
+
+    [RoutePrefix("api/Module")]
+    public class ModuleController : ApiController
+    {
+        Authenticate authenticate = new Authenticate();
+
+        [Route("GetModuleInfo")]
+        public IHttpActionResult Get(string moduleID)
+        {
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
+            {
+                ModuleQueries query = new ModuleQueries();
+                ModuleInfo moduleInfo = new ModuleInfo();
+                moduleInfo = query.GetModuleInfo(moduleID);
+                if(string.IsNullOrEmpty(moduleInfo.ModuleName))
+                {
+                    return BadRequest("The module you requested does not exist.");
+                }
+                return Ok(moduleInfo);
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+    }
+
+    [RoutePrefix("api/Module")]
+    public class ModuleDataController : ApiController
+    {
+        Authenticate authenticate = new Authenticate();
 
         [Route("GetData")]
         public IHttpActionResult Get(string moduleID, int subsectionID, string languageID)
         {
-            int userID = authenticate.confirmToken();
-
-            if (userID != 0)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
             {
                 ModuleQueries query = new ModuleQueries();
                 return Ok(query.GetModuleData(moduleID, subsectionID, languageID));
@@ -48,11 +144,11 @@ namespace MBBS.Controllers
         [Route("PostData")]
         public IHttpActionResult Post()
         {
-            int userID = authenticate.confirmToken();
-            if (userID != 0)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0 && !user.UserTypeID.Equals(1))
             {
                 ModuleQueries query = new ModuleQueries();
-                query.PostModuleData(userID);
+                query.PostModuleData(user.UserID);
             return Ok();
             }
             else
@@ -64,9 +160,8 @@ namespace MBBS.Controllers
         [Route("GetSubsectionNames")]
         public IHttpActionResult Get(string languageID)
         {
-            //int userID = authenticate.confirmToken();
-            int userID = 1;
-            if (userID != 0)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
             {
                 ModuleQueries query = new ModuleQueries();
                 
@@ -81,8 +176,10 @@ namespace MBBS.Controllers
     }
 
     [RoutePrefix("api/Module")]
-    public class AllModulesController : ApiController
+    public class ModuleNamesController : ApiController
     {
+        Authenticate authenticate = new Authenticate();
+
         [Route("AllModules")]
         public IHttpActionResult Get()
         {           
@@ -93,9 +190,9 @@ namespace MBBS.Controllers
         [Route("GetSectionNames")]
         public IHttpActionResult Get(string languageID)
         {
-            //int userID = authenticate.confirmToken();
-            int userID = 1;
-            if (userID != 0)
+
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
             {
                 ModuleQueries query = new ModuleQueries();
 
@@ -110,19 +207,18 @@ namespace MBBS.Controllers
     }
 
     [RoutePrefix("api/Module")]
-    public class MatrixController : ApiController
+    public class VersionController : ApiController
     {
         Authenticate authenticate = new Authenticate();
 
-        [Route("GetMatrixData")]
+        [Route("GetVersions")]
         public IHttpActionResult Get(string moduleID, string languageID)
         {
-            //int userID = authenticate.confirmToken();
-            int userID = 1;
-            if (userID != 0)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0)
             {
-                ModuleQueries query = new ModuleQueries();  
-                return Ok(query.GetMatrixData(moduleID, languageID));
+                ModuleQueries query = new ModuleQueries();
+                return Ok(query.GetVersionData(moduleID, languageID));
             }
             else
             {
@@ -130,14 +226,14 @@ namespace MBBS.Controllers
             }
         }
 
-        [Route("PostCompetency")]
+        [Route("PostVersion")]
         public IHttpActionResult Post()
         {
-            int userID = authenticate.confirmToken();
-            if (userID != 0)
+            AuthenticatedUser user = authenticate.confirmToken();
+            if (user.UserID != 0 && !user.UserTypeID.Equals(1))
             {
                 ModuleQueries query = new ModuleQueries();
-                query.PostCompetency(userID);
+                query.PostVersionData(user.UserID);
                 return Ok();
             }
             else
@@ -145,13 +241,8 @@ namespace MBBS.Controllers
                 return Unauthorized();
             }
         }
+            
+            
     }
-
-    [RoutePrefix("api/Module")]
-    public class TestingController : ApiController
-    {
-
-    }
-
-    //new JavaScriptSerializer().Serialize(ListOfMyObject);
+    
 }

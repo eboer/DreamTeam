@@ -30,7 +30,7 @@
 
     <Grid>
         <Label x:Name="header" Content="Trend"  VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Height="66" Background="#73AAD9"  Foreground="White" />
-        <Button x:Name="back" HorizontalAlignment="Left" VerticalAlignment="Top" Content="log out" Width="75" Height="20" Margin="10,20,0,0" Foreground="White" Background="#7B93AF" Click="back_Click" />
+        <Button x:Name="back" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Back" Width="75" Height="20" Margin="10,20,0,0" Foreground="White" Background="#7B93AF" Click="back_Click" />
         <TabControl x:Name="tabControl" HorizontalAlignment="Stretch" Margin="0,62,0,0" VerticalAlignment="Stretch" BorderThickness="0" BorderBrush="#73AAD9">
             <TabItem Header="Module Grades" HorizontalAlignment="Left" Margin="0,0,0,0" Height="60" Background="#3FA9F5" >
                 <Grid Background="#FFE5E5E5">
@@ -57,7 +57,11 @@
             
             <TabItem Header="Module Comments" HorizontalAlignment="Right" Margin="0,0,0,0" Background="#3FA9F5" BorderThickness="0" BorderBrush="Transparent">
                 <Grid Background="#FFE5E5E5">
-                    <ListView x:Name="commentList" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0" Background="#E6E6E6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="3*" />
+                    </Grid.ColumnDefinitions>
+                    <ListView x:Name="commentList" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0" Background="#E6E6E6" Grid.Column="0">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                             <StackPanel>
@@ -71,7 +75,7 @@
                             </Style>
                         </ListView.ItemContainerStyle>
                     </ListView>
-                    <RichTextBox IsReadOnly="True" HorizontalAlignment="Right" Width="250" VerticalAlignment="Stretch" x:Name="questionText" />
+                    <RichTextBox IsReadOnly="True" HorizontalAlignment="Right" VerticalAlignment="Stretch" x:Name="questionText" Grid.Column="1" />
                 </Grid>
             </TabItem>
         </TabControl>

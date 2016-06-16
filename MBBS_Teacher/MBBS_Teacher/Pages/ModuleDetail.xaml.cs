@@ -24,6 +24,7 @@ namespace MBBS_Teacher.Pages
         public async void UtilizeState(object state)
         {
             data = (Data)state;
+            Console.WriteLine(data.Lang);
             this.header.Content = data.ModuleName;
             this.SettingsList.Items.Add(new ListViewItem { Content = "Download module" });
             this.SettingsList.Items.Add(new ListViewItem { Content = "Check review" });
@@ -33,7 +34,7 @@ namespace MBBS_Teacher.Pages
                 string text = null;
                 Task t = Task.Run(() =>
                 {
-                    text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/GetSubsectionNames?languageID=en", this.data.token);
+                    text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/GetSubsectionNames?languageID=" + data.Lang, this.data.Token);
                     sub = JsonConvert.DeserializeObject<List<Subsecties>>(text);
 
                 });

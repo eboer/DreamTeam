@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Newtonsoft.Json;
+using MBBS_Teacher.Pages;
 
 namespace MBBS_Teacher.Pages
 {
@@ -32,26 +33,24 @@ namespace MBBS_Teacher.Pages
             data = (Data)state;
             this.header.Content = "Hello " + data.LoginName + ", Select a module";
             this.footer.Content = data.LoginName + "'s modules";
-            getData();
+            getSubData();
+            getNotSubData();
                 
        }
 
-        private async void getData()
+        private async void getNotSubData()
         {
-
             try
             {
                 List<Module> modules = new List<Module>();
                 Task getModuleTask = Task.Run(() =>
                 {
-                    text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/DocentModules", this.data.token);
+                    text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/AllModules");
+                    Console.WriteLine(text);
                     modules = JsonConvert.DeserializeObject<List<Module>>(text);
                 });
                 await Task.WhenAll(getModuleTask);
-                foreach (Module module in modules)
-                {
-                    moduleList.Items.Add(new ListViewItem { Content = module.module_id + " " + module.module_name });
-                }
+                allModuleList.ItemsSource = modules;
 
             }
             catch (WebException exept)
@@ -69,11 +68,65 @@ namespace MBBS_Teacher.Pages
 
                     if (exept.ToString().Contains("500"))
                     {
-                        //   Error.Content = "The server is unavailable, please try again later ";
+
                     }
                     else
                     {
-                        // Error.Content = "Username and/or password incorrect";
+
+                    }
+                    text = exept.ToString();
+                    Console.WriteLine(text);
+                }
+            }
+        }
+
+        private async void getSubData()
+        {
+
+            try
+            {
+                List<Module> modules = new List<Module>();
+                Task getModuleTask = Task.Run(() =>
+                {
+                    text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/DocentModules", this.data.Token);
+                    modules = JsonConvert.DeserializeObject<List<Module>>(text);
+                });
+                await Task.WhenAll(getModuleTask);
+                List<Module> tempModuleList = new List<Module>();
+                for(int i = 0; i < modules.Count; i++)
+                {
+                    Module englishMod = new Module();
+                    englishMod.module_id = modules[i].module_id;
+                    englishMod.module_name = modules[i].module_name;
+                    englishMod.module_lang = "en";
+                    tempModuleList.Add(englishMod);
+
+                }
+                
+                modules.AddRange(tempModuleList);
+                moduleList.ItemsSource = modules;
+               
+            }
+            catch (WebException exept)
+            {
+                if (exept.Response != null)
+                {
+                    using (var errorResponse = (HttpWebResponse)exept.Response)
+                    {
+                        using (var reader = new StreamReader(errorResponse.GetResponseStream()))
+                        {
+                            string error = reader.ReadToEnd();
+                            Console.WriteLine(error);
+                        }
+                    }
+
+                    if (exept.ToString().Contains("500"))
+                    {
+                       
+                    }
+                    else
+                    {
+                       
                     }
                     text = exept.ToString();
                     Console.WriteLine(text);
@@ -86,12 +139,41 @@ namespace MBBS_Teacher.Pages
        {
                
             var item = sender as ListViewItem;
+            Module module = (Module)item.Content;
+            if(string.IsNullOrEmpty(module.module_lang))
+            {
+                data.Lang = "nl";
+            }
+            else
+            {
+                data.Lang = module.module_lang;
+            }
             if (item != null)
             {
-                data.ModuleName = item.Content.ToString().Substring(0,4);
+                data.ModuleName = module.module_id;
                 Switcher.Switch(new ModuleDetail(), data);
             }
          }
+
+        private void allModuleList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+            var item = sender as ListViewItem;
+            Module module = (Module)item.Content;
+            
+            if (item != null)
+            {
+                try
+                {
+                    WebRequestHelper.sendPostSignup("http://mbbsweb.azurewebsites.net/api/Module/AddDocentModule", module.module_id, data.Token);
+                    getSubData();
+                }
+                catch
+                {
+                    //error
+                }
+            }
+        }
 
         private void back_Click(object sender, RoutedEventArgs e)
         {
