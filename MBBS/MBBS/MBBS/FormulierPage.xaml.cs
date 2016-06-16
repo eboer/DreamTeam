@@ -119,12 +119,12 @@ namespace MBBS
         {
             // Create the webrequest
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-
-
             request.Headers["Authorization"] = authorization;
+
             // Get the response
             var response = await request.GetResponseAsync();
             var respStream = response.GetResponseStream();
+
             // Read the webresponse
             StreamReader reader = new StreamReader(respStream);
             string text = reader.ReadToEnd();

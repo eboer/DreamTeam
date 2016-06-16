@@ -12,16 +12,13 @@ namespace MBBS
 {
     class WebRequestHelper
     {
-        // Get Data using the token
-        public string getData(string url, string authorization)
-        {
-            return url;
-        }
-
         // Get Data without the token (for loging/register)
         public async Task<string> getData(string url)
         {
+            // Create the webrequest
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+
+            // Get the response
             var response = await request.GetResponseAsync();
             Stream ressStream = response.GetResponseStream();
             
