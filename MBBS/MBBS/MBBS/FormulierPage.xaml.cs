@@ -42,14 +42,12 @@ namespace MBBS
                 string data =
                     await help.getData("http://mbbsweb.azurewebsites.net/api/Survey/GetSurveyQuestions?languageID=EN");
                 questions = JsonConvert.DeserializeObject<List<Question>>(data);
-
             }
             catch (Exception)
             {
                 // Display no data found
                 Debug.WriteLine("No data found");
             }
-
         }
 
         // Submit the survey data
@@ -105,7 +103,7 @@ namespace MBBS
             Debug.WriteLine(json);
 
             // Submit the json data
-                                //MakeJsonRequest(url, json, token); UNCOMMENT
+            MakeJsonRequest(url, json, token);
 
             // Display success alert
             DisplayAlert("Success!", "You have submitted the survey", "OK");
