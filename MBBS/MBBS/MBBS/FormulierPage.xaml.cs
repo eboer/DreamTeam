@@ -96,7 +96,7 @@ namespace MBBS
 
             //MakeJsonRequest(url, json, token);
             DisplayAlert("Success!", "You have submitted the survey", "OK");
-            Navigation.PopModalAsync();
+            Navigation.PopAsync();
 
         }
 

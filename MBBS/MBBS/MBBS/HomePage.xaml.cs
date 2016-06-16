@@ -54,7 +54,7 @@ namespace MBBS
         private async void ModuleListView_OnItemTapped(object sender, ItemTappedEventArgs e)
         {
             var stack = Navigation.NavigationStack; //create stack
-            if (stack[stack.Count - 1].GetType() != typeof(FPage))
+            if (stack[stack.Count - 1].GetType() != typeof(FormulierPage))
             {
                 if (e.Item != null)
                 {

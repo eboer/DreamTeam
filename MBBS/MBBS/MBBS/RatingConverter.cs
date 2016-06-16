@@ -12,9 +12,9 @@ namespace MBBS
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var rating = (int)value;
+            var rating = (int) value;
             if (rating == 0)
-                return "0";
+                return 0;
             if (rating == 1)
                 return 1;
             if (rating == 2)
@@ -25,8 +25,21 @@ namespace MBBS
                 return 4;
             if (rating == 5)
                 return 5;
+            if (rating > 5)
+                rating = rating % 5;
+            if (rating == 0)
+                rating = 5;
+            return rating;
 
-            return string.Empty;
+            /*if (rating > 20)
+                rating = (int)value - 20;
+            if (rating > 15)
+                rating = (int)value - 15;
+            if (rating > 10)
+                rating = (int)value - 10;
+            if (rating > 5)
+                rating = (int)value - 5;
+            return rating;*/
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
