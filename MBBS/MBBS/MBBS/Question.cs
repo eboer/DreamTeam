@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MBBS
 {
+    // Class for storing the questions
     class Question
     {
         public string QuestionID { get; set; }

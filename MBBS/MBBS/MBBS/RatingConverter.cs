@@ -10,6 +10,7 @@ namespace MBBS
 {
     class RatingConverter : IValueConverter
     {
+        // Convert the star rating and return its value
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var rating = (int) value;
@@ -30,16 +31,6 @@ namespace MBBS
             if (rating == 0)
                 rating = 5;
             return rating;
-
-            /*if (rating > 20)
-                rating = (int)value - 20;
-            if (rating > 15)
-                rating = (int)value - 15;
-            if (rating > 10)
-                rating = (int)value - 10;
-            if (rating > 5)
-                rating = (int)value - 5;
-            return rating;*/
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
