@@ -6,6 +6,7 @@ using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -165,13 +166,91 @@ namespace MBBS_Teacher
 
         private void getTitlePage()
         {
-            JsonReader reader = new JsonTextReader(new StringReader(WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/GetModuleInfo?moduleID=" + data.ModuleName,data.Token)));
-            string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/GetModuleInfo?moduleID=" + data.ModuleName,data.Token);
-            while (reader.Read())
+            try
             {
-                Console.WriteLine("Token {0} , Value {1}", reader.TokenType, reader.Value);
+                JsonReader reader = new JsonTextReader(new StringReader(WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/GetModuleInfo?moduleID=" + data.ModuleName, data.Token)));
+                string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Module/GetModuleInfo?moduleID=" + data.ModuleName, data.Token);
+                ModuleInformation moduleInfo = JsonConvert.DeserializeObject<ModuleInformation>(text);
+                XFont titleFont = new XFont("Verdana", 15, XFontStyle.Bold);
+
+                using (System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(new Bitmap(1, 1)))
+                {
+                    SizeF size = graphics.MeasureString(moduleInfo.ModuleName, new Font("Verdana", 15, FontStyle.Bold, GraphicsUnit.Point));
+                    Double textWidth = (double)size.Width / 2;
+                    XRect titleRect = new XRect((pdfPage.Width / 2) - textWidth / 1.4, 100, someWidth, 200);
+                    tf.DrawString(moduleInfo.ModuleName, titleFont, XBrushes.Black, titleRect, XStringFormats.TopLeft);
+                    size = graphics.MeasureString(data.ModuleName, new Font("Verdana", 15, FontStyle.Bold, GraphicsUnit.Point));
+                    textWidth = (double)size.Width / 2;
+                    titleRect = new XRect(pdfPage.Width / 2 - textWidth / 1.4, 120, someWidth, 200);
+                    tf.DrawString(data.ModuleName, titleFont, XBrushes.Black, titleRect, XStringFormats.TopLeft);
+                }
+
+
+
+
+
+                XFont infoText = new XFont("Verdana", 10, XFontStyle.Regular);
+                XRect infoRect = new XRect(myX, pdfPage.Height - 200, someWidth, 200);
+                tf.DrawString(moduleInfo.LocationName, infoText, XBrushes.Black, infoRect, XStringFormats.TopLeft);
+
+                infoRect = new XRect(myX, pdfPage.Height - 190, someWidth, 200);
+                tf.DrawString(moduleInfo.Sector, infoText, XBrushes.Black, infoRect, XStringFormats.TopLeft);
+
+                infoRect = new XRect(myX, pdfPage.Height - 180, someWidth, 200);
+                tf.DrawString(moduleInfo.POBox, infoText, XBrushes.Black, infoRect, XStringFormats.TopLeft);
+
+                infoRect = new XRect(myX, pdfPage.Height - 170, someWidth, 200);
+                tf.DrawString(moduleInfo.PostalCode, infoText, XBrushes.Black, infoRect, XStringFormats.TopLeft);
+
+                infoRect = new XRect(myX, pdfPage.Height - 160, someWidth, 200);
+                tf.DrawString(moduleInfo.Phone, infoText, XBrushes.Black, infoRect, XStringFormats.TopLeft);
+
+                infoRect = new XRect(myX, pdfPage.Height - 150, someWidth, 200);
+                tf.DrawString(moduleInfo.Website, infoText, XBrushes.Black, infoRect, XStringFormats.TopLeft);
+
+                pdfPage = pdf.AddPage();
+                graph = XGraphics.FromPdfPage(pdfPage);
+                tf = new XTextFormatter(graph);
             }
-            Console.WriteLine(text);
+            catch
+            {
+                getTitlePage();
+            }
+
+        }
+
+        private class ModuleInformation
+        {
+            [JsonProperty("ModuleName")]
+            public string ModuleName { get; set; }
+
+            [JsonProperty("LocationName")]
+            public string LocationName { get; set; }
+
+            [JsonProperty("Sector")]
+            public string Sector { get; set; }
+
+            [JsonProperty("Street")]
+            public string Street { get; set; }
+
+            [JsonProperty("PostalCode")]
+            public string PostalCode { get; set; }
+
+            [JsonProperty("Location")]
+            public string Location { get; set; }
+
+            [JsonProperty("POBox")]
+            public string POBox { get; set; }
+
+            [JsonProperty("POBoxPostalCode")]
+            public string POBoxPostalCode { get; set; }
+
+            [JsonProperty("Phone")]
+            public string Phone { get; set; }
+
+            [JsonProperty("Website")]
+            public string Website { get; set; }
+
         }
     }
 }

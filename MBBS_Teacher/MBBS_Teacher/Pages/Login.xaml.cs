@@ -23,114 +23,6 @@ namespace MBBS_Teacher.Pages
             throw new NotImplementedException();
         }
 
-
-        private async void login_Click(object sender, RoutedEventArgs e)
-        {
-            Username.Text = "rubendewitte93@gmail.com";
-            Password.Password = "test";
-            if (string.IsNullOrEmpty(Username.Text) || string.IsNullOrEmpty(Password.Password))
-            {
-                Error.Content = "Please fill in the email and password";
-            }
-            else
-            {
-                string uName = Username.Text;
-                string pWord = Password.Password;
-                string text = null;
-                string errorText = null;
-                Data data = new Data();
-                Task loginTask = Task.Run(() =>
-               {
-                   try
-                   {
-text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Account/Login?email=" + uName + "&password=" + pWord);
-                   }
-                   catch (WebException exept)
-                   {
-                       if (exept.Response != null)
-                       {
-                           using (var errorResponse = (HttpWebResponse)exept.Response)
-                           {
-                               using (var reader = new StreamReader(errorResponse.GetResponseStream()))
-                               {
-                                   string error = reader.ReadToEnd();
-                               }
-                           }
-
-                           if (exept.ToString().Contains("500"))
-                           {
-                               errorText = "The server is unavailable, please try again later ";
-                           }
-                           else
-                           {
-                               errorText = "Username and/or password incorrect";
-                           }
-                       }
-
-                   }
-               });
-                await Task.WhenAll(loginTask);
-                Console.WriteLine(text);
-                if (text != null)
-                {
-                    data.Token = text;
-                    data.Token = data.Token.TrimEnd('"');
-                    data.Token = data.Token.TrimStart('"');
-                    data.LoginName = Username.Text;
-                    Switcher.Switch(new PdfCreater(), data);
-                }
-                else
-                {
-                    Error.Content = errorText;
-                }/*
-                Task t = Task.Factory.StartNew(() =>
-                {
-                    try
-                    {
-                        text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Account/Login?email=" + uName + "&password=" + pWord);
-                    }
-                    catch (WebException exept)
-                    {
-                        if (exept.Response != null)
-                        {
-                            using (var errorResponse = (HttpWebResponse)exept.Response)
-                            {
-                                using (var reader = new StreamReader(errorResponse.GetResponseStream()))
-                                {
-                                    string error = reader.ReadToEnd();
-                                    Console.WriteLine(error);
-                                }
-                            }
-
-                            if (exept.ToString().Contains("500"))
-                            {
-                                errorText = "The server is unavailable, please try again later ";
-                            }
-                            else
-                            {
-                                errorText = "Username and/or password incorrect";
-                            }
-                        }
-
-                    }
-                });
-                
-                Task.WaitAll(t);
-                if (text != null)
-                {
-                    data.Token = text;
-                    data.Token = data.Token.TrimEnd('"');
-                    data.Token = data.Token.TrimStart('"');
-                    data.LoginName = Username.Text;
-                    Switcher.Switch(new PdfCreater(), data);
-                }
-                else
-                {
-                    Error.Content = errorText;
-                }*/
-            }
-        }
-
         private void Username_GotFocus(object sender, RoutedEventArgs e)
         {
             TextBox Username = (TextBox)sender;
@@ -144,11 +36,9 @@ text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Account/Lo
             Switcher.Switch(new Register());
         }
 
-        private async void fakelogin_Click(object sender, RoutedEventArgs e)
+        private async void login_Click(object sender, RoutedEventArgs e)
         {
             popUp.IsOpen = true;
-            Username.Text = "rubendewitte93@gmail.com";
-            Password.Password = "test";
             if (string.IsNullOrEmpty(Username.Text) || string.IsNullOrEmpty(Password.Password))
             {
                 Error.Content = "Please fill in the email and password";

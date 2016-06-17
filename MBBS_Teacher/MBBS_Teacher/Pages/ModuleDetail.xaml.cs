@@ -72,12 +72,19 @@ namespace MBBS_Teacher.Pages
                 if (item.ToString().Contains("Download module"))
                 {
                     this.popUp.IsOpen = true;
-                    Task t = Task.Run(async () =>
+                    try
                     {
-                        PdfWriter writer = new PdfWriter(data);
-                        await writer.drawPdf();
-                    });
-                    await Task.WhenAll(t);
+                        Task t = Task.Run(async () =>
+                        {
+                            PdfWriter writer = new PdfWriter(data);
+                            await writer.drawPdf();
+                        });
+                        await Task.WhenAll(t);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Error");
+                    }
                     
                     this.popUp.IsOpen = false;
                 }

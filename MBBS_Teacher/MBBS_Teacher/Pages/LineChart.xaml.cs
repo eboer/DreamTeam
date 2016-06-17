@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,41 +24,76 @@ namespace MBBS_Teacher.Pages
         }
 
         //fills the chart with data
-        public void fillChart()
+        public async void fillChart()
         {
+            //try to do the webrequest, if it fails wait 10 seconds and try again
             try
             {
-                string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Survey/AverageRatingPerYear?moduleID=" + data.ModuleName, data.Token);
+                string text = null;
+                //do the webrequest in a task so that the UI doesn't freeze
+                Task t = Task.Run(() =>
+                {
+                    text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Survey/AverageRatingPerYear?moduleID=" + data.ModuleName, data.Token);
+                });
+                await Task.WhenAll(t);
+                //add the new data to the chart in reverse order
                 Dictionary<string, double> values = JsonConvert.DeserializeObject<Dictionary<string, double>>(text);
                 ((LineSeries)GradeChart.Series[0]).ItemsSource =
                 values.Reverse();
             }
             catch
             {
+                // wait 10  sec
+                Task t = Task.Run(async () =>
+                {
+                    await Task.Delay(10000);
+                });
+                await Task.WhenAll(t);
                 fillChart();
             }
-            
+
 
         }
 
-       
 
-        public void LoadScoreChart()
+        //load the score
+        public async void LoadScoreChart()
         {
-            string text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Survey/AverageRatingSubsections?moduleID=" + data.ModuleName, data.Token);
-            Dictionary<string, double> results = JsonConvert.DeserializeObject<Dictionary<string, double>>(text);
+            //try to do the webrequest, if it fails wait 10 seconds and try again
+            try
+            {
+                string text = null;
+                //make the webrequest run in a task so the UI doesn't freeze
+                Task t = Task.Run(() =>
+                {
+                    text = WebRequestHelper.getData("http://mbbsweb.azurewebsites.net/api/Survey/AverageRatingSubsections?moduleID=" + data.ModuleName, data.Token);
+                });
+                await Task.WhenAll(t);
+                Dictionary<string, double> results = JsonConvert.DeserializeObject<Dictionary<string, double>>(text);
 
-            ((BarSeries)ScoreChart.Series[0]).ItemsSource = results;
+                ((BarSeries)ScoreChart.Series[0]).ItemsSource = results;
+            }
+            //retry after 10 sec
+            catch
+            {
+                Task t = Task.Run(async () =>
+                {
+                    await Task.Delay(10000);
+                });
+                await Task.WhenAll(t);
+                LoadScoreChart();
+            }
         }
-
+        //utilize state, this method is used for recieving data from another page
         public void UtilizeState(object state)
         {
+            //data class containing the prev page info
             data = (Data)state;
             this.header.Content = data.ModuleName;
-            fillChart();
-            
-            LoadScoreChart();
 
+            //fill the charts
+            fillChart();
+            LoadScoreChart();
             LoadComments();
         }
 
@@ -74,7 +108,7 @@ namespace MBBS_Teacher.Pages
             {
                 Task t = Task.Run(async () =>
                 {
-                    await Task.Delay(20);
+                    await Task.Delay(10000);
                 });
                 Task.WaitAll(t);
                 LoadComments();

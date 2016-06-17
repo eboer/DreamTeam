@@ -10,7 +10,6 @@
 
     <Grid Background="#E6E6E6">
         
-        <Button x:Name="fakelogin" Content="fakeLogin" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Margin="0,200,0,0" Click="fakelogin_Click" Background="#73AAD9" Foreground="White" />
         <Button x:Name="login" Content="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Margin="0,100,0,0" Click="login_Click" Background="#73AAD9" Foreground="White" />
         <Label Name="Error" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,60,0,0" Foreground="Red" />
         <TextBox x:Name="Username" HorizontalAlignment="Center" Height="23" TextWrapping="Wrap" Text="Username" VerticalAlignment="Center" Width="180" Margin="0,-100,0,0" GotFocus="Username_GotFocus" />
