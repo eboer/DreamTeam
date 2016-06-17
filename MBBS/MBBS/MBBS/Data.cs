@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MBBS_Teacher
 {
+    // Class for storing the session info
     class Data
     {
         public string LoginName { get; set; }

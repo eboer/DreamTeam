@@ -10,11 +10,12 @@ namespace MBBS
 {
     class RatingConverter : IValueConverter
     {
+        // Convert the star rating and return its value
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var rating = (int)value;
+            var rating = (int) value;
             if (rating == 0)
-                return "0";
+                return 0;
             if (rating == 1)
                 return 1;
             if (rating == 2)
@@ -25,8 +26,11 @@ namespace MBBS
                 return 4;
             if (rating == 5)
                 return 5;
-
-            return string.Empty;
+            if (rating > 5)
+                rating = rating % 5;
+            if (rating == 0)
+                rating = 5;
+            return rating;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -39,27 +43,11 @@ namespace MBBS
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-
-/*#if DEBUG || ENABLE_TEST_CLOUD
-            return true;
-#endif
-
-            //var session = value as Session;
-            if (session == null)
-                return false;
-
-            if (!session.StartTime.HasValue)
-                return false;
-
-            //if it has started or is about to start
-            if (session.StartTime.Value.AddMinutes(-15) < DateTime.UtcNow)
-                return true;
-
-            return false;*/
+            //convert if rating is visible
             return true;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

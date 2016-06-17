@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MBBS
 {
+    // Class for storing survey data
     class SurveyData
     {
         public string QuestionID { get; set; }

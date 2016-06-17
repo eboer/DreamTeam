@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MBBS
 {
+    // Class for storing the modules
     public class Module
     {
         public string module_id { get; set; }
