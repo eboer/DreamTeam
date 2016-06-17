@@ -8,7 +8,7 @@
   <ContentPage.Content>
     <ScrollView Orientation="Vertical" VerticalOptions="FillAndExpand">
       <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand">
-        <Label Text="Registreren"
+        <Label Text="Register"
                TextColor="#4d4d4d"
                FontSize="25"/>
         <Image Source="drawable-xxhdpi/icon.png"></Image>
