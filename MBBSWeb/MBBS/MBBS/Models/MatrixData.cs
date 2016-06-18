@@ -1,7 +1,12 @@
-﻿using System;
+﻿//===========================================================================================
+//Project: MBBS
+//Description:
+//   Object of module matrix. Contains headers and list of competencies.
+//
+//Date: 10-6-2016
+//Author: Janine Lanting
+//===========================================================================================
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace MBBS.Models
 {

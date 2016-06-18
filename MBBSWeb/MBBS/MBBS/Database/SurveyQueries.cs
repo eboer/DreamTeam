@@ -1,7 +1,14 @@
-﻿using System;
+﻿//===========================================================================================
+//Project: MBBS
+//Description:
+//   Queries for survey related calls. Function names self explanatory.
+//
+//Date: 10-6-2016
+//Author: Janine Lanting
+//===========================================================================================
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Web;
 using MBBS.Models;
 

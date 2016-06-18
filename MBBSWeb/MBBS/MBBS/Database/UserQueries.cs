@@ -1,4 +1,12 @@
-﻿using System;
+﻿//===========================================================================================
+//Project: MBBS
+//Description:
+//  Queries for user related calls. Function names are self explanatory.
+//
+//Date: 10-6-2016
+//Author: Janine Lanting
+//===========================================================================================
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -9,9 +17,7 @@ namespace MBBS.Database
 {
     public class UserQueries
     {
-        SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MS_TableConnectionString"].ConnectionString);
-
-        
+        SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MS_TableConnectionString"].ConnectionString); 
 
         public void AddDocentData(int docentID)
         {
@@ -51,6 +57,8 @@ namespace MBBS.Database
             return userID;
         }
 
+        //old function, still used in older version of registration
+        //caused issues, hence the cheat used in query creation
         public int CreateUser(string firstName, string lastName, string email, int userType)
         {
             con.Open();

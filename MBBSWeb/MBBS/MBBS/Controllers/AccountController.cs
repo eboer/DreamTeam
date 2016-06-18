@@ -1,12 +1,6 @@
-﻿//===========================================================================================
-//Project: MBBS
-//Description:
-//   
+﻿//
+//Currently not used, may be used for a future expansion of account features.
 //
-//Date: 10-6-2016
-//Author: Janine Lanting
-//===========================================================================================
-
 using System;
 using System.Collections.Generic;
 using System.Net.Http;

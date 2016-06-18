@@ -1,7 +1,7 @@
 ﻿//===========================================================================================
 //Project: MBBS
 //Description:
-//   
+//   Controllers for survey related calls.
 //
 //Date: 10-6-2016
 //Author: Janine Lanting
@@ -54,9 +54,7 @@ namespace MBBS.Controllers
                 return InternalServerError(e);
             }
             
-        }
-
-       
+        }  
     }
 
     [RoutePrefix("api/Survey")]
@@ -138,12 +136,12 @@ namespace MBBS.Controllers
             }
         }
 
-        [Route("PostSurveyAnswers")]
-        public IHttpActionResult Post()
-        {
-            return Ok("You finally got the post working");
-        }
-
+        /// <summary>
+        /// Xamarin app group could not get POST working. 
+        /// Temporary workaround: Posting with a GET.
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns></returns>
         [Route("PostSurveyAnswers")]
         public IHttpActionResult Get(string content)
         {
@@ -163,12 +161,6 @@ namespace MBBS.Controllers
             }
         }
 
-        [Route("PostSurveyAnswers")]
-        public IHttpActionResult Post([FromBody] string value)
-        {
-            
-            return Ok("success");
-        }
     }
 
     

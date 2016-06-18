@@ -1,7 +1,7 @@
 ﻿//===========================================================================================
 //Project: MBBS
 //Description:
-//   
+//   Controllers for module related calls.
 //
 //Date: 10-6-2016
 //Author: Janine Lanting
@@ -14,7 +14,9 @@ using MBBS.Models;
 
 namespace MBBS.Controllers
 {
-    
+    /// <summary>
+    /// Controllers for docent module management
+    /// </summary>
     [RoutePrefix("api/Module")]
     public class DocentModuleController : ApiController
     {
@@ -40,6 +42,10 @@ namespace MBBS.Controllers
 
         }
 
+        /// <summary>
+        /// Allows docent to add module
+        /// </summary>
+        /// <returns></returns>
         [Route("AddDocentModule")]
         public IHttpActionResult Post()
         {
@@ -57,11 +63,20 @@ namespace MBBS.Controllers
         }
     }
 
+    /// <summary>
+    /// Matrix controller
+    /// </summary>
     [RoutePrefix("api/Module")]
     public class MatrixController : ApiController
     {
         Authenticate authenticate = new Authenticate();
 
+        /// <summary>
+        /// Retrieves module matrix data
+        /// </summary>
+        /// <param name="moduleID"></param>
+        /// <param name="languageID"></param>
+        /// <returns></returns>
         [Route("GetMatrixData")]
         public IHttpActionResult Get(string moduleID, string languageID)
         {
@@ -77,6 +92,10 @@ namespace MBBS.Controllers
             }
         }
 
+        /// <summary>
+        /// Adds competency to module matrix
+        /// </summary>
+        /// <returns></returns>
         [Route("PostCompetency")]
         public IHttpActionResult Post()
         {
@@ -94,11 +113,19 @@ namespace MBBS.Controllers
         }
     }
 
+    /// <summary>
+    /// Returns module info
+    /// </summary>
     [RoutePrefix("api/Module")]
-    public class ModuleController : ApiController
+    public class ModuleInfoController : ApiController
     {
         Authenticate authenticate = new Authenticate();
 
+        /// <summary>
+        /// Returns module info
+        /// </summary>
+        /// <param name="moduleID"></param>
+        /// <returns></returns>
         [Route("GetModuleInfo")]
         public IHttpActionResult Get(string moduleID)
         {
@@ -121,11 +148,21 @@ namespace MBBS.Controllers
         }
     }
 
+    /// <summary>
+    /// Controller for module data
+    /// </summary>
     [RoutePrefix("api/Module")]
     public class ModuleDataController : ApiController
     {
         Authenticate authenticate = new Authenticate();
 
+        /// <summary>
+        /// Returns module data
+        /// </summary>
+        /// <param name="moduleID"></param>
+        /// <param name="subsectionID"></param>
+        /// <param name="languageID"></param>
+        /// <returns></returns>
         [Route("GetData")]
         public IHttpActionResult Get(string moduleID, int subsectionID, string languageID)
         {
@@ -141,6 +178,10 @@ namespace MBBS.Controllers
             }
         }
 
+        /// <summary>
+        /// Posts module data to database
+        /// </summary>
+        /// <returns></returns>
         [Route("PostData")]
         public IHttpActionResult Post()
         {
@@ -157,6 +198,11 @@ namespace MBBS.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns list of subsection names
+        /// </summary>
+        /// <param name="languageID"></param>
+        /// <returns></returns>
         [Route("GetSubsectionNames")]
         public IHttpActionResult Get(string languageID)
         {
@@ -175,11 +221,18 @@ namespace MBBS.Controllers
 
     }
 
+    /// <summary>
+    /// Controller for modules and module section names
+    /// </summary>
     [RoutePrefix("api/Module")]
     public class ModuleNamesController : ApiController
     {
         Authenticate authenticate = new Authenticate();
 
+        /// <summary>
+        /// Returns list of all modules
+        /// </summary>
+        /// <returns></returns>
         [Route("AllModules")]
         public IHttpActionResult Get()
         {           
@@ -187,6 +240,11 @@ namespace MBBS.Controllers
                 return Ok(query.GetAllModules());
         }
 
+        /// <summary>
+        /// Returns section and subsection names
+        /// </summary>
+        /// <param name="languageID"></param>
+        /// <returns></returns>
         [Route("GetSectionNames")]
         public IHttpActionResult Get(string languageID)
         {
@@ -206,11 +264,20 @@ namespace MBBS.Controllers
 
     }
 
+    /// <summary>
+    /// Version controller
+    /// </summary>
     [RoutePrefix("api/Module")]
     public class VersionController : ApiController
     {
         Authenticate authenticate = new Authenticate();
 
+        /// <summary>
+        /// Retrieves version information for module
+        /// </summary>
+        /// <param name="moduleID"></param>
+        /// <param name="languageID"></param>
+        /// <returns></returns>
         [Route("GetVersions")]
         public IHttpActionResult Get(string moduleID, string languageID)
         {
@@ -226,6 +293,10 @@ namespace MBBS.Controllers
             }
         }
 
+        /// <summary>
+        /// Posts new module version info
+        /// </summary>
+        /// <returns></returns>
         [Route("PostVersion")]
         public IHttpActionResult Post()
         {

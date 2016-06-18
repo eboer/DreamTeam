@@ -1,7 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿//===========================================================================================
+//Project: MBBS
+//Description:
+//   Question object. Contains question text and info for survey.
+//
+//Date: 10-6-2016
+//Author: Janine Lanting
+//===========================================================================================
 
 namespace MBBS.Models
 {

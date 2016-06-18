@@ -1,4 +1,12 @@
-﻿using System;
+﻿//===========================================================================================
+//Project: MBBS
+//Description:
+//   Queries for module related calls. Function names self explanatory.
+//
+//Date: 10-6-2016
+//Author: Janine Lanting
+//===========================================================================================
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Web;
@@ -233,6 +241,7 @@ namespace MBBS.Database
 
             while (reader.Read())
             {
+                moduleInfo.ModuleID = moduleID;
                 moduleInfo.ModuleName = reader.GetString(0);
                 moduleInfo.LocationName = reader.GetString(1);
                 moduleInfo.Sector = reader.GetString(2);

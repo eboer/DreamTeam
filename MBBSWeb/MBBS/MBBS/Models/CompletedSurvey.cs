@@ -1,7 +1,13 @@
-﻿using System;
+﻿//===========================================================================================
+//Project: MBBS
+//Description:
+//   Completed survey object. Contains list of student answers.
+//
+//Date: 10-6-2016
+//Author: Janine Lanting
+//===========================================================================================
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace MBBS.Models
 {

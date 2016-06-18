@@ -1,11 +1,15 @@
-﻿using MBBS.Authentication;
+﻿//===========================================================================================
+//Project: MBBS
+//Description:
+//   Controllers for administrator use.
+//
+//Date: 10-6-2016
+//Author: Janine Lanting
+//===========================================================================================
+using MBBS.Authentication;
 using MBBS.Database;
 using MBBS.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace MBBS.Controllers
@@ -17,23 +21,9 @@ namespace MBBS.Controllers
         Authenticate authenticate = new Authenticate();
 
         /// <summary>
-        /// Returns list of modules which docent manages
+        /// Allows administrator to create new module.
         /// </summary>
-        [Route("DocentModules")]
-        public IHttpActionResult Get()
-        {
-            AuthenticatedUser user = authenticate.confirmToken();
-            if (user.UserID != 0)
-            {
-                return Ok();
-            }
-            else
-            {
-                return Unauthorized();
-            }
-
-        }
-
+        /// <returns></returns>
         [Route("CreateModule")]
         public IHttpActionResult Post()
         {

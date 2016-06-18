@@ -1,7 +1,8 @@
 ﻿//===========================================================================================
 //Project: MBBS
 //Description:
-//   
+//   Returns the average rating per year, per subsection per year, or per subsection. Ignores
+//  where rating is 0 (which stands for 'not applicable').
 //
 //Date: 10-6-2016
 //Author: Janine Lanting
@@ -9,15 +10,18 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using MBBS.Database;
 
 namespace MBBS.Calculators
 {
     public class SurveyCalculators
     {
-        public Dictionary<object, double> CalculateRating(Dictionary <object, List<int>> resultList)
+        /// <summary>
+        /// Calculates the average of a list of ratings given.
+        /// </summary>
+        /// <param name="resultList"></param>
+        /// <returns></returns>
+        private Dictionary<object, double> CalculateRating(Dictionary <object, List<int>> resultList)
         {
             
             Dictionary<object, double> results = new Dictionary<object, double>();

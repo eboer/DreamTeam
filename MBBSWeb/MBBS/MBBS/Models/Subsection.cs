@@ -1,7 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿//===========================================================================================
+//Project: MBBS
+//Description:
+//   Subsection info object.
+//
+//Date: 10-6-2016
+//Author: Janine Lanting
+//===========================================================================================
+using System;
 
 namespace MBBS.Models
 {

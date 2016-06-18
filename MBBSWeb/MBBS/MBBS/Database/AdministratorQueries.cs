@@ -1,7 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿//===========================================================================================
+//Project: MBBS
+//Description:
+//   Queries for administrator related calls. Function names self explanatory.
+//
+//Date: 10-6-2016
+//Author: Janine Lanting
+//===========================================================================================
 using System.Data.SqlClient;
-using System.Linq;
 using System.Web;
 
 namespace MBBS.Database
